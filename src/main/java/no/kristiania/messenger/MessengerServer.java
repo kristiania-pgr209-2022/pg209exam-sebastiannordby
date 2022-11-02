@@ -46,7 +46,7 @@ public class MessengerServer {
     public void start() throws Exception {
         logger.info("Starting server..");
         server.start();
-        logger.info("Server started at: ", server.getURI());
+        logger.info(String.format("Server started at port: %s", server.getURI()));
     }
 
     public void stop() throws Exception {
