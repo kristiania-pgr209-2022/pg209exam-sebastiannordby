@@ -27,7 +27,7 @@ public class MessengerServerTest {
     }
 
     @Test
-    void canConnectToServer() throws IOException {
+    void canConnectToServer() throws Exception {
         var connection = new URL(server.getUrl(), "/").openConnection();
         var httpUrlConnection = (HttpURLConnection) connection;
 
