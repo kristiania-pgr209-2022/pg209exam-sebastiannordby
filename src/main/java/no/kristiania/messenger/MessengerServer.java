@@ -59,7 +59,7 @@ public class MessengerServer {
         return server.getURI().toURL();
     }
 
-    private org.eclipse.jetty.util.resource.Resource getSourceResource(org.eclipse.jetty.util.resource.Resource baseResource) throws IOException, IOException {
+    private org.eclipse.jetty.util.resource.Resource getSourceResource(org.eclipse.jetty.util.resource.Resource baseResource) throws IOException {
         var file = baseResource.getFile();
         if (file == null) {
             return null;

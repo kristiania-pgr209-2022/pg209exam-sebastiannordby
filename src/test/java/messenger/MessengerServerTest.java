@@ -23,7 +23,9 @@ public class MessengerServerTest {
 
     @AfterEach
     void tearDown() throws Exception {
-        server.stop();
+        if(server != null) {
+            server.stop();
+        }
     }
 
     @Test
