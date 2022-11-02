@@ -2,12 +2,15 @@ package messenger;
 
 
 import no.kristiania.messenger.MessengerServer;
+import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -30,10 +33,9 @@ public class MessengerServerTest {
 
     @Test
     void canConnectToServer() throws Exception {
-        var connection = new URL(server.getUrl(), "/").openConnection();
-        var httpUrlConnection = (HttpURLConnection) connection;
+        var connection = getServerConnection("/");
 
-        assertThat(httpUrlConnection.getResponseCode())
+        assertThat(connection.getResponseCode())
                 .as("HTTP Response Code")
                 .isEqualTo(200);
     }
@@ -41,5 +43,12 @@ public class MessengerServerTest {
     @Test
     void shouldCreateServer()  {
         assertThat(server).isNotEqualTo(null);
+    }
+
+    private HttpURLConnection getServerConnection(String spec) throws IOException {
+        var connection = new URL(server.getUrl(), spec).openConnection();
+        var httpUrlConnection = (HttpURLConnection) connection;
+
+        return httpUrlConnection;
     }
 }
