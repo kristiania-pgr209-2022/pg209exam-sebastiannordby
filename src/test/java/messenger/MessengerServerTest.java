@@ -46,6 +46,16 @@ public class MessengerServerTest {
         assertThat(server.isRunning()).isEqualTo(true);
     }
 
+    @Test
+    void shouldGetServedIndexHtml() throws IOException {
+        var connection = getServerConnection("/");
+        var response = connection.getResponseMessage();
+
+        AssertionsForClassTypes.assertThat(connection.getInputStream())
+                .asString(StandardCharsets.UTF_8)
+                .contains("<title>");
+    }
+
     private HttpURLConnection getServerConnection(String spec) throws IOException {
         var connection = new URL(server.getUrl(), spec).openConnection();
         var httpUrlConnection = (HttpURLConnection) connection;
