@@ -1,8 +1,27 @@
+html {
+  height: 100%;
+}
+
+body {
+  min-height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+h2 {
+  font-size: 1.75rem;
+}
+
 #root {
   max-width: 1280px;
+  width: 100%;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .logo {
@@ -39,3 +58,80 @@
 .read-the-docs {
   color: #888;
 }
+
+.welcome-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.welcome-screen h2 {
+  margin-bottom: 2em;
+}
+
+.user-selector {
+  display: flex;
+  gap: 1em;
+}
+
+.user-card {
+  display: flex;
+  flex-direction: column;
+  gap: .2em;
+  padding: 1em;
+  border-radius: 20px;
+  border: 1px solid #cfcfcf;
+  width: 150px;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.user-card:hover {
+  cursor: pointer;
+  background-color: slateblue;
+  color: #fff;
+  font-weight: bold;
+}
+
+.main-view {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.main-view .content {
+  display: flex;
+  flex: 1;
+  border: 1px solid #dfdfdf;
+}
+
+.main-view .content .selector {
+  flex: 0 1 300px;
+  border-right: 1px solid #dfdfdf;
+}
+
+.main-view .content .messages {
+  flex: 1 0 500px;
+}
+
+.message-view {
+
+}
+
+.panel-view {
+}
+
+.secondary-title {
+  font-size: 1.1rem;
+  padding-bottom: .75em;
+  border-bottom: 1px solid #dfdfdf;
+}
+
+.panel-view {
+
+}
+
