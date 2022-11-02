@@ -17,4 +17,10 @@ public class MessengerServer {
         server.start();
         logger.info("Server started at: ", server.getURI());
     }
+
+    public void stop() throws Exception {
+        logger.info("Stopping server..");
+        server.stop();
+        logger.info("Server stopped..");
+    }
 }
