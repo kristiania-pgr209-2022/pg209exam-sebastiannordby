@@ -1,5 +1,10 @@
 # PG209 Backend programmering eksamen
 
+## Hvordan vi jobber
+Under denne oppgaven har vi valgt og jobbe sammen ved å bruke kommuniseringsplatformen Discord. 
+Når vi jobber deler vi skjermen med hverandre så hvis en commit'er mer kode enn den andre er det fordi vi jobber på denne måten. 
+Vi parprogrammerer med delt skjerm.
+
 ## Sjekkliste for innleveringen
 
 * [ ] Dere har lest eksamensteksten
