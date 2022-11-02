@@ -24,16 +24,19 @@ const USERS = [
 
 const PANEL_DATA = [
     {
+        id: 1,
         username: "Alladin",
         type: "user",
         displayName: "Alladin"
     },
     {
+        id: 2,
         username: "Mohammed",
         type: "user",
         displayName: "Ola"
     },
     {
+        id: 3,
         username: "Ola",
         type: "user",
         displayName: "Ola"
@@ -41,7 +44,14 @@ const PANEL_DATA = [
 ];
 
 const MESSAGES = [
-
+    {
+        panelDataId: 1,
+        message: "Hello"
+    },
+    {
+        panelDataId: 1,
+        message: "Hey how are your"
+    },
 ];
 
 function UserSelector() {
@@ -58,7 +68,7 @@ function UserSelector() {
 }
 
 function MainView() {
-    const {userId} = useParams();
+    const { userId, panelDataId } = useParams();
     const [panelData, setPanelData] = useState();
     const user = USERS.find(x => x.id == userId);
 
@@ -71,34 +81,45 @@ function MainView() {
             </header>
             <div className={"content"}>
                 <div class={"selector"}>
-                    <PanelView setPanelData={setPanelData}></PanelView>
+                    <PanelView userId={userId} setPanelData={setPanelData}></PanelView>
                 </div>
                 <div class={"messages"}>
-                    <MessageView></MessageView>
+                    <MessageView panelDataId={panelDataId}></MessageView>
                 </div>
             </div>
         </div>
     );
 }
 
-function MessageView( ) {
+function MessageView({ panelDataId } ) {
+    const data = PANEL_DATA.find(x => x.id == panelDataId);
+    const messages = MESSAGES.filter(x => x.panelDataId == panelDataId);
+    console.log('MessageView: ', data);
+
     return (
         <div class="message-view">
             <h3 className={"secondary-title"}>Meldinger</h3>
+
+            <div className="content">
+                {messages.map(x =>
+                    <div>{x.message}</div>
+                )}
+            </div>
         </div>
     );
 }
 
-function PanelView({setPanelData}) {
+function PanelView({setPanelData, userId}) {
     return (
         <div className={"panel-view"}>
-            <div>
+            <div class="header">
                 <h3 className={"secondary-title"}>Personer</h3>
             </div>
-            <div>
-                {PANEL_DATA.forEach(x =>
-                    <Link key={x.displayName} onClick={() => setPanelData(x)}>
-                        <span>{x.displayName}</span>
+            <div class="content">
+                {PANEL_DATA.map(x =>
+                    <Link key={x.id} to={`/messages/${userId}/${x.id}`}>
+                        <img className={"avatar"} />
+                        <span>{x.username}</span>
                     </Link>
                 )}
             </div>
@@ -122,6 +143,7 @@ export default function App() {
             <Routes>
                 <Route path={"/"} element={<WelcomeScreen/>}></Route>
                 <Route path={"/messages/:userId"} element={<MainView/>}></Route>
+                <Route path={"/messages/:userId/:panelDataId"} element={<MainView/>}></Route>
             </Routes>
         </HashRouter>
     );
