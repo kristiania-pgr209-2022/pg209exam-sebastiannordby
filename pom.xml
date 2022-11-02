@@ -152,6 +152,12 @@
             <artifactId>assertj-core</artifactId>
             <version>3.23.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>2.1.214</version>
+            <scope>test</scope>
+        </dependency>
 
         <!--Logging dependencies-->
 
@@ -183,5 +189,20 @@
             <artifactId>jersey-hk2</artifactId>
             <version>3.0.8</version>
         </dependency>
+
+        <!--Database dependencies-->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>9.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-sqlserver</artifactId>
+            <version>9.4.0</version>
+        </dependency>
+
     </dependencies>
+
+
 </project>
