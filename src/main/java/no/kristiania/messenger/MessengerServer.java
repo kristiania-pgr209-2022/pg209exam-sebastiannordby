@@ -1,6 +1,8 @@
 package no.kristiania.messenger;
 
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.webapp.WebAppContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,6 +15,11 @@ public class MessengerServer {
 
     public MessengerServer(int port) {
         this.server = new Server(port);
+
+        var webContext = new WebAppContext();
+        webContext.setContextPath("/");
+
+        server.setHandler(webContext);
     }
 
     public void start() throws Exception {

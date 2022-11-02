@@ -5,10 +5,8 @@ import no.kristiania.messenger.MessengerServer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,7 +17,7 @@ public class MessengerServerTest {
 
     @BeforeEach
     void setup() throws Exception {
-        server = new MessengerServer(0);
+        server = new MessengerServer(2000);
         server.start();
     }
 
