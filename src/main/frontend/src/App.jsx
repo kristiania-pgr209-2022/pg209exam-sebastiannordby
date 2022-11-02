@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
-
+import {BrowserRouter, HashRouter, Link, Route, Routes, useParams} from "react-router-dom";
 let selectedUser = null;
 
 const USERS = [
@@ -40,27 +40,33 @@ const PANEL_DATA = [
     }
 ];
 
-function UserSelector({onUserSelected}) {
+const MESSAGES = [
+
+];
+
+function UserSelector() {
     return (
         <div className={"user-selector"}>
             {USERS.map(x =>
-                <div className={"user-card"} key={x.id} onClick={() => onUserSelected(x)}>
+                <Link to={`/messages/${x.id}`} className={"user-card"} key={x.id}>
                     <label>{x.username}</label>
                     <p>{x.name}</p>
-                </div>
+                </Link>
             )}
         </div>
     );
 }
 
 function MainView() {
+    const {userId} = useParams();
     const [panelData, setPanelData] = useState();
+    const user = USERS.find(x => x.id == userId);
 
     return (
         <div className={"main-view"}>
             <header>
                 <nav>
-                    <h2>Kristiania Messenger</h2>
+                    <h2>Kristiania Messenger - {user.name}</h2>
                 </nav>
             </header>
             <div className={"content"}>
@@ -68,14 +74,14 @@ function MainView() {
                     <PanelView setPanelData={setPanelData}></PanelView>
                 </div>
                 <div class={"messages"}>
-                    <MessageView source={panelData}></MessageView>
+                    <MessageView></MessageView>
                 </div>
             </div>
         </div>
     );
 }
 
-function MessageView({ source }) {
+function MessageView( ) {
     return (
         <div class="message-view">
             <h3 className={"secondary-title"}>Meldinger</h3>
@@ -91,33 +97,32 @@ function PanelView({setPanelData}) {
             </div>
             <div>
                 {PANEL_DATA.forEach(x =>
-                    <div key={x.displayName} onClick={() => setPanelData(x)}>
+                    <Link key={x.displayName} onClick={() => setPanelData(x)}>
                         <span>{x.displayName}</span>
-                    </div>
+                    </Link>
                 )}
             </div>
         </div>
     );
 }
 
-function App() {
-    const [user, setUser] = useState();
-
-    function onUserSelected(user) {
-        setUser(user);
-    }
-
-    if(user == null) {
-        return (
-            <div className={"welcome-screen"}>
-                <h1>Kristiania Messenger</h1>
-                <h2>Velg bruker for å fortsette</h2>
-                <UserSelector onUserSelected={onUserSelected}></UserSelector>
-            </div>
-        );
-    } else {
-        return (<MainView/>);
-    }
+function WelcomeScreen() {
+    return (
+        <div className={"welcome-screen"}>
+            <h1>Kristiania Messenger</h1>
+            <h2>Velg bruker for å fortsette</h2>
+            <UserSelector ></UserSelector>
+        </div>
+    );
 }
 
-export default App
+export default function App() {
+    return (
+        <HashRouter>
+            <Routes>
+                <Route path={"/"} element={<WelcomeScreen/>}></Route>
+                <Route path={"/messages/:userId"} element={<MainView/>}></Route>
+            </Routes>
+        </HashRouter>
+    );
+}
