@@ -43,6 +43,7 @@ public class MessengerServerTest {
     @Test
     void shouldCreateServer()  {
         assertThat(server).isNotEqualTo(null);
+        assertThat(server.isRunning()).isEqualTo(true);
     }
 
     private HttpURLConnection getServerConnection(String spec) throws IOException {

@@ -73,4 +73,8 @@ public class MessengerServer {
             return null;
         }
     }
+
+    public boolean isRunning() {
+        return server.isRunning();
+    }
 }
