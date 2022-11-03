@@ -6,5 +6,5 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface UserDao {
-    List<User> retrieveUsers() throws SQLException;
+    List<User> listAllUsers() throws SQLException;
 }

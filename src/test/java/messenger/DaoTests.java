@@ -6,7 +6,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.sql.DataSource;
-import javax.xml.crypto.Data;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class DaoTests {
 
@@ -16,13 +17,36 @@ public class DaoTests {
     @BeforeEach
     void setUp() throws Exception {
         userDao = new JdbcUserDao(dataSource);
-    }
+        try(var connection = dataSource.getConnection()){
+            var statement = connection.createStatement();
+                    statement.executeUpdate("create table users (id serial primary key, name varchar(100), email varchar(100))");
+        }
 
+    }
 
     @Test
-    void shouldListUsers() throws Exception{
-        User sampleUser = SampleData.sampleBook();
+    void shouldInsertUser() throws Exception {
+        User sampleUser = SampleData.sampleUser();
+        userDao.insertUser(sampleUser);
+        var list = userDao.listAllUsers();
+
+        assertThat(list).isNotNull();
+        assertThat(list).isNotEmpty();
+    }
+
+/*
+    @Test
+    void shouldListUser() throws Exception{
+        User sampleUser = SampleData.sampleUser();
+        userDao.insertUser(sampleUser);
+        assertThat(userDao.retrieveSingleUser(sampleUser.getName()))
+                .usingRecursiveComparison()
+                .isEqualTo(sampleUser);
+                //.isNotSameAs(sampleUser);
+
 
     }
+
+ */
 
 }

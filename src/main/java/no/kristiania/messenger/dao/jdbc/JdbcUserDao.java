@@ -22,7 +22,7 @@ public class JdbcUserDao implements UserDao {
 
     public int insertUser(User entity) throws SQLException {
         try(Connection connection = dataSource.getConnection()){
-            String sql = "insert into user (name, email) values (?,?)";
+            String sql = "insert into users (name, email) values (?,?)";
             try(PreparedStatement stmt = connection.prepareStatement(
                     sql,
                     PreparedStatement.RETURN_GENERATED_KEYS
@@ -41,12 +41,27 @@ public class JdbcUserDao implements UserDao {
         }
     }
 
+    public User retrieveSingleUser(String name) throws SQLException {
+        try (var connection = dataSource.getConnection()) {
+            try (var statement = connection.prepareStatement("select * from users where name = ?")) {
+                statement.setString(1, name);
+                try (var rs = statement.executeQuery()) {
+                    if (rs.next()) {
+                        return readUser(rs);
+                    } else {
+                        return null;
+                    }
+                }
+            }
+        }
+    }
+
 
     @Override
-    public List<User> retrieveUsers() throws SQLException {
+    public List<User> listAllUsers() throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
             try(PreparedStatement stmt = connection.prepareStatement(
-                    "select * from user"
+                    "select * from users"
             )){
 
                 try (ResultSet rs = stmt.executeQuery()) {
@@ -64,5 +79,14 @@ public class JdbcUserDao implements UserDao {
                 }
             }
         }
+    }
+
+    static User readUser(ResultSet rs) throws SQLException {
+        var user = new User();
+
+        user.setId(rs.getInt("id"));
+        user.setName(rs.getString("name"));
+        user.setEmail(rs.getString("email"));
+        return user;
     }
 }
