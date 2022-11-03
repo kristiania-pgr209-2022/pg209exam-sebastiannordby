@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 
 import javax.sql.DataSource;
 
+import java.sql.SQLException;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DaoTests {
@@ -19,7 +21,7 @@ public class DaoTests {
         userDao = new JdbcUserDao(dataSource);
         try(var connection = dataSource.getConnection()){
             var statement = connection.createStatement();
-                    statement.executeUpdate("create table users (id serial primary key, name varchar(100), email varchar(100))");
+                    statement.executeUpdate("create table users (id serial primary key, name varchar(100), email varchar(200))");
         }
 
     }
@@ -47,6 +49,10 @@ public class DaoTests {
 
     }
 
+    @Test
+    void shouldRetrieveNullForMissingUser() throws SQLException {
+        assertThat(userDao.retrieveSingleUser("Konstantin")).isNull();
+    }
 
 
 }
