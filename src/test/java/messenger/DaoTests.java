@@ -51,7 +51,7 @@ public class DaoTests {
 
     @Test
     void shouldRetrieveNullForMissingUser() throws SQLException {
-        assertThat(userDao.retrieveSingleUser("Konstantin")).isNull();
+        assertThat(userDao.retrieveSingleUser("Konstantsin")).isNull();
     }
 
 
