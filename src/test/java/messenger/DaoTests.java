@@ -34,19 +34,19 @@ public class DaoTests {
         assertThat(list).isNotEmpty();
     }
 
-/*
+
     @Test
     void shouldListUser() throws Exception{
         User sampleUser = SampleData.sampleUser();
         userDao.insertUser(sampleUser);
         assertThat(userDao.retrieveSingleUser(sampleUser.getName()))
                 .usingRecursiveComparison()
-                .isEqualTo(sampleUser);
-                //.isNotSameAs(sampleUser);
+                .isEqualTo(sampleUser)
+                .isNotSameAs(sampleUser);
 
 
     }
 
- */
+
 
 }

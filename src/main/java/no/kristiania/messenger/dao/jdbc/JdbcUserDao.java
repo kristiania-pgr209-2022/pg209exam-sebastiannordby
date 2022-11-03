@@ -35,7 +35,7 @@ public class JdbcUserDao implements UserDao {
                 ResultSet generatedKeys = stmt.getGeneratedKeys();
 
                 generatedKeys.next();
-
+                entity.setId(generatedKeys.getInt("id"));
                 return generatedKeys.getInt(1);
             }
         }
@@ -68,12 +68,8 @@ public class JdbcUserDao implements UserDao {
                     List<User> users = new ArrayList<>();
 
                     while(rs.next()){
-                        User user = new User();
 
-                        user.setId(rs.getInt("id"));
-                        user.setName(rs.getString("name"));
-                        user.setEmail(rs.getString("email"));
-                        users.add(user);
+                        users.add(readUser(rs));
                     }
                     return users;
                 }
