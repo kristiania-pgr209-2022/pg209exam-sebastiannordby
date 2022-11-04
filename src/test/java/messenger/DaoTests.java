@@ -21,7 +21,8 @@ public class DaoTests {
         userDao = new JdbcUserDao(dataSource);
         try(var connection = dataSource.getConnection()){
             var statement = connection.createStatement();
-                    statement.executeUpdate("create table users (id serial primary key, name varchar(100), email varchar(200))");
+                    statement.executeUpdate("drop table users if exists;" +
+                            "create table users (id serial primary key, name varchar(100), email varchar(200))");
         }
 
     }
