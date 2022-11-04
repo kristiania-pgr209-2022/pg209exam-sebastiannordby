@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface UserDao {
     List<User> list() throws Exception;
-    User retrieveSingleUser(String name) throws Exception;
+    User find(int id) throws Exception;
     int insertUser(User entity) throws Exception;
 }

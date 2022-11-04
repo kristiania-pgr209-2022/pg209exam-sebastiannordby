@@ -8,6 +8,7 @@ public class User {
     private String bio;
 
     public User(
+        int id,
         String name,
         String emailAddress,
         String nickname,
@@ -16,6 +17,14 @@ public class User {
         this.emailAddress = emailAddress;
         this.nickname = nickname;
         this.bio = bio;
+    }
+
+    public User(
+        String name,
+        String emailAddress,
+        String nickname,
+        String bio) {
+        this(-1, name, emailAddress, nickname, bio);
     }
 
     public User() {

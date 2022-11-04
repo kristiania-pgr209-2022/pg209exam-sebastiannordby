@@ -36,26 +36,25 @@ public class JdbcUserDao implements UserDao {
 
                 try(ResultSet generatedKeys = stmt.getGeneratedKeys()){
                     generatedKeys.next();
+                    var generatedKey = generatedKeys.getInt(1);
 
-                    return generatedKeys.getInt(1);
+                    entity.setId(generatedKey);
+
+                    return generatedKey;
                 }
             }
         }
     }
 
-    public User retrieveSingleUser(String name) throws SQLException {
+    public User find(int id) throws SQLException {
         try (var connection = dataSource.getConnection()) {
-            var sql = "SELECT * FROM Users where Name = ?";
+            var sql = "SELECT * FROM Users where Id = ?";
 
             try (var statement = connection.prepareStatement(sql)) {
-                statement.setString(1, name);
+                statement.setInt(1, id);
 
                 try (var rs = statement.executeQuery()) {
-                    if (rs.next()) {
-                        return readUser(rs);
-                    } else {
-                        return null;
-                    }
+                    return rs.next() ? readUser(rs) : null;
                 }
             }
         }

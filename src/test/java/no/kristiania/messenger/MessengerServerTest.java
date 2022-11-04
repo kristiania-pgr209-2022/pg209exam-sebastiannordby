@@ -15,22 +15,7 @@ import java.nio.charset.StandardCharsets;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-public class MessengerServerTest {
-    private MessengerServer server;
-
-    @BeforeEach
-    void setup() throws Exception {
-        server = new MessengerServer(2000, InMemoryDatabase.createTestDataSource());
-        server.start();
-    }
-
-    @AfterEach
-    void tearDown() throws Exception {
-        if(server != null) {
-            server.stop();
-        }
-    }
-
+public class MessengerServerTest extends ServerTest {
     @Test
     void canConnectToServer() throws Exception {
         var connection = getServerConnection("/");
@@ -54,12 +39,5 @@ public class MessengerServerTest {
         AssertionsForClassTypes.assertThat(connection.getInputStream())
                 .asString(StandardCharsets.UTF_8)
                 .contains("<title>");
-    }
-
-    private HttpURLConnection getServerConnection(String spec) throws IOException {
-        var connection = new URL(server.getUrl(), spec).openConnection();
-        var httpUrlConnection = (HttpURLConnection) connection;
-
-        return httpUrlConnection;
     }
 }

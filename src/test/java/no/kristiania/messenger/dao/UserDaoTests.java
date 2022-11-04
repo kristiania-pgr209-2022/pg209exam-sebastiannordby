@@ -4,6 +4,7 @@ import no.kristiania.messenger.InMemoryDatabase;
 import no.kristiania.messenger.SampleData;
 import no.kristiania.messenger.dao.jdbc.JdbcUserDao;
 import no.kristiania.messenger.entities.User;
+import org.assertj.core.api.recursive.comparison.RecursiveComparisonConfiguration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -36,20 +37,18 @@ public class UserDaoTests {
 
     @Test
     void shouldListUser() throws Exception{
-        User sampleUser = SampleData.sampleUser();
+        var sampleUser = SampleData.sampleUser();
         userDao.insertUser(sampleUser);
-        assertThat(userDao.retrieveSingleUser(sampleUser.getName()))
-                .usingRecursiveComparison()
-                .isEqualTo(sampleUser)
-                .isNotSameAs(sampleUser);
+        var insertedUser = userDao.find(sampleUser.getId());
 
-
+        assertThat(insertedUser)
+            .usingRecursiveComparison()
+            .isEqualTo(sampleUser)
+            .isNotSameAs(sampleUser);
     }
 
     @Test
     void shouldRetrieveNullForMissingUser() throws SQLException {
-        assertThat(userDao.retrieveSingleUser("Konstantsin")).isNull();
+        assertThat(userDao.find(-1)).isNull();
     }
-
-
 }
