@@ -25,7 +25,7 @@ Vi parprogrammerer med delt skjerm.
 * [ ] Skriver ut nyttige logmeldinger
 
 ## Basisfunksjonalitet
-* [ ] Kan velge hvilken bruker vi skal opptre som
+* [X] Kan velge hvilken bruker vi skal opptre som
 * [ ] Viser eksisterende meldinger til brukeren
 * [ ] Lar brukeren opprette en ny melding
 * [ ] Lar brukeren svare på meldinger
@@ -38,19 +38,19 @@ Vi parprogrammerer med delt skjerm.
 * [ ] Det finnes test for alle JAX-RS endpoints og alle DAO-er
 
 ## Plan for backend
-* [ ] En Jetty Webserver
-  * [ ] Servere en React applikasjon
-* [ ] Microsoft SQL Database med Flyway migreringer
+* [X] En Jetty Webserver
+  * [X] Servere en React applikasjon
+* [X] Microsoft SQL Database med Flyway migreringer
 * [ ] Databasen skal inneholde følgende tabeller:
-  * [ ] Bruker
+  * [X] Bruker
   * [ ] Melding; innhold og avsenderId(bruker), mottakerId?(bruker), gruppeId?(Gruppe), dato
   * [ ] Gruppe: Navn
   * [ ] GruppeDeltaker: GruppeId(Gruppe), BrukerId(bruker)
 
 ## Plan for frontend
-* [ ] Når man åpner applikasjonen skal man kunne gjøre følgende:
-  * [ ] Velge fra et sett med brukere
-  * [ ] Opprette en ny bruker
+* [X] Når man åpner applikasjonen skal man kunne gjøre følgende:
+  * [X] Velge fra et sett med brukere
+  * [X] Opprette en ny bruker
 * [ ] Applikasjonen er delt opp i 2 komponenter: 
   * [ ] Sendingspanel: En vertikal boks med valg for personer/grupper
   * [ ] Meldingspanel: En vertikal boks der du ser meldinger som er hentet basert på valg i sendingspanel
