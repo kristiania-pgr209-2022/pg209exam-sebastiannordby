@@ -3,11 +3,19 @@ package no.kristiania.messenger.entities;
 public class User {
     private int id;
     private String name;
-    private String email;
+    private String emailAddress;
+    private String nickname;
+    private String bio;
 
-    public User(String name, String email) {
+    public User(
+        String name,
+        String emailAddress,
+        String nickname,
+        String bio) {
         this.name = name;
-        this.email = email;
+        this.emailAddress = emailAddress;
+        this.nickname = nickname;
+        this.bio = bio;
     }
 
     public User() {
@@ -30,11 +38,26 @@ public class User {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
+    public String getEmailAddress() {
+        return emailAddress;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
+    }
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
     }
 }

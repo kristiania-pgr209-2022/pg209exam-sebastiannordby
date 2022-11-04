@@ -1,5 +1,7 @@
-package messenger;
+package no.kristiania.messenger.dao;
 
+import no.kristiania.messenger.InMemoryDatabase;
+import no.kristiania.messenger.SampleData;
 import no.kristiania.messenger.dao.jdbc.JdbcUserDao;
 import no.kristiania.messenger.entities.User;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,7 +13,7 @@ import java.sql.SQLException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DaoTests {
+public class UserDaoTests {
 
     private DataSource  dataSource = InMemoryDatabase.createTestDataSource();
     private JdbcUserDao userDao;
@@ -19,12 +21,6 @@ public class DaoTests {
     @BeforeEach
     void setUp() throws Exception {
         userDao = new JdbcUserDao(dataSource);
-        try(var connection = dataSource.getConnection()){
-            var statement = connection.createStatement();
-                    statement.executeUpdate("drop table users if exists;" +
-                            "create table users (id serial primary key, name varchar(100), email varchar(200))");
-        }
-
     }
 
     @Test

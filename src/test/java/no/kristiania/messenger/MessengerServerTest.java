@@ -1,4 +1,4 @@
-package messenger;
+package no.kristiania.messenger;
 
 
 import no.kristiania.messenger.MessengerServer;
