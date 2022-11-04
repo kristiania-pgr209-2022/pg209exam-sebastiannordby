@@ -9,6 +9,7 @@ import org.glassfish.jersey.servlet.ServletContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.sql.DataSource;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -18,7 +19,7 @@ public class MessengerServer {
     private static final Logger logger = LoggerFactory.getLogger(MessengerServer.class);
     private final Server server;
 
-    public MessengerServer(int port) throws IOException {
+    public MessengerServer(int port, DataSource dataSource) throws IOException {
         this.server = new Server(port);
 
         var webContext = new WebAppContext();
@@ -34,7 +35,7 @@ public class MessengerServer {
         }
 
         var servlet = new ServletHolder(new ServletContainer(
-                new MessengerServerConfig()
+            new MessengerServerConfig(dataSource)
         ));
 
         servlet.setInitOrder(0);

@@ -20,7 +20,7 @@ public class MessengerServerTest {
 
     @BeforeEach
     void setup() throws Exception {
-        server = new MessengerServer(2000);
+        server = new MessengerServer(2000, InMemoryDatabase.createTestDataSource());
         server.start();
     }
 

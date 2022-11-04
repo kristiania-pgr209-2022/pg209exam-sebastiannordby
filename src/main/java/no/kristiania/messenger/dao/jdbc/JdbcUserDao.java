@@ -36,7 +36,6 @@ public class JdbcUserDao implements UserDao {
 
                 try(ResultSet generatedKeys = stmt.getGeneratedKeys()){
                     generatedKeys.next();
-                    entity.setId(generatedKeys.getInt("Id"));
 
                     return generatedKeys.getInt(1);
                 }
@@ -63,7 +62,7 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public List<User> listAllUsers() throws SQLException {
+    public List<User> list() throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
             var sql = "SELECT * FROM Users";
 

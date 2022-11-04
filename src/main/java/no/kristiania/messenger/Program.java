@@ -1,5 +1,7 @@
 package no.kristiania.messenger;
 
+import no.kristiania.messenger.database.MicrosoftSqlDataSource;
+
 import java.util.Optional;
 
 public class Program {
@@ -9,6 +11,6 @@ public class Program {
                 .map(Integer::parseInt)
                 .orElse(8080);
 
-        new MessengerServer(port).start();
+        new MessengerServer(port, MicrosoftSqlDataSource.getDataSource()).start();
     }
 }

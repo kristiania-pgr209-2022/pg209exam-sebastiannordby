@@ -27,7 +27,7 @@ public class UserDaoTests {
     void shouldInsertUser() throws Exception {
         User sampleUser = SampleData.sampleUser();
         userDao.insertUser(sampleUser);
-        var list = userDao.listAllUsers();
+        var list = userDao.list();
 
         assertThat(list).isNotNull();
         assertThat(list).isNotEmpty();

@@ -1,8 +1,18 @@
-import { useState } from 'react'
+import {useRef, useState} from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
-import {BrowserRouter, HashRouter, Link, Route, Routes, useParams} from "react-router-dom";
+import {BrowserRouter, HashRouter, Link, Route, Routes, useNavigate, useParams} from "react-router-dom";
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import {UserSelectionPage} from "./pages/user-selection-page.jsx";
+import {CreateUserDialog} from "./components/create-user-dialog.jsx";
 let selectedUser = null;
+
 
 const USERS = [
     {
@@ -54,18 +64,7 @@ const MESSAGES = [
     },
 ];
 
-function UserSelector() {
-    return (
-        <div className={"user-selector"}>
-            {USERS.map(x =>
-                <Link to={`/messages/${x.id}`} className={"user-card"} key={x.id}>
-                    <label>{x.username}</label>
-                    <p>{x.name}</p>
-                </Link>
-            )}
-        </div>
-    );
-}
+
 
 function MainView() {
     const { userId, panelDataId } = useParams();
@@ -128,11 +127,23 @@ function PanelView({setPanelData, userId}) {
 }
 
 function WelcomeScreen() {
+    const [createDialogVisible, setCreateDialogVisible] = useState(false);
+    let history = useNavigate();
+
+    function gotoLogin() {
+        history("/login");
+    }
+
     return (
         <div className={"welcome-screen"}>
             <h1>Kristiania Messenger</h1>
-            <h2>Velg bruker for å fortsette</h2>
-            <UserSelector ></UserSelector>
+
+            <div className={"buttons"}>
+                <Button onClick={() => setCreateDialogVisible(true)}>Opprett</Button>
+                <Button onClick={gotoLogin}>Login</Button>
+            </div>
+
+            <CreateUserDialog open={createDialogVisible} setOpen={setCreateDialogVisible}></CreateUserDialog>
         </div>
     );
 }
@@ -144,6 +155,7 @@ export default function App() {
                 <Route path={"/"} element={<WelcomeScreen/>}></Route>
                 <Route path={"/messages/:userId"} element={<MainView/>}></Route>
                 <Route path={"/messages/:userId/:panelDataId"} element={<MainView/>}></Route>
+                <Route path={"/login"} element={<UserSelectionPage/>}></Route>
             </Routes>
         </HashRouter>
     );
