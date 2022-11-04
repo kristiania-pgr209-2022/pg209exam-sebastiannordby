@@ -8,6 +8,7 @@ import jakarta.json.Json;
 import no.kristiania.messenger.dao.UserDao;
 import no.kristiania.messenger.entities.User;
 
+import javax.print.attribute.standard.Media;
 import java.io.StringReader;
 
 @Path("/user")
@@ -35,8 +36,24 @@ public class UserEndpoint {
         return Response.ok(result.build().toString()).build();
     }
 
+    @GET
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response find(@PathParam("id") int id) throws Exception {
+        var user = userDao.find(id);
+        var userJson = Json.createObjectBuilder()
+            .add("id", user.getId())
+            .add("name", user.getName())
+            .add("emailAddress", user.getEmailAddress())
+            .add("nickname", user.getNickname())
+            .add("bio", user.getBio());
+
+        return Response.ok(userJson.build().toString()).build();
+    }
+
     @POST
     @Path("/")
+    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response create(String body) throws Exception {
         if(body == null && body.length() == 0) {
@@ -55,6 +72,6 @@ public class UserEndpoint {
         var responseJson = Json.createObjectBuilder()
             .add("id", userId);
 
-        return Response.ok(responseJson).build();
+        return Response.ok(responseJson.build().toString()).build();
     }
 }
