@@ -129,7 +129,13 @@
                                 <includes>
                                     <include>**/*.properties</include>
                                 </includes>
-                                <targetPath>/site/wwwroot</targetPath>
+                            </resource>
+                            <resource>
+                                <type>static</type>
+                                <directory>${project.basedir}/src/local/azure</directory>
+                                <includes>
+                                    <include>**/*.properties</include>
+                                </includes>
                             </resource>
                         </resources>
                     </deployment>

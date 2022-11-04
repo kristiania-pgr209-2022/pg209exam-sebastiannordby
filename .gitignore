@@ -3,3 +3,4 @@
 target
 /src/main/resources/webapp/assets/
 /src/main/frontend/node/
+/src/local/azure
