@@ -52,6 +52,9 @@ public class UserEndpoint {
                 userJson.getString("bio"))
         );
 
-        return Response.ok().build();
+        var responseJson = Json.createObjectBuilder()
+            .add("id", userId);
+
+        return Response.ok(responseJson).build();
     }
 }

@@ -13,6 +13,7 @@ public class User {
         String emailAddress,
         String nickname,
         String bio) {
+        this.id = id;
         this.name = name;
         this.emailAddress = emailAddress;
         this.nickname = nickname;
