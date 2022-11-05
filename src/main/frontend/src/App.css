@@ -106,8 +106,21 @@ h2 {
 }
 
 .main-view header {
-  background: #303033;
+  background: #c61932;
   color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: .5em 1em;
+}
+
+.main-view header button {
+  color: #fff;
+}
+
+.main-view header h1 {
+  font-size: 1.3rem;
+  margin: 0;
 }
 
 .main-view > .content {
@@ -120,9 +133,7 @@ h2 {
   padding: 1em .5em;
 }
 
-.main-view nav h1 {
-  font-size: 1rem;
-}
+
 
 .main-view > .content .selector {
   flex: 0 1 300px;
@@ -133,8 +144,8 @@ h2 {
   flex: 1 0 500px;
 }
 
-.message-view {
-
+.message-view header {
+  padding: .5em 1em;
 }
 
 .panel-view {
@@ -148,7 +159,6 @@ h2 {
   justify-content: space-between;
   gap: 2em;
   border-bottom: 1px solid #dfdfdf;
-  padding: .5em 1em;
   align-items: center;
 }
 
@@ -173,6 +183,15 @@ h2 {
   border: 1px solid #dfdfdf;
 }
 
+.section-header {
+  display: flex;
+  gap: 1em;
+  align-items: center;
+  height: 55px;
+  max-height: 55px;
+  padding: .5em 1em;
+  border-bottom: 1px solid #dfdfdf;
+}
 
 .secondary-title {
   margin: 0;
