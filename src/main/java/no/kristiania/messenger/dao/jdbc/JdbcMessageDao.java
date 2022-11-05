@@ -1,5 +1,6 @@
 package no.kristiania.messenger.dao.jdbc;
 
+import jakarta.inject.Inject;
 import no.kristiania.messenger.entities.Message;
 import no.kristiania.messenger.entities.User;
 
@@ -17,6 +18,11 @@ import java.util.TimeZone;
 
 public class JdbcMessageDao {
     private DataSource dataSource;
+
+    @Inject
+    public JdbcMessageDao(DataSource dataSource) throws Exception{
+        this.dataSource = dataSource;
+    }
 
     public int sendNewMessage(Message entity) throws SQLException {
         Date date = new Date();
