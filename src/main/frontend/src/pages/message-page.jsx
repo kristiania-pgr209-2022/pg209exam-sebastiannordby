@@ -1,4 +1,4 @@
-import {Link, useParams} from "react-router-dom";
+import {Link, useParams, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import IconButton from '@mui/material/IconButton';
 import Skeleton from '@mui/material/Skeleton';
@@ -10,9 +10,10 @@ export function MessengerPage() {
     const { userId, panelDataId } = useParams();
     const [ user, setUser ] = useState(null);
     const [panelData, setPanelData] = useState();
+    const navigate = useNavigate();
 
     const signOut = () => {
-
+        navigate('/');
     };
 
     useEffect(() => {
@@ -30,16 +31,14 @@ export function MessengerPage() {
 
     return (<div className={"main-view"}>
         <header>
-            <nav>
-                {user ?
-                    <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                        <h1>Kristiania Messenger</h1>
-                        <IconButton onClick={signOut} aria-label="sign out">
-                            <ExitToApp/>
-                        </IconButton>
-                    </div>
-                 : <Skeleton variant="text" sx={{ fontSize: '1rem' }} />}
-            </nav>
+            {user ?
+                <>
+                    <h1>Kristiania Messenger</h1>
+                    <IconButton onClick={signOut} aria-label="sign out" className="color-inherit" >
+                        <ExitToApp/>
+                    </IconButton>
+                </>
+            : <Skeleton variant="text" sx={{ fontSize: '1rem' }} />}
         </header>
         <div className={"content"}>
             <div className={"selector"}>

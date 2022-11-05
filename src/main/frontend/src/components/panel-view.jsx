@@ -9,6 +9,9 @@ import Checkbox from "@mui/material/Checkbox";
 import DialogActions from "@mui/material/DialogActions";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
+import {TextField} from "@mui/material";
 
 export function PanelView({setPanelData, userId, isLoading }) {
     const [newGroupDialogOpen, setNewGroupDialogOpen] = useState(false);
@@ -17,7 +20,7 @@ export function PanelView({setPanelData, userId, isLoading }) {
     if(!isLoading) {
         return (
             <div className={"panel-view"}>
-                <div class="header">
+                <div class="header section-header">
                     <h3 className={"secondary-title"}>Chatter</h3>
 
                     <Button
@@ -44,7 +47,7 @@ export function PanelView({setPanelData, userId, isLoading }) {
 
                 <NewPersonChatDialog
                     open={newPersonDialogOpen}
-                    setOpen={newPersonDialogOpen}
+                    setOpen={setNewPersonDialogOpen}
                     signedOnUserId={userId}>
                 </NewPersonChatDialog>
             </div>
@@ -63,12 +66,10 @@ export function PanelView({setPanelData, userId, isLoading }) {
  * )}
  * */
 
-
-
 function PanelViewSkeleton() {
     return (
         <div className={"panel-view"}>
-            <div class="header">
+            <div class="header section-header">
                 <h3 className={"secondary-title"}>Chatter</h3>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1em', padding: '1em'}}>
@@ -94,7 +95,13 @@ function PanelViewSkeleton() {
 function NewPersonChatDialog({ open, setOpen, signedOnUserId }) {
     const [ users, setUsers ] = useState([]);
     const [ selectedUserId, setSelectedUserId ] = useState(0);
+    const [ message, setMessage ] = useState('');
+    const [ subject, setSubject ] = useState('');
+
     const handleClose = () => {
+        setSelectedUserId(0);
+        setMessage('');
+        setSubject('');
         setOpen(false);
     };
 
@@ -107,36 +114,40 @@ function NewPersonChatDialog({ open, setOpen, signedOnUserId }) {
             const result = await fetch(`/api/user`);
             const users = await result.json();
 
-            console.log('Users: ', users);
-
             setUsers(users.filter(x => x.id !== signedOnUserId));
         })();
     }, [ setUsers ]);
 
     return (
-        <Dialog open={open} onClose={handleClose} sx={{minWidth: '500px'}}>
+        <Dialog open={open} onClose={handleClose}>
             <DialogTitle>Ny chat</DialogTitle>
             <DialogContent>
-                <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={selectedUserId}
-                    label="Mottaker"
-                    sx={{width: '100%'}}
-                    onChange={e => setSelectedUserId(e.target.value)}>
+                <div style={{minWidth: '500px', padding: '1em', display: 'flex', flexDirection: 'column', gap: '1em'}}>
+                    <FormControl sx={{width: '100%'}}>
+                        <InputLabel id="recieverLabel">Mottaker</InputLabel>
+                        <Select
+                            labelId="recieverLabel"
+                            id="demo-simple-select"
+                            value={selectedUserId}
+                            label="Mottaker"
+                            sx={{width: '100%'}}
+                            onChange={e => setSelectedUserId(e.target.value)}>
+                            <MenuItem disabled value="">
+                                <em>Velg mottaker</em>
+                            </MenuItem>
 
-                    <MenuItem disabled value="">
-                        <em>Velg mottaker</em>
-                    </MenuItem>
-
-                    {users.map(user =>
-                        <MenuItem value={user.id}>{user.name}</MenuItem>
-                    )}
-                </Select>
+                            {users.map(user =>
+                                <MenuItem value={user.id}>{user.name}</MenuItem>
+                            )}
+                        </Select>
+                    </FormControl>
+                    <TextField value={subject} onChange={e => setSubject(e.target.value)} label="Tittel" variant="outlined" />
+                    <TextField value={message} onChange={e => setMessage(e.target.value)} label="Melding" variant="outlined" />
+                </div>
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose}>Avbryt</Button>
-                <Button onClick={createChat}>Opprett</Button>
+                <Button onClick={createChat}>Send</Button>
             </DialogActions>
         </Dialog>
     );

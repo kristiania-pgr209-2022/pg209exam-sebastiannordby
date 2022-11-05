@@ -19,8 +19,8 @@ function WelcomeScreen() {
             <h1>Kristiania Messenger</h1>
 
             <div className={"buttons"}>
-                <Button onClick={() => setCreateDialogVisible(true)}>Opprett</Button>
-                <Button onClick={gotoLogin}>Login</Button>
+                <Button onClick={() => setCreateDialogVisible(true)} variant="outlined">Opprett</Button>
+                <Button onClick={gotoLogin} variant="contained">Login</Button>
             </div>
 
             <CreateUserDialog open={createDialogVisible} setOpen={setCreateDialogVisible}></CreateUserDialog>
