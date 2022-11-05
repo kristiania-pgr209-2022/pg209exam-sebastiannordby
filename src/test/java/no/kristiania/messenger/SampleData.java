@@ -21,19 +21,16 @@ public class SampleData {
         );
     }
 
-    public static Message sampleMessage(){
+    public static Message sampleMessage(User sender, User receiver){
         Date date = new Date();
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        df.setTimeZone(TimeZone.getTimeZone("Europe/Oslo"));
-        Date currentDate = new Date();
 
         return new Message(
             pick(
         "Hei, skal vi spille tennis etter backend timen?",
                 "Når kommer du over?",
                 "Byen i kveld?"),
-                1, 0, currentDate
-        );
+                sender.getId(), receiver.getId(), new java.sql.Date(date.getTime()));
+
     }
 
     public static String pick(String... parameters) {

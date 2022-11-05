@@ -24,7 +24,7 @@ public class JdbcMessageDao {
         this.dataSource = dataSource;
     }
 
-    public int sendNewMessage(Message entity) throws SQLException {
+    public int sendNewMessage(Message entity, int loggedInUser, int receiver) throws SQLException {
         Date date = new Date();
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         df.setTimeZone(TimeZone.getTimeZone("Europe/Oslo"));
@@ -36,9 +36,9 @@ public class JdbcMessageDao {
                     sql, PreparedStatement.RETURN_GENERATED_KEYS)){
 
                 stmt.setString(1, entity.getContent());
-                stmt.setInt(2, entity.getSenderId());
-                stmt.setInt(3, entity.getReceiverId());
-                stmt.setDate(4, java.sql.Date.valueOf(df.format(date)));
+                stmt.setInt(2, loggedInUser);
+                stmt.setInt(3, receiver);
+                stmt.setDate(4, new java.sql.Date(date.getTime()));
                 stmt.executeUpdate();
 
                 try(ResultSet generatedKeys = stmt.getGeneratedKeys()){
@@ -53,13 +53,13 @@ public class JdbcMessageDao {
         }
     }
 
-    public List findMessageBetween(User sender, User receiver) throws SQLException {
+    public List findMessageBetween(int loggedInUser, int receiver) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
             var sql = "SELECT * FROM Messages where SenderId= ? and ReceiverId = ?";
 
             try(var statement = connection.prepareStatement(sql)){
-                statement.setInt(1, sender.getId());
-                statement.setInt(2,receiver.getId());
+                statement.setInt(1, loggedInUser);
+                statement.setInt(2, receiver);
 
 
                 try (ResultSet rs = statement.executeQuery()) {
