@@ -17,7 +17,7 @@ public class SampleData {
             pick("Mats", "Sebastian", "Leif"),
             pick("csharp@gmail.com", "javalord@oracle.net", "ndc@code.com"),
             pick("Cyllon", "Ridens", "Spolker"),
-            pick("Happy, living life.", "Programming my way away.", "Looking for coding job. Hit me up")
+            pick("Happy, living life.", "Programming my way away.", "Looking for coding job. Hit me up", "Hello World")
         );
     }
 
@@ -25,10 +25,14 @@ public class SampleData {
         Date date = new Date();
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         df.setTimeZone(TimeZone.getTimeZone("Europe/Oslo"));
-        Date currentDate = java.sql.Date.valueOf(df.format(date));
-        return new Message(
-                pick("Hei, skal vi spille tennis etter backend timen?"), 1, 0, currentDate
+        Date currentDate = new Date();
 
+        return new Message(
+            pick(
+        "Hei, skal vi spille tennis etter backend timen?",
+                "Når kommer du over?",
+                "Byen i kveld?"),
+                1, 0, currentDate
         );
     }
 
@@ -37,3 +41,4 @@ public class SampleData {
             parameters[random.nextInt(parameters.length - 1)] : null;
     }
 }
+//java.sql.Date.valueOf(df.format(date))

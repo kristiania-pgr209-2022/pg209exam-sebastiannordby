@@ -28,12 +28,9 @@ public class MessageDaoTests {
 
     @Test
     void shouldSendMessageToDataBase() throws SQLException {
-        User sender = SampleData.sampleUser();
+        var sender = SampleData.sampleUser();
         userDao.insertUser(sender);
-        User reciever = new User();
-        while(sender.equals(reciever)){
-            reciever = SampleData.sampleUser();
-        }
+        var reciever = SampleData.sampleUser();
         userDao.insertUser(reciever);
 
         Message sampleMessage = SampleData.sampleMessage();
