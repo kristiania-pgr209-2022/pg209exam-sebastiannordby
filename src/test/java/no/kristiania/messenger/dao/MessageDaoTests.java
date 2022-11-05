@@ -30,18 +30,39 @@ public class MessageDaoTests {
     void shouldSendMessageToDataBase() throws SQLException {
         var sender = SampleData.sampleUser();
         userDao.insertUser(sender);
-        var reciever = SampleData.sampleUser();
-        userDao.insertUser(reciever);
+        var receiver = SampleData.sampleUser();
+        userDao.insertUser(receiver);
 
-        Message sampleMessage = SampleData.sampleMessage();
-        messageDao.sendNewMessage(sampleMessage);
+        Message sampleMessage = SampleData.sampleMessage(sender, receiver);
+        messageDao.sendNewMessage(sampleMessage, sender.getId(), receiver.getId());
 
-        var list = messageDao.findMessageBetween(sender, reciever);
+        var list = messageDao.findMessageBetween(sender.getId(), receiver.getId());
 
         assertThat(list).isNotNull();
         assertThat(list).isNotEmpty();
     }
 
+    @Test
+    void shouldListMessagesBetweenUsers() throws SQLException {
+        var sender = SampleData.sampleUser();
+        userDao.insertUser(sender);
+        var receiver = SampleData.sampleUser();
+        userDao.insertUser(receiver);
 
+        Message sampleMessage = SampleData.sampleMessage(sender, receiver);
+        messageDao.sendNewMessage(sampleMessage, sender.getId(), receiver.getId());
+
+        var insertedMessage = messageDao.findMessageBetween(sender.getId(), receiver.getId());
+
+        assertThat(insertedMessage)
+                .usingRecursiveComparison()
+                .isEqualTo(sampleMessage)
+                .isNotSameAs(sampleMessage);
+    }
+
+    @Test
+    void shouldRetrieveEmptyListForNoValidUser() throws SQLException {
+        assertThat(messageDao.findMessageBetween(0, -1)).isEmpty();
+    }
 
 }
