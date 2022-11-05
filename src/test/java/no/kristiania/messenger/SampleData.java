@@ -21,15 +21,16 @@ public class SampleData {
         );
     }
 
+
     public static Message sampleMessage(User sender, User receiver){
-        Date date = new Date();
+        Date date = new Date(System.currentTimeMillis());
 
         return new Message(
             pick(
         "Hei, skal vi spille tennis etter backend timen?",
                 "Når kommer du over?",
                 "Byen i kveld?"),
-                sender.getId(), receiver.getId(), new java.sql.Date(date.getTime()));
+                sender.getId(), receiver.getId(), date);
 
     }
 
