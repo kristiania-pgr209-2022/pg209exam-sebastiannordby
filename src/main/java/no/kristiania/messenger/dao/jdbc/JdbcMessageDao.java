@@ -1,6 +1,7 @@
 package no.kristiania.messenger.dao.jdbc;
 
 import no.kristiania.messenger.entities.Message;
+import no.kristiania.messenger.entities.User;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -9,7 +10,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 public class JdbcMessageDao {
@@ -43,4 +46,39 @@ public class JdbcMessageDao {
             }
         }
     }
+
+    public List findMessageBetween(User sender, User receiver) throws SQLException {
+        try (Connection connection = dataSource.getConnection()) {
+            var sql = "SELECT * FROM Messages where SenderId= ? and ReceiverId = ?";
+
+            try(var statement = connection.prepareStatement(sql)){
+                statement.setInt(1, sender.getId());
+                statement.setInt(2,receiver.getId());
+
+
+                try (ResultSet rs = statement.executeQuery()) {
+                    List<Message> messages = new ArrayList<>();
+
+                    while(rs.next()){
+                        messages.add(readMessage(rs));
+                    }
+
+                    return messages;
+                }
+            }
+        }
+    }
+
+    static Message readMessage(ResultSet rs) throws SQLException {
+        var message = new Message();
+
+        message.setMessageId(rs.getInt("MessageId"));
+        message.setContent(rs.getString("Content"));
+        message.setSenderId(rs.getInt("SenderId"));
+        message.setReceiverId(rs.getInt("ReceiverId"));
+        message.setSentDate(rs.getDate("SentDate"));
+
+        return message;
+    }
+
 }

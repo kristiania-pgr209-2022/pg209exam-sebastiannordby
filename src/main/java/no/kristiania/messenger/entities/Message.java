@@ -16,6 +16,10 @@ public class Message {
         this.sentDate = sentDate;
     }
 
+    public Message() {
+
+    }
+
     public int getMessageId() {
         return messageId;
     }
