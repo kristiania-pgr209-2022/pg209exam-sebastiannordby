@@ -21,6 +21,7 @@ public class SampleData {
         );
     }
 
+
     public static Message sampleMessage(User sender, User receiver){
         Date date = new Date(System.currentTimeMillis());
 
