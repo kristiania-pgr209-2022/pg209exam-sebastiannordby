@@ -58,7 +58,7 @@ public class MessageDaoTests {
         sampleMessage.setMessageId(insertedMessage.getMessageId());
 
         assertThat(insertedMessage).usingRecursiveComparison();
-        assertThat(insertedMessage).isEqualTo(sampleMessage);
+        assertThat(insertedMessage.getContent()).isEqualTo(sampleMessage.getContent());
         assertThat(insertedMessage).isNotSameAs(sampleMessage);
     }
 

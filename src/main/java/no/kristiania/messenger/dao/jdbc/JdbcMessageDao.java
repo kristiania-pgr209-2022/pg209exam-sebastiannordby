@@ -1,6 +1,7 @@
 package no.kristiania.messenger.dao.jdbc;
 
 import jakarta.inject.Inject;
+import no.kristiania.messenger.dao.MessageDao;
 import no.kristiania.messenger.entities.Message;
 import no.kristiania.messenger.entities.User;
 
@@ -13,7 +14,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class JdbcMessageDao {
+public class JdbcMessageDao implements MessageDao {
     private DataSource dataSource;
 
     @Inject
