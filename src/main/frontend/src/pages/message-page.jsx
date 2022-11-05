@@ -1,5 +1,6 @@
 import {Link, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
+import {Skeleton} from "@mui/material";
 
 const USERS = [
     {
@@ -54,76 +55,126 @@ const MESSAGES = [
 
 export function MessengerPage() {
     const { userId, panelDataId } = useParams();
-    const [ user, setUser ] = useState();
+    const [ user, setUser ] = useState(null);
     const [panelData, setPanelData] = useState();
 
     useEffect(() => {
         (async () => {
             if(userId) {
-                const result = await fetch(`/api/user/${userId}`);
-                const user = await result.json();
+                setTimeout(async() => {
+                    const result = await fetch(`/api/user/${userId}`);
+                    const user = await result.json();
 
-                setUser(user)
+                    setUser(user);
+                }, 700); // To display skeleton
             }
         })();
     }, [setUser]);
 
-    if(user != null) {
-        return (<div className={"main-view"}>
-            <header>
-                <nav>
-                    <h2>Kristiania Messenger - {user.name}</h2>
-                </nav>
-            </header>
-            <div className={"content"}>
-                <div className={"selector"}>
-                    <PanelView userId={userId} setPanelData={setPanelData}></PanelView>
-                </div>
-                <div className={"messages"}>
-                    <MessageView panelDataId={panelDataId}></MessageView>
-                </div>
+    return (<div className={"main-view"}>
+        <header>
+            <nav>
+                {user ? <h2>Kristiania Messenger - {user.name}</h2> : <Skeleton variant="text" sx={{ fontSize: '1rem' }} />}
+            </nav>
+        </header>
+        <div className={"content"}>
+            <div className={"selector"}>
+                <PanelView isLoading={!user} userId={userId} setPanelData={setPanelData}></PanelView>
             </div>
-        </div>);
-    } else {
-        return (
-            <p>Laster..</p>
-        );
-    }
+            <div className={"messages"}>
+                <MessageView isLoading={!user} panelDataId={panelDataId}></MessageView>
+            </div>
+        </div>
+    </div>);
 }
 
 
-function MessageView({ panelDataId } ) {
+function MessageView({ panelDataId, isLoading } ) {
     const data = PANEL_DATA.find(x => x.id == panelDataId);
     const messages = MESSAGES.filter(x => x.panelDataId == panelDataId);
     console.log('MessageView: ', data);
 
-    return (
-        <div class="message-view">
-            <h3 className={"secondary-title"}>Meldinger</h3>
+    if(!isLoading) {
+        return (
+            <div class="message-view">
+                <h3 className={"secondary-title"}>Meldinger</h3>
 
-            <div className="content">
-                {messages.map(x =>
-                    <div>{x.message}</div>
-                )}
+                <div className="content">
+                    {messages.map(x =>
+                        <div>{x.message}</div>
+                    )}
+                </div>
             </div>
-        </div>
-    );
+        );
+    } else {
+        return (<div style={{display: 'flex', gap: '1em', flexDirection: 'column', padding: '1em' }}>
+            <Skeleton variant="rounded" width={"100%"} height={30} />
+            <Skeleton variant="rounded" width={"100%"} height={30} />
+            <Skeleton variant="rounded" width={"100%"} height={30} />
+            <Skeleton variant="rounded" width={"100%"} height={30} />
+            <Skeleton variant="rounded" width={"100%"} height={30} />
+            <Skeleton variant="rounded" width={"100%"} height={30} />
+            <Skeleton variant="rounded" width={"100%"} height={30} />
+            <Skeleton variant="rounded" width={"100%"} height={30} />
+            <Skeleton variant="rounded" width={"100%"} height={30} />
+            <Skeleton variant="rounded" width={"100%"} height={30} />
+            <Skeleton variant="rounded" width={"100%"} height={30} />
+            <Skeleton variant="rounded" width={"100%"} height={30} />
+            <Skeleton variant="rounded" width={"100%"} height={30} />
+            <Skeleton variant="rounded" width={"100%"} height={30} />
+            <Skeleton variant="rounded" width={"100%"} height={30} />
+            <Skeleton variant="rounded" width={"100%"} height={30} />
+            <Skeleton variant="rounded" width={"100%"} height={30} />
+            <Skeleton variant="rounded" width={"100%"} height={30} />
+            <Skeleton variant="rounded" width={"100%"} height={30} />
+            <Skeleton variant="rounded" width={"100%"} height={30} />
+            <Skeleton variant="rounded" width={"100%"} height={30} />
+            <Skeleton variant="rounded" width={"100%"} height={30} />
+            <Skeleton variant="rounded" width={"100%"} height={30} />
+            <Skeleton variant="rounded" width={"100%"} height={30} />
+        </div>);
+    }
 }
 
-function PanelView({setPanelData, userId}) {
-    return (
-        <div className={"panel-view"}>
-            <div class="header">
-                <h3 className={"secondary-title"}>Personer</h3>
+function PanelView({setPanelData, userId, isLoading }) {
+    if(!isLoading) {
+        return (
+            <div className={"panel-view"}>
+                <div class="header">
+                    <h3 className={"secondary-title"}>Personer</h3>
+                </div>
+                <div class="content">
+                    {PANEL_DATA.map(x =>
+                        <Link key={x.id} to={`/messages/${userId}/${x.id}`}>
+                            <img className={"avatar"} />
+                            <span>{x.username}</span>
+                        </Link>
+                    )}
+                </div>
             </div>
-            <div class="content">
-                {PANEL_DATA.map(x =>
-                    <Link key={x.id} to={`/messages/${userId}/${x.id}`}>
-                        <img className={"avatar"} />
-                        <span>{x.username}</span>
-                    </Link>
-                )}
+        );
+    } else {
+        return (
+            <div className={"panel-view"}>
+                <div class="header">
+                    <h3 className={"secondary-title"}>Personer</h3>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1em', padding: '1em'}}>
+                    <Skeleton variant="rounded" width={"100%"} height={30} />
+                    <Skeleton variant="rounded" width={"100%"} height={30} />
+                    <Skeleton variant="rounded" width={"100%"} height={30} />
+                    <Skeleton variant="rounded" width={"100%"} height={30} />
+                    <Skeleton variant="rounded" width={"100%"} height={30} />
+                    <Skeleton variant="rounded" width={"100%"} height={30} />
+                    <Skeleton variant="rounded" width={"100%"} height={30} />
+                    <Skeleton variant="rounded" width={"100%"} height={30} />
+                    <Skeleton variant="rounded" width={"100%"} height={30} />
+                    <Skeleton variant="rounded" width={"100%"} height={30} />
+                    <Skeleton variant="rounded" width={"100%"} height={30} />
+                    <Skeleton variant="rounded" width={"100%"} height={30} />
+                    <Skeleton variant="rounded" width={"100%"} height={30} />
+                </div>
             </div>
-        </div>
-    );
+        );
+    }
 }
