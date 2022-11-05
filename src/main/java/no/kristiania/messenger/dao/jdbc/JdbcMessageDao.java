@@ -21,7 +21,7 @@ public class JdbcMessageDao {
         df.setTimeZone(TimeZone.getTimeZone("Europe/Oslo"));
         try(Connection connection = dataSource.getConnection()){
             var sql = """
-                INSERT INTO Messages (Content, Sender_Id, Receiver_Id, Sent_Date) values (?, ?, ?, ?)""";
+                INSERT INTO Messages (Content, SenderId, ReceiverId, SentDate) values (?, ?, ?, ?)""";
 
             try(PreparedStatement stmt = connection.prepareStatement(
                     sql, PreparedStatement.RETURN_GENERATED_KEYS)){
