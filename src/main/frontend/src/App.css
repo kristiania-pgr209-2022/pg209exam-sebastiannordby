@@ -116,6 +116,14 @@ h2 {
   border: 1px solid #dfdfdf;
 }
 
+.main-view nav {
+  padding: 1em .5em;
+}
+
+.main-view nav h1 {
+  font-size: 1rem;
+}
+
 .main-view > .content .selector {
   flex: 0 1 300px;
   border-right: 1px solid #dfdfdf;
@@ -133,6 +141,15 @@ h2 {
   display: flex;
   flex-direction: column;
   height: 100%;
+}
+
+.panel-view > .header {
+  display: flex;
+  justify-content: space-between;
+  gap: 2em;
+  border-bottom: 1px solid #dfdfdf;
+  padding: .5em 1em;
+  align-items: center;
 }
 
 .panel-view > .content {
@@ -158,11 +175,8 @@ h2 {
 
 
 .secondary-title {
-  margin-top: 0;
+  margin: 0;
   font-size: 1.1rem;
-  padding: .75em 0;
-  border-bottom: 1px solid #dfdfdf;
-  background: #b6b6b96b;
 }
 
 .panel-view {

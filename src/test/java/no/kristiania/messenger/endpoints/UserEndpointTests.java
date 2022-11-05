@@ -5,10 +5,7 @@ import no.kristiania.messenger.SampleData;
 import no.kristiania.messenger.ServerTest;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 

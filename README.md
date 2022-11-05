@@ -51,9 +51,9 @@ Vi parprogrammerer med delt skjerm.
 * [X] Når man åpner applikasjonen skal man kunne gjøre følgende:
   * [X] Velge fra et sett med brukere
   * [X] Opprette en ny bruker
-* [ ] Applikasjonen er delt opp i 2 komponenter: 
-  * [ ] Sendingspanel: En vertikal boks med valg for personer/grupper
-  * [ ] Meldingspanel: En vertikal boks der du ser meldinger som er hentet basert på valg i sendingspanel
+* [X] Applikasjonen er delt opp i 2 komponenter: 
+  * [X] Sendingspanel: En vertikal boks med valg for personer/grupper
+  * [X] Meldingspanel: En vertikal boks der du ser meldinger som er hentet basert på valg i sendingspanel
 * [ ] Sendingspanel: viser personer/grupper du har meldinger i
   * [ ] Man skal kunne "opprette" en ny melding enten til person eller gruppe
 * [ ] Meldingspanel: viser meldingene innenfor personen/gruppen du har valgt på venstre side

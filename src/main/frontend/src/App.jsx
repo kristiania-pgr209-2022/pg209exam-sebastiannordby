@@ -1,22 +1,10 @@
-import {useRef, useState} from 'react'
-import reactLogo from './assets/react.svg'
 import './App.css'
-import {BrowserRouter, HashRouter, Link, Route, Routes, useNavigate, useParams} from "react-router-dom";
+import { useState } from 'react'
+import { HashRouter, Route, Routes, useNavigate, useParams} from "react-router-dom";
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import {UserSelectionPage} from "./pages/user-selection-page.jsx";
-import {CreateUserDialog} from "./components/create-user-dialog.jsx";
-import {MessengerPage} from "./pages/message-page.jsx";
-let selectedUser = null;
-
-
-
-
+import {UserSelectionPage} from "./pages/user-selection-page";
+import {CreateUserDialog} from "./components/create-user-dialog";
+import {MessengerPage} from "./pages/message-page";
 
 function WelcomeScreen() {
     const [createDialogVisible, setCreateDialogVisible] = useState(false);

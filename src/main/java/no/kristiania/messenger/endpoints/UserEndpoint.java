@@ -7,8 +7,6 @@ import jakarta.ws.rs.core.Response;
 import jakarta.json.Json;
 import no.kristiania.messenger.dao.UserDao;
 import no.kristiania.messenger.entities.User;
-
-import javax.print.attribute.standard.Media;
 import java.io.StringReader;
 
 @Path("/user")
