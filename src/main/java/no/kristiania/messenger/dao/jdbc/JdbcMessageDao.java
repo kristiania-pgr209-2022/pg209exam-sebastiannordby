@@ -11,10 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
+import java.util.*;
 
 public class JdbcMessageDao {
     private DataSource dataSource;
@@ -24,8 +21,8 @@ public class JdbcMessageDao {
         this.dataSource = dataSource;
     }
 
-    public int sendNewMessage(Message entity, int loggedInUser, int receiver) throws SQLException {
-        Date date = new Date();
+    public int sendNewMessage(String content, int loggedInUser, int receiver) throws SQLException {
+        Date date = new Date(System.currentTimeMillis());
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         df.setTimeZone(TimeZone.getTimeZone("Europe/Oslo"));
         try(Connection connection = dataSource.getConnection()){
@@ -35,7 +32,7 @@ public class JdbcMessageDao {
             try(PreparedStatement stmt = connection.prepareStatement(
                     sql, PreparedStatement.RETURN_GENERATED_KEYS)){
 
-                stmt.setString(1, entity.getContent());
+                stmt.setString(1, content);
                 stmt.setInt(2, loggedInUser);
                 stmt.setInt(3, receiver);
                 stmt.setDate(4, new java.sql.Date(date.getTime()));
@@ -45,7 +42,7 @@ public class JdbcMessageDao {
                     generatedKeys.next();
                     var generatedKey = generatedKeys.getInt(1);
 
-                    entity.setMessageId(generatedKey);
+                    //entity.setMessageId(generatedKey);
 
                     return generatedKey;
                 }
@@ -53,7 +50,7 @@ public class JdbcMessageDao {
         }
     }
 
-    public List findMessageBetween(int loggedInUser, int receiver) throws SQLException {
+    public List<Message> findMessageBetween(int loggedInUser, int receiver) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
             var sql = "SELECT * FROM Messages where SenderId= ? and ReceiverId = ?";
 

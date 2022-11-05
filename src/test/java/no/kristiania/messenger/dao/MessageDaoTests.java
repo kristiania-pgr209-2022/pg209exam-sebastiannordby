@@ -34,7 +34,7 @@ public class MessageDaoTests {
         userDao.insertUser(receiver);
 
         Message sampleMessage = SampleData.sampleMessage(sender, receiver);
-        messageDao.sendNewMessage(sampleMessage, sender.getId(), receiver.getId());
+        messageDao.sendNewMessage(sampleMessage.getContent(), sender.getId(), receiver.getId());
 
         var list = messageDao.findMessageBetween(sender.getId(), receiver.getId());
 
@@ -50,14 +50,16 @@ public class MessageDaoTests {
         userDao.insertUser(receiver);
 
         Message sampleMessage = SampleData.sampleMessage(sender, receiver);
-        messageDao.sendNewMessage(sampleMessage, sender.getId(), receiver.getId());
+        messageDao.sendNewMessage(sampleMessage.getContent(), sender.getId(), receiver.getId());
 
-        var insertedMessage = messageDao.findMessageBetween(sender.getId(), receiver.getId());
+        var messages = messageDao.findMessageBetween(sender.getId(), receiver.getId());
+        var insertedMessage = messages.get(0);
 
-        assertThat(insertedMessage)
-                .usingRecursiveComparison()
-                .isEqualTo(sampleMessage)
-                .isNotSameAs(sampleMessage);
+        sampleMessage.setMessageId(insertedMessage.getMessageId());
+
+        assertThat(insertedMessage).usingRecursiveComparison();
+        assertThat(insertedMessage).isEqualTo(sampleMessage);
+        assertThat(insertedMessage).isNotSameAs(sampleMessage);
     }
 
     @Test
