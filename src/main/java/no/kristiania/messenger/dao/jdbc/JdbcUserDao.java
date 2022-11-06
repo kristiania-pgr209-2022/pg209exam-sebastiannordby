@@ -60,7 +60,7 @@ public class JdbcUserDao implements UserDao {
         }
     }
 
-    @Override
+
     public List<User> list() throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
             var sql = "SELECT * FROM Users";

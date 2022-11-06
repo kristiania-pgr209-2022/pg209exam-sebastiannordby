@@ -10,6 +10,10 @@ public class Group {
         this.groupName = groupName;
     }
 
+    public Group() {
+
+    }
+
     public int getGroupId() {
         return groupId;
     }
