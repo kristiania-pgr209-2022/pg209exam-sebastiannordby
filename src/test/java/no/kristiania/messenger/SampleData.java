@@ -35,19 +35,19 @@ public class SampleData {
 
     }
 
-    public static String pick(String... parameters) {
-        return parameters != null && parameters.length > 0 ?
-            parameters[random.nextInt(parameters.length - 1)] : null;
-    }
-
     public static Group sampleGroup(){
         return new Group(
                 pick("Football"
                         , "Tennis",
                         "Gaming")
         );
-
-
     }
+
+    public static String pick(String... parameters) {
+        return parameters != null && parameters.length > 0 ?
+            parameters[random.nextInt(parameters.length - 1)] : null;
+    }
+
+
 }
 //java.sql.Date.valueOf(df.format(date))
