@@ -20,7 +20,7 @@ public class SampleData {
     }
 
 
-    public static Message sampleMessage(User sender, User receiver){
+    public static Message sampleMessage(User sender, int messageThread){
         Date date = new Date(System.currentTimeMillis());
 
         return new Message(
@@ -28,11 +28,11 @@ public class SampleData {
         "Hei, skal vi spille tennis etter backend timen?",
                 "Når kommer du over?",
                 "Byen i kveld?"),
-                sender.getId(), receiver.getId(), date);
+                sender.getId(), messageThread, date);
 
     }
 
-    public static MessageThread sampleGroup(){
+    public static MessageThread sampleThread(){
         return new MessageThread(
                 pick("Football"
                         , "Tennis",

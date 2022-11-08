@@ -40,9 +40,10 @@ public class MessageDaoTests {
 
         var messageThreadId = messageThreadDao.insert(new MessageThread(""));
 
+        messageThreadMembershipDao.insert(sender.getId(), messageThreadId);
         messageThreadMembershipDao.insert(receiver.getId(), messageThreadId);
 
-        Message sampleMessage = SampleData.sampleMessage(sender, receiver);
+        Message sampleMessage = SampleData.sampleMessage(sender, messageThreadId);
         messageDao.sendNewMessage(sampleMessage.getContent(), sender.getId(), messageThreadId);
 
         var list = messageDao.findMessagesInThreadForUser(sender.getId(), messageThreadId);
@@ -58,9 +59,13 @@ public class MessageDaoTests {
         var receiver = SampleData.sampleUser();
         userDao.insertUser(receiver);
 
-        Message sampleMessage = SampleData.sampleMessage(sender, receiver);
 
         var messageThreadId = messageThreadDao.insert(new MessageThread("Tets"));
+
+
+        messageThreadMembershipDao.insert(sender.getId(), messageThreadId);
+        messageThreadMembershipDao.insert(receiver.getId(), messageThreadId);
+        Message sampleMessage = SampleData.sampleMessage(sender, messageThreadId);
 
         messageDao.sendNewMessage(sampleMessage.getContent(), sender.getId(), messageThreadId);
 
