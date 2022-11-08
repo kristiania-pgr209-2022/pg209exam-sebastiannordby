@@ -1,9 +1,11 @@
 CREATE TABLE Users(
-  Id INT IDENTITY PRIMARY KEY,
+  Id INT IDENTITY,
   Name VARCHAR(200),
   EmailAddress VARCHAR(255),
   Nickname VARCHAR(20),
   Bio VARCHAR(250),
+
+  CONSTRAINT UsersPK PRIMARY KEY(Id)
 );
 
 INSERT INTO Users(Name, EmailAddress, Nickname, Bio) VALUES(
