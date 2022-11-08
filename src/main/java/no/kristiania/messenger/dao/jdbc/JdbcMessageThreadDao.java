@@ -23,7 +23,7 @@ public class JdbcMessageThreadDao implements MessageThreadDao {
     public int insert(MessageThread entity) throws SQLException {
         try(Connection connection = dataSource.getConnection()){
             var sql = """
-                INSERT INTO MessageThreads (Name) values (?)""";
+                INSERT INTO MessageThreads (Topic) values (?)""";
 
             try(PreparedStatement stmt = connection.prepareStatement(
                     sql, PreparedStatement.RETURN_GENERATED_KEYS)){
@@ -80,7 +80,7 @@ public class JdbcMessageThreadDao implements MessageThreadDao {
     public List<MessageThread> listThreadsByUserId(int userId) throws Exception {
         try (Connection connection = dataSource.getConnection()) {
             var sql = """
-                SELECT Topic, MessageThreads.Id FROM MessageThreadMemberships 
+                SELECT MessageThreads.Topic, MessageThreads.Id FROM MessageThreadMemberships 
                 JOIN MessageThreads ON MessageThreadMemberships.MessageThreadId = MessageThreads.Id 
                 WHERE UserId = ?
             """;
@@ -92,10 +92,10 @@ public class JdbcMessageThreadDao implements MessageThreadDao {
                     List<MessageThread> threads = new ArrayList<>();
 
                     while(rs.next()){
-                        var messageThreadId = rs.getInt("MessageThreadId");
-                        var topic =  rs.getString("Topic");
+                        var messageThreadId = rs.getInt("Id");
+                        var Topic =  rs.getString("Topic");
 
-                        threads.add(new MessageThread(messageThreadId, topic));
+                        threads.add(new MessageThread(messageThreadId, Topic));
                     }
 
                     return threads;
@@ -109,7 +109,7 @@ public class JdbcMessageThreadDao implements MessageThreadDao {
         var group = new MessageThread();
 
         group.setId(rs.getInt("Id"));
-        group.setTopic(rs.getString("Name"));
+        group.setTopic(rs.getString("Topic"));
 
         return group;
     }
