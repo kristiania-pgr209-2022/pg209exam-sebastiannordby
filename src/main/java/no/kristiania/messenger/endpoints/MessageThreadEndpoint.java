@@ -7,6 +7,9 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import no.kristiania.messenger.dao.MessageThreadDao;
+import no.kristiania.messenger.entities.MessageThread;
+
+import java.util.List;
 
 @Path("/message-thread")
 public class MessageThreadEndpoint {
@@ -16,8 +19,9 @@ public class MessageThreadEndpoint {
     @GET
     @Path("/{userId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public void listAllThreads(@PathParam("userId") int userId) throws Exception {
+    public List<MessageThread> listAllThreads(@PathParam("userId") int userId) throws Exception {
         var messageThreads = messageThreadDao.listThreadsByUserId(userId);
 
+        return messageThreads;
     }
 }

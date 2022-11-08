@@ -17,6 +17,16 @@ export function PanelView({setPanelData, userId, isLoading }) {
     const [newGroupDialogOpen, setNewGroupDialogOpen] = useState(false);
     const [newPersonDialogOpen, setNewPersonDialogOpen] = useState(false);
 
+    useEffect(() => {
+        (async() => {
+            const res = await fetch(`/api/message-thread/${userId}`);
+            const json = await res.json();
+
+            console.log(json);
+        })();
+    });
+
+
     if(!isLoading) {
         return (
             <div className={"panel-view"}>
