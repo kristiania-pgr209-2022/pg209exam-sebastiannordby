@@ -73,7 +73,7 @@ public class MessageThreadDaoTests {
 
         assertThat(messageThreads).isNotNull();
         assertThat(messageThreads).isNotEmpty();
-        //assertThat(messageThreads).isEqualTo(messageThread);
+        //assertThat(messageThreads).contains(messageThread);
 
     }
 
