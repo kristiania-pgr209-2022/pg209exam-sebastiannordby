@@ -13,7 +13,7 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import {TextField} from "@mui/material";
 
-export function PanelView({ setPanelData, userId, isLoading }) {
+export function PanelView({ setMessageThread, userId, isLoading }) {
     const [newGroupDialogOpen, setNewGroupDialogOpen] = useState(false);
     const [newPersonDialogOpen, setNewPersonDialogOpen] = useState(false);
     const [messageThreads, setMessageThreads] = useState([]);
@@ -25,8 +25,13 @@ export function PanelView({ setPanelData, userId, isLoading }) {
 
             setMessageThreads(json);
         })();
-    });
+    }, []);
 
+    function selectMessageThread(messageThread) {
+        setMessageThread(messageThread);
+
+        console.log('Hello: ', messageThread);
+    }
 
     if(!isLoading) {
         return (
@@ -54,7 +59,7 @@ export function PanelView({ setPanelData, userId, isLoading }) {
                 </div>
                 <div class="content">
                     {messageThreads.map(x =>
-                        <div>{x.topic}</div>
+                        <div key={x.id} onClick={() => selectMessageThread(x)}>{x.topic}</div>
                     )}
                 </div>
 
