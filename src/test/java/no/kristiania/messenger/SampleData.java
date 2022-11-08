@@ -1,14 +1,11 @@
 package no.kristiania.messenger;
 
-import no.kristiania.messenger.entities.Group;
+import no.kristiania.messenger.entities.MessageThread;
 import no.kristiania.messenger.entities.Message;
 import no.kristiania.messenger.entities.User;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
-import java.util.TimeZone;
 
 public class SampleData {
     private static Random random = new Random();
@@ -35,8 +32,8 @@ public class SampleData {
 
     }
 
-    public static Group sampleGroup(){
-        return new Group(
+    public static MessageThread sampleGroup(){
+        return new MessageThread(
                 pick("Football"
                         , "Tennis",
                         "Gaming")

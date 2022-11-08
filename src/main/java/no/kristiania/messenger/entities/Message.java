@@ -6,13 +6,13 @@ public class Message {
     private int messageId;
     private String content;
     private int senderId;
-    private int receiverId;
+    private int messageThreadId;
     private Date sentDate;
 
-    public Message(String content, int senderId, int receiverId, Date sentDate) {
+    public Message(String content, int senderId, int messageThreadId, Date sentDate) {
         this.content = content;
         this.senderId = senderId;
-        this.receiverId = receiverId;
+        this.messageThreadId = messageThreadId;
         this.sentDate = sentDate;
     }
 
@@ -44,12 +44,12 @@ public class Message {
         this.senderId = senderId;
     }
 
-    public int getReceiverId() {
-        return receiverId;
+    public int getMessageThreadId() {
+        return messageThreadId;
     }
 
-    public void setReceiverId(int receiverId) {
-        this.receiverId = receiverId;
+    public void setMessageThreadId(int messageThreadId) {
+        this.messageThreadId = messageThreadId;
     }
 
     public Date getSentDate() {

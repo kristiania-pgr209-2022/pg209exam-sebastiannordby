@@ -1,35 +1,34 @@
 package no.kristiania.messenger.dao.jdbc;
 
 import jakarta.inject.Inject;
-import no.kristiania.messenger.dao.GroupMembershipDao;
+import no.kristiania.messenger.dao.MessageThreadMembershipDao;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JdbcGroupMembershipDao implements GroupMembershipDao {
+public class JdbcMessageThreadMembershipDao implements MessageThreadMembershipDao {
     private DataSource dataSource;
 
     @Inject
-    public JdbcGroupMembershipDao(DataSource dataSource) {
+    public JdbcMessageThreadMembershipDao(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
     @Override
-    public int insert(int userId, int groupId) throws Exception {
+    public int insert(int userId, int messageThreadId) throws Exception {
         try(Connection connection = dataSource.getConnection()){
             var sql = """
-                INSERT INTO GroupMemberships(UserId, GroupId) values (?, ?)""";
+                INSERT INTO MessageThreadMemberships(UserId, MessageThreadId) values (?, ?)""";
 
             try(PreparedStatement stmt = connection.prepareStatement(
                     sql, PreparedStatement.RETURN_GENERATED_KEYS)){
 
                 stmt.setInt(1, userId);
-                stmt.setInt(2, groupId);
+                stmt.setInt(2, messageThreadId);
 
                 stmt.executeUpdate();
 
@@ -42,10 +41,10 @@ public class JdbcGroupMembershipDao implements GroupMembershipDao {
     }
 
     @Override
-    public List<Integer> getGroupIdsByUserId(int userId) throws Exception {
+    public List<Integer> getMessageThreadIdsByUserId(int userId) throws Exception {
         try(var connection = dataSource.getConnection()) {
             var sql = """
-                    SELECT GroupId from GroupMemberships WHERE UserId = ?""";
+                    SELECT MessageThreadId from MessageThreadMemberships WHERE UserId = ?""";
 
             try(var statement = connection.prepareStatement(sql)) {
                 statement.setInt(1, userId);
@@ -54,7 +53,7 @@ public class JdbcGroupMembershipDao implements GroupMembershipDao {
 
                 try(var rs = statement.executeQuery()) {
                     while(rs.next()) {
-                        result.add(rs.getInt("GroupId"));
+                        result.add(rs.getInt("MessageThreadId"));
                     }
 
                     return result;

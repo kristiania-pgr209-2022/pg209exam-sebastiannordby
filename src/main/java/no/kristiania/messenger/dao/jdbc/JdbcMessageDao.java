@@ -3,7 +3,6 @@ package no.kristiania.messenger.dao.jdbc;
 import jakarta.inject.Inject;
 import no.kristiania.messenger.dao.MessageDao;
 import no.kristiania.messenger.entities.Message;
-import no.kristiania.messenger.entities.User;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -28,7 +27,7 @@ public class JdbcMessageDao implements MessageDao {
         df.setTimeZone(TimeZone.getTimeZone("Europe/Oslo"));
         try(Connection connection = dataSource.getConnection()){
             var sql = """
-                INSERT INTO Messages (Content, SenderId, ReceiverId, SentDate) values (?, ?, ?, ?)""";
+                INSERT INTO Messages (Content, SenderId, MessageThreadId, SentDate) values (?, ?, ?, ?)""";
 
             try(PreparedStatement stmt = connection.prepareStatement(
                     sql, PreparedStatement.RETURN_GENERATED_KEYS)){
@@ -51,13 +50,13 @@ public class JdbcMessageDao implements MessageDao {
         }
     }
 
-    public List<Message> findMessageBetween(int loggedInUser, int receiver) throws SQLException {
+    public List<Message> findMessagesInThreadForUser(int loggedInUser, int messageThreadId) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
-            var sql = "SELECT * FROM Messages where SenderId= ? and ReceiverId = ?";
+            var sql = "SELECT * FROM Messages where SenderId= ? and MessageThreadId = ?";
 
             try(var statement = connection.prepareStatement(sql)){
                 statement.setInt(1, loggedInUser);
-                statement.setInt(2, receiver);
+                statement.setInt(2, messageThreadId);
 
 
                 try (ResultSet rs = statement.executeQuery()) {
@@ -79,7 +78,7 @@ public class JdbcMessageDao implements MessageDao {
         message.setMessageId(rs.getInt("MessageId"));
         message.setContent(rs.getString("Content"));
         message.setSenderId(rs.getInt("SenderId"));
-        message.setReceiverId(rs.getInt("ReceiverId"));
+        message.setMessageThreadId(rs.getInt("MessageThreadId"));
         message.setSentDate(rs.getDate("SentDate"));
 
         return message;

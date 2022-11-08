@@ -1,9 +1,8 @@
 package no.kristiania.messenger.dao.jdbc;
 
 import jakarta.inject.Inject;
-import no.kristiania.messenger.dao.GroupDao;
-import no.kristiania.messenger.entities.Group;
-import no.kristiania.messenger.entities.User;
+import no.kristiania.messenger.dao.MessageThreadDao;
+import no.kristiania.messenger.entities.MessageThread;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -13,23 +12,23 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JdbcGroupDao implements GroupDao {
+public class JdbcMessageThreadDao implements MessageThreadDao {
     private DataSource dataSource;
 
     @Inject
-    public JdbcGroupDao(DataSource dataSource) throws Exception{
+    public JdbcMessageThreadDao(DataSource dataSource) throws Exception{
         this.dataSource = dataSource;
     }
 
-    public int insertGroup(Group entity) throws SQLException {
+    public int insert(MessageThread entity) throws SQLException {
         try(Connection connection = dataSource.getConnection()){
             var sql = """
-                INSERT INTO Groups (GroupName) values (?)""";
+                INSERT INTO MessageThreads (Name) values (?)""";
 
             try(PreparedStatement stmt = connection.prepareStatement(
                     sql, PreparedStatement.RETURN_GENERATED_KEYS)){
 
-                stmt.setString(1, entity.getGroupName());
+                stmt.setString(1, entity.getTopic());
 
                 stmt.executeUpdate();
 
@@ -37,7 +36,7 @@ public class JdbcGroupDao implements GroupDao {
                     generatedKeys.next();
                     var generatedKey = generatedKeys.getInt(1);
 
-                    entity.setGroupId(generatedKey);
+                    entity.setId(generatedKey);
 
                     return generatedKey;
                 }
@@ -45,30 +44,30 @@ public class JdbcGroupDao implements GroupDao {
         }
     }
 
-    public Group findGroup(int id) throws SQLException {
+    public MessageThread find(int id) throws SQLException {
         try (var connection = dataSource.getConnection()) {
-            var sql = "SELECT * FROM Groups where GroupId = ?";
+            var sql = "SELECT * FROM MessageThreads where Id = ?";
 
             try (var statement = connection.prepareStatement(sql)) {
                 statement.setInt(1, id);
 
                 try (var rs = statement.executeQuery()) {
-                    return rs.next() ? readGroup(rs) : null;
+                    return rs.next() ? readMessageThread(rs) : null;
                 }
             }
         }
     }
 
-    public List<Group> listGroups() throws SQLException {
+    public List<MessageThread> list() throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
-            var sql = "SELECT * FROM Groups";
+            var sql = "SELECT * FROM MessageThreads";
 
             try(PreparedStatement stmt = connection.prepareStatement(sql)){
                 try (ResultSet rs = stmt.executeQuery()) {
-                    List<Group> groups = new ArrayList<>();
+                    List<MessageThread> groups = new ArrayList<>();
 
                     while(rs.next()){
-                        groups.add(readGroup(rs));
+                        groups.add(readMessageThread(rs));
                     }
 
                     return groups;
@@ -80,11 +79,11 @@ public class JdbcGroupDao implements GroupDao {
 
 
 
-    static Group readGroup(ResultSet rs) throws SQLException {
-        var group = new Group();
+    static MessageThread readMessageThread(ResultSet rs) throws SQLException {
+        var group = new MessageThread();
 
-        group.setGroupId(rs.getInt("GroupId"));
-        group.setGroupName(rs.getString("GroupName"));
+        group.setId(rs.getInt("Id"));
+        group.setTopic(rs.getString("Name"));
 
         return group;
     }

@@ -1,10 +1,10 @@
 package no.kristiania.messenger.entities;
 
-public class GroupMembership {
+public class MessageThreadMembership {
     private int userId;
     private int groupId;
 
-    public GroupMembership(int userId, int groupId) {
+    public MessageThreadMembership(int userId, int groupId) {
         this.userId = userId;
         this.groupId = groupId;
     }
