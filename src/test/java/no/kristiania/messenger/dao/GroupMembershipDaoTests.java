@@ -30,11 +30,11 @@ public class GroupMembershipDaoTests {
     void shouldInsertMemberIntoGroup() throws Exception {
         var userId = userDao.insertUser(new User(
         "Test", "test@shouldInsertMemberIntoGroup.com", "Testo", "Full oftest"));
-
         var groupId = groupDao.insertGroup(new Group("Test Group"));
+        var membershipId = membershipDao.insert(userId, groupId);
+        var groupIdsWhereUserIsMember = membershipDao.getGroupIdsByUserId(userId);
 
-        var result = membershipDao.insert(userId, groupId);
-
-        assertThat(result).isTrue();
+        assertThat(groupIdsWhereUserIsMember).isNotNull();
+        assertThat(groupIdsWhereUserIsMember.size() >= 1).isEqualTo(true);
     }
 }
