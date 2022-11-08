@@ -16,7 +16,8 @@ public class MessageThreadEndpoint {
     @GET
     @Path("/{userId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public void listAllThreads(@PathParam("userId") int userId) {
-        messageThreadDao.li
+    public void listAllThreads(@PathParam("userId") int userId) throws Exception {
+        var messageThreads = messageThreadDao.listThreadsByUserId(userId);
+
     }
 }
