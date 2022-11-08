@@ -1,6 +1,11 @@
 :root {
   --kristiania-color: #c61932;
 }
+
+* {
+  box-sizing: border-box;
+}
+
 html {
   height: 100%;
 }
@@ -172,8 +177,34 @@ h2 {
   flex: 1 0 500px;
 }
 
+.message-view {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 .message-view header {
   padding: .5em 1em;
+}
+
+.message-view .content {
+  flex: 1;
+}
+
+.message-view .message {
+  text-align: left;
+  border-bottom: 1px solid #cfcfcf;
+  padding: .5em;
+}
+
+.message-view .footer {
+  display: flex;
+  gap: .5em;
+  padding: .5em;
+}
+
+.message-view .footer input {
+  flex: 1;
 }
 
 .panel-view {
@@ -202,6 +233,21 @@ h2 {
   display: flex;
   align-items: center;
   gap: 1em;
+}
+
+.panel-view .message {
+  width: 100%;
+  padding: .5em;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  text-align: left;
+  border-bottom: 1px solid #cfcfcf;
+}
+
+.panel-view .message:hover {
+  cursor: pointer;
+  background-color: var(--kristiania-color);
+  color: #fff;
 }
 
 .avatar {

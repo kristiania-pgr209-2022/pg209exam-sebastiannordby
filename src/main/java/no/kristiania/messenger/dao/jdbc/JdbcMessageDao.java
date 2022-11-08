@@ -3,6 +3,7 @@ package no.kristiania.messenger.dao.jdbc;
 import jakarta.inject.Inject;
 import no.kristiania.messenger.dao.MessageDao;
 import no.kristiania.messenger.entities.Message;
+import no.kristiania.messenger.views.MessageView;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -67,6 +68,31 @@ public class JdbcMessageDao implements MessageDao {
         }
     }
 
+    @Override
+    public List<MessageView> findMessageViewsInThread(int messageThreadId) throws Exception {
+        try (Connection connection = dataSource.getConnection()) {
+            var sql = """
+                SELECT Messages.Id as MessageId, Content, SenderId, MessageThreadId, SentDate, Users.Nickname AS UserNickname FROM Messages 
+                JOIN Users ON Users.Id = Messages.SenderId
+                WHERE MessageThreadId = ?""";
+
+            try(var statement = connection.prepareStatement(sql)){
+                statement.setInt(1, messageThreadId);
+
+
+                try (ResultSet rs = statement.executeQuery()) {
+                    List<MessageView> messages = new ArrayList<>();
+
+                    while(rs.next()){
+                        messages.add(readMessageView(rs));
+                    }
+
+                    return messages;
+                }
+            }
+        }
+    }
+
     static Message readMessage(ResultSet rs) throws SQLException {
         var message = new Message();
 
@@ -79,4 +105,16 @@ public class JdbcMessageDao implements MessageDao {
         return message;
     }
 
+    static MessageView readMessageView(ResultSet rs) throws SQLException {
+        var message = new MessageView();
+
+        message.messageId = rs.getInt("MessageId");
+        message.content = rs.getString("Content");
+        message.senderId = rs.getInt("SenderId");
+        message.messageThreadId = rs.getInt("MessageThreadId");
+        message.sentDate = rs.getDate("SentDate");
+        message.userNickname = rs.getString("UserNickName");
+
+        return message;
+    }
 }

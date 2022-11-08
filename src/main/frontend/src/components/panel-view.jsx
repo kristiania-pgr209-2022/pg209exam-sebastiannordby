@@ -47,7 +47,7 @@ export function PanelView({ setMessageThread, userId, isLoading }) {
                 </div>
                 <div class="content">
                     {messageThreads.map(x =>
-                        <div key={x.id} onClick={() => selectMessageThread(x)}>{x.topic}</div>
+                        <div className="message" key={x.id} onClick={() => selectMessageThread(x)}>{x.topic}</div>
                     )}
                 </div>
 

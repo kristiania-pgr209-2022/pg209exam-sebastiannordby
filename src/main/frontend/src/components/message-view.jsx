@@ -8,18 +8,43 @@ export function MessageView({ messageThread, isLoading, userId } ) {
     useEffect(() => {
         (async() => {
             if(messageThread) {
-                const res = await fetch(`/api/message/${messageThread.id}`);
-                const messagesReceived = await res.json();
-
-                setMessages(messagesReceived);
+                await fetchMessages();
             }
         })();
     }, [ messageThread ]);
 
-    function sendNewMessage() {
+    async function fetchMessages() {
+        if(messageThread) {
+            const res = await fetch(`/api/message/${messageThread.id}`);
+            const messagesReceived = await res.json();
 
+            console.log({messagesReceived});
+
+            setMessages(messagesReceived);
+        }
+    }
+
+    async function sendNewMessage() {
+        if(messageThread == null)
+            return;
+
+        if(newMessage.length == 0)
+            return;
+
+        const result = await fetch("/api/message", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                userId: userId,
+                message: newMessage,
+                messageThreadId: messageThread.id,
+            })
+        });
 
         setNewMessage('');
+        await fetchMessages();
     }
 
     if(!isLoading) {
@@ -31,11 +56,11 @@ export function MessageView({ messageThread, isLoading, userId } ) {
 
                 <div className="content">
                     {messages.map(x =>
-                        <div key={x.id}>{x.content}</div>
+                        <div key={x.id} className="message">{x.userNickname} - {x.sentDate} - {x.content}</div>
                     )}
                 </div>
-                <div>
-                    <input value={newMessage} onChange={(e) => setNewMessage(e.target.value)} />
+                <div className="footer">
+                    <input placeholder="Melding.." value={newMessage} onChange={(e) => setNewMessage(e.target.value)} />
                     <button onClick={sendNewMessage}>Send</button>
                 </div>
             </div>
