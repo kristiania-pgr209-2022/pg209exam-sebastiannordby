@@ -28,7 +28,7 @@ public class MessageThreadEndpoint {
         return Response.ok(messageThreads).build();
     }
 
-    @GET
+    @POST
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
