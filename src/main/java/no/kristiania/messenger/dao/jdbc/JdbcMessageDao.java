@@ -42,8 +42,6 @@ public class JdbcMessageDao implements MessageDao {
                     generatedKeys.next();
                     var generatedKey = generatedKeys.getInt(1);
 
-                    //entity.setMessageId(generatedKey);
-
                     return generatedKey;
                 }
             }
@@ -75,7 +73,7 @@ public class JdbcMessageDao implements MessageDao {
     static Message readMessage(ResultSet rs) throws SQLException {
         var message = new Message();
 
-        message.setMessageId(rs.getInt("MessageId"));
+        message.setMessageId(rs.getInt("Id"));
         message.setContent(rs.getString("Content"));
         message.setSenderId(rs.getInt("SenderId"));
         message.setMessageThreadId(rs.getInt("MessageThreadId"));

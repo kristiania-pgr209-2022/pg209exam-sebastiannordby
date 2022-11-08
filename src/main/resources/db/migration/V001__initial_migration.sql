@@ -1,10 +1,9 @@
 CREATE TABLE Users(
-  Id INT IDENTITY,
+  Id INT IDENTITY(1, 1),
   Name VARCHAR(200),
   EmailAddress VARCHAR(255),
   Nickname VARCHAR(20),
   Bio VARCHAR(250),
-
   CONSTRAINT UsersPK PRIMARY KEY(Id)
 );
 

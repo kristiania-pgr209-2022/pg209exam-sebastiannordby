@@ -13,8 +13,9 @@ import org.junit.jupiter.api.Test;
 import javax.sql.DataSource;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 public class MessageThreadDaoTests {
     private DataSource dataSource = InMemoryDatabase.createTestDataSource();
@@ -32,13 +33,13 @@ public class MessageThreadDaoTests {
     }
 
     @Test
-    void shouldInsertGroup() throws Exception {
-        MessageThread sampleGroup = SampleData.sampleThread();
-        messageThreadDao.insert(sampleGroup);
+    void shouldInsertThread() throws Exception {
+        var messageThread = SampleData.sampleThread();
+        var messageThreadId = messageThreadDao.insert(messageThread);
         var list = messageThreadDao.list();
 
-        assertThat(list).isNotNull();
-        assertThat(list).isNotEmpty();
+        assertThat(list).isNotNull().isNotEmpty();
+        assertThat(list.stream().map(x -> x.getId())).contains(messageThreadId);
     }
 
     @Test
@@ -70,16 +71,27 @@ public class MessageThreadDaoTests {
 
         var messageThreads=  messageThreadDao.listThreadsByUserId(sender.getId());
 
-
         assertThat(messageThreads).isNotNull();
         assertThat(messageThreads).isNotEmpty();
-        //assertThat(messageThreads).contains(messageThread);
-
+        assertThat(messageThreads.stream().map(x -> x.getId())).contains(messageThreadId);
     }
 
     @Test
-    void shouldRetrieveNullForMissingGroup() throws SQLException {
-        assertThat(messageThreadDao.find(-1)).isNull();
+    void shouldSimulateCreationOfNewThreadWithMessage() throws Exception {
+        var senderId = userDao.insertUser(SampleData.sampleUser());
+        var receiverId = userDao.insertUser(SampleData.sampleUser());
+
+        assertThatNoException().isThrownBy(() -> {
+            messageThreadDao.insert("Simulation", "This should simulate creation.",
+                senderId, new ArrayList<Integer>(){{
+                    add(receiverId);
+                }}
+            );
+        });
     }
 
+    @Test
+    void shouldRetrieveNullForMissingThread() throws SQLException {
+        assertThat(messageThreadDao.find(-1)).isNull();
+    }
 }

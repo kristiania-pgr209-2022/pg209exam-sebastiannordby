@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +42,52 @@ public class JdbcMessageThreadDao implements MessageThreadDao {
                     return generatedKey;
                 }
             }
+        }
+    }
+
+    @Override
+    public void insert(String topic, String message, int senderId, List<Integer> userReceiverIds) throws Exception {
+        try (var connection = dataSource.getConnection()) {
+            connection.setAutoCommit(false);
+
+            // Insert MessageThread
+            var insertMessageThreadSql = "INSERT INTO MessageThreads(Topic) VALUES(?)";
+            try (var insertMessageThreadStmt = connection
+                    .prepareStatement(insertMessageThreadSql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+
+                insertMessageThreadStmt.setString(1, topic);
+                insertMessageThreadStmt.executeUpdate();
+
+                try(ResultSet generatedKeys = insertMessageThreadStmt.getGeneratedKeys()){
+                    if(!generatedKeys.next())
+                        throw new IllegalStateException("MessageThreadId was not generated.");
+
+                    var messageThreadId = generatedKeys.getInt(1);
+
+                    // Insert MessageThreadMemberships
+                    for(var userReceiverId : userReceiverIds) {
+                        var insertIntoThreadMembershipSql = "INSERT INTO MessageThreadMemberships(MessageThreadId, UserId) VALUES(?, ?)";
+                        try (var membershipStmt
+                                 = connection.prepareStatement(insertIntoThreadMembershipSql)) {
+                            membershipStmt.setInt(1, messageThreadId);
+                            membershipStmt.setInt(2, userReceiverId);
+                            membershipStmt.executeUpdate();
+                        }
+                    }
+
+                    // Innsert Message
+                    var insertMessageSql = "INSERT INTO MESSAGES(Content, SenderId, MessageThreadId, SentDate) VALUES(?, ?, ?, ?)";
+                    try(var messageStmt = connection.prepareStatement(insertMessageSql)) {
+                        messageStmt.setString(1, message);
+                        messageStmt.setInt(2, senderId);
+                        messageStmt.setInt(3, messageThreadId);
+                        messageStmt.setDate(4, java.sql.Date.valueOf(LocalDate.now()));
+                        messageStmt.executeUpdate();
+                    }
+                }
+            }
+
+            connection.commit();
         }
     }
 
