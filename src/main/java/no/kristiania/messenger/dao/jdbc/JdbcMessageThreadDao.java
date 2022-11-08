@@ -78,7 +78,7 @@ public class JdbcMessageThreadDao implements MessageThreadDao {
                         }
                     }
 
-                    // Innsert Message
+                    // Insert Message
                     var insertMessageSql = "INSERT INTO MESSAGES(Content, SenderId, MessageThreadId, SentDate) VALUES(?, ?, ?, ?)";
                     try(var messageStmt = connection.prepareStatement(insertMessageSql)) {
                         messageStmt.setString(1, message);
