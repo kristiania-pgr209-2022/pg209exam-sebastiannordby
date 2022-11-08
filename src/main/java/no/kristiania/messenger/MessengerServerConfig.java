@@ -1,6 +1,10 @@
 package no.kristiania.messenger;
 
+import no.kristiania.messenger.dao.GroupDao;
+import no.kristiania.messenger.dao.GroupMembershipDao;
 import no.kristiania.messenger.dao.UserDao;
+import no.kristiania.messenger.dao.jdbc.JdbcGroupDao;
+import no.kristiania.messenger.dao.jdbc.JdbcGroupMembershipDao;
 import no.kristiania.messenger.dao.jdbc.JdbcUserDao;
 import no.kristiania.messenger.endpoints.UserEndpoint;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
@@ -16,6 +20,8 @@ public class MessengerServerConfig extends ResourceConfig {
             @Override
             protected void configure() {
                 bind(JdbcUserDao.class).to(UserDao.class);
+                bind(JdbcGroupDao.class).to(GroupDao.class);
+                bind(JdbcGroupMembershipDao.class).to(GroupMembershipDao.class);
                 bind(dataSource).to(DataSource.class);
             }
         });
