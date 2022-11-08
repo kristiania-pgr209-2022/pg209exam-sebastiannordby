@@ -34,8 +34,8 @@ public class SampleData {
 
     public static MessageThread sampleThread(){
         return new MessageThread(
-                pick("Football"
-                        , "Tennis",
+                pick("Football",
+                        "Tennis",
                         "Gaming")
         );
     }
