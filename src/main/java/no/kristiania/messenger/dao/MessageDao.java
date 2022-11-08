@@ -5,6 +5,6 @@ import no.kristiania.messenger.entities.Message;
 import java.util.List;
 
 public interface MessageDao {
-    int sendNewMessage (String content, int loggedInUser, int receiver) throws Exception;
+    int newMessage(int loggedInUser, int messageThreadId, String content) throws Exception;
     List<Message> findMessagesInThread(int messageThreadId) throws Exception;
 }

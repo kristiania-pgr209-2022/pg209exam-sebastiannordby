@@ -44,7 +44,7 @@ public class MessageDaoTests {
         messageThreadMembershipDao.insert(receiver.getId(), messageThreadId);
 
         Message sampleMessage = SampleData.sampleMessage(sender, messageThreadId);
-        messageDao.sendNewMessage(sampleMessage.getContent(), sender.getId(), messageThreadId);
+        messageDao.newMessage(sender.getId(), messageThreadId, sampleMessage.getContent());
 
         var list = messageDao.findMessagesInThread(messageThreadId);
 
@@ -67,7 +67,7 @@ public class MessageDaoTests {
         messageThreadMembershipDao.insert(receiver.getId(), messageThreadId);
         Message sampleMessage = SampleData.sampleMessage(sender, messageThreadId);
 
-        messageDao.sendNewMessage(sampleMessage.getContent(), sender.getId(), messageThreadId);
+        messageDao.newMessage(sender.getId(), messageThreadId, sampleMessage.getContent());
 
         var messages = messageDao.findMessagesInThread(messageThreadId);
         var insertedMessage = messages.get(0);

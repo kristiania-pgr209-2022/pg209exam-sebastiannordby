@@ -11,10 +11,9 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
-import {TextField} from "@mui/material";
+import TextField from "@mui/material/TextField";
 
 export function PanelView({ setMessageThread, userId, isLoading }) {
-    const [newGroupDialogOpen, setNewGroupDialogOpen] = useState(false);
     const [newPersonDialogOpen, setNewPersonDialogOpen] = useState(false);
     const [messageThreads, setMessageThreads] = useState([]);
 
@@ -29,8 +28,6 @@ export function PanelView({ setMessageThread, userId, isLoading }) {
 
     function selectMessageThread(messageThread) {
         setMessageThread(messageThread);
-
-        console.log('Hello: ', messageThread);
     }
 
     if(!isLoading) {
@@ -45,16 +42,7 @@ export function PanelView({ setMessageThread, userId, isLoading }) {
                         aria-label="new message"
                         component="label"
                         startIcon={<Message />}>
-                        Person
-                    </Button>
-
-                    <Button
-                        onClick={() => setNewGroupDialogOpen(true)}
-                        color="primary"
-                        aria-label="new message"
-                        component="label"
-                        startIcon={<Message />}>
-                        Gruppe
+                        Ny melding
                     </Button>
                 </div>
                 <div class="content">

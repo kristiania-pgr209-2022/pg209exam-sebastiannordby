@@ -3,17 +3,24 @@ import {useEffect, useState} from "react";
 
 export function MessageView({ messageThread, isLoading, userId } ) {
     const [messages, setMessages] = useState([]);
+    const [newMessage, setNewMessage] = useState('');
 
     useEffect(() => {
         (async() => {
             if(messageThread) {
-                const res = await fetch(`/api/message/${userId}/${messageThread.id}`);
+                const res = await fetch(`/api/message/${messageThread.id}`);
                 const messagesReceived = await res.json();
 
                 setMessages(messagesReceived);
             }
         })();
     }, [ messageThread ]);
+
+    function sendNewMessage() {
+
+
+        setNewMessage('');
+    }
 
     if(!isLoading) {
         return (
@@ -26,6 +33,10 @@ export function MessageView({ messageThread, isLoading, userId } ) {
                     {messages.map(x =>
                         <div key={x.id}>{x.content}</div>
                     )}
+                </div>
+                <div>
+                    <input value={newMessage} onChange={(e) => setNewMessage(e.target.value)} />
+                    <button onClick={sendNewMessage}>Send</button>
                 </div>
             </div>
         );

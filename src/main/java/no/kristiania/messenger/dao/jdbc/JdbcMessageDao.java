@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 
 public class JdbcMessageDao implements MessageDao {
@@ -21,10 +22,7 @@ public class JdbcMessageDao implements MessageDao {
         this.dataSource = dataSource;
     }
 
-    public int sendNewMessage(String content, int loggedInUser, int receiver) throws SQLException {
-        Date date = new Date(System.currentTimeMillis());
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        df.setTimeZone(TimeZone.getTimeZone("Europe/Oslo"));
+    public int newMessage(int loggedInUser, int messageThreadId, String content) throws SQLException {
         try(Connection connection = dataSource.getConnection()){
             var sql = """
                 INSERT INTO Messages (Content, SenderId, MessageThreadId, SentDate) values (?, ?, ?, ?)""";
@@ -34,8 +32,8 @@ public class JdbcMessageDao implements MessageDao {
 
                 stmt.setString(1, content);
                 stmt.setInt(2, loggedInUser);
-                stmt.setInt(3, receiver);
-                stmt.setDate(4, new java.sql.Date(date.getTime()));
+                stmt.setInt(3, messageThreadId);
+                stmt.setDate(4, java.sql.Date.valueOf(LocalDate.now()));
                 stmt.executeUpdate();
 
                 try(ResultSet generatedKeys = stmt.getGeneratedKeys()){
