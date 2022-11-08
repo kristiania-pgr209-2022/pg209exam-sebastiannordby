@@ -13,8 +13,8 @@ public class MessageThread {
 
     }
 
-    public MessageThread(String groupName) {
-        this.topic =groupName;
+    public MessageThread(String topic) {
+        this.topic =topic;
     }
 
     public int getId() {

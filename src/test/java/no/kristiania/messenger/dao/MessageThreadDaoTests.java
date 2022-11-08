@@ -24,7 +24,7 @@ public class MessageThreadDaoTests {
 
     @Test
     void shouldInsertGroup() throws Exception {
-        MessageThread sampleGroup = SampleData.sampleGroup();
+        MessageThread sampleGroup = SampleData.sampleThread();
         messageThreadDao.insert(sampleGroup);
         var list = messageThreadDao.list();
 
@@ -34,7 +34,7 @@ public class MessageThreadDaoTests {
 
     @Test
     void shouldListMessageThreads() throws Exception{
-        var messageThread = SampleData.sampleGroup();
+        var messageThread = SampleData.sampleThread();
         messageThreadDao.insert(messageThread);
 
         var messageThreadFound = messageThreadDao.find(messageThread.getId());
