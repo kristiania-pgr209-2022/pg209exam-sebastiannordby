@@ -9,7 +9,7 @@ import {MessageView} from '../components/message-view';
 export function MessengerPage() {
     const { userId, panelDataId } = useParams();
     const [ user, setUser ] = useState(null);
-    const [panelData, setPanelData] = useState();
+    const [messageThread, setMessageThread] = useState();
     const navigate = useNavigate();
 
     const signOut = () => {
@@ -42,10 +42,10 @@ export function MessengerPage() {
         </header>
         <div className={"content"}>
             <div className={"selector"}>
-                <PanelView isLoading={!user} userId={userId} setPanelData={setPanelData}></PanelView>
+                <PanelView isLoading={!user} userId={userId} setMessageThread={setMessageThread}></PanelView>
             </div>
             <div className={"messages"}>
-                <MessageView isLoading={!user} panelDataId={panelDataId}></MessageView>
+                <MessageView isLoading={!user} userId={userId} messageThread={messageThread}></MessageView>
             </div>
         </div>
     </div>);

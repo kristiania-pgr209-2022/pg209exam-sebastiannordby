@@ -48,13 +48,12 @@ public class JdbcMessageDao implements MessageDao {
         }
     }
 
-    public List<Message> findMessagesInThreadForUser(int loggedInUser, int messageThreadId) throws SQLException {
+    public List<Message> findMessagesInThread(int messageThreadId) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
-            var sql = "SELECT * FROM Messages where SenderId= ? and MessageThreadId = ?";
+            var sql = "SELECT * FROM Messages WHERE MessageThreadId = ?";
 
             try(var statement = connection.prepareStatement(sql)){
-                statement.setInt(1, loggedInUser);
-                statement.setInt(2, messageThreadId);
+                statement.setInt(1, messageThreadId);
 
 
                 try (ResultSet rs = statement.executeQuery()) {

@@ -46,7 +46,7 @@ public class MessageDaoTests {
         Message sampleMessage = SampleData.sampleMessage(sender, messageThreadId);
         messageDao.sendNewMessage(sampleMessage.getContent(), sender.getId(), messageThreadId);
 
-        var list = messageDao.findMessagesInThreadForUser(sender.getId(), messageThreadId);
+        var list = messageDao.findMessagesInThread(messageThreadId);
 
         assertThat(list).isNotNull();
         assertThat(list).isNotEmpty();
@@ -69,7 +69,7 @@ public class MessageDaoTests {
 
         messageDao.sendNewMessage(sampleMessage.getContent(), sender.getId(), messageThreadId);
 
-        var messages = messageDao.findMessagesInThreadForUser(sender.getId(), messageThreadId);
+        var messages = messageDao.findMessagesInThread(messageThreadId);
         var insertedMessage = messages.get(0);
 
         sampleMessage.setMessageId(insertedMessage.getMessageId());
@@ -81,7 +81,7 @@ public class MessageDaoTests {
 
     @Test
     void shouldRetrieveEmptyListForNoValidUser() throws Exception {
-        assertThat(messageDao.findMessagesInThreadForUser(0, -1)).isEmpty();
+        assertThat(messageDao.findMessagesInThread(-1)).isEmpty();
     }
 
 }

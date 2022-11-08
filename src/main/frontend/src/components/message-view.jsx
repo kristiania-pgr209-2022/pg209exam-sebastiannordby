@@ -1,8 +1,19 @@
 import Skeleton from "@mui/material/Skeleton";
+import {useEffect, useState} from "react";
 
-export function MessageView({ panelDataId, isLoading } ) {
-    const data = [];
-    const messages = [];
+export function MessageView({ messageThread, isLoading, userId } ) {
+    const [messages, setMessages] = useState([]);
+
+    useEffect(() => {
+        (async() => {
+            if(messageThread) {
+                const res = await fetch(`/api/message/${userId}/${messageThread.id}`);
+                const messagesReceived = await res.json();
+
+                setMessages(messagesReceived);
+            }
+        })();
+    }, [ messageThread ]);
 
     if(!isLoading) {
         return (
@@ -13,7 +24,7 @@ export function MessageView({ panelDataId, isLoading } ) {
 
                 <div className="content">
                     {messages.map(x =>
-                        <div>{x.message}</div>
+                        <div key={x.id}>{x.content}</div>
                     )}
                 </div>
             </div>
