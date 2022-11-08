@@ -76,7 +76,33 @@ public class JdbcMessageThreadDao implements MessageThreadDao {
         }
     }
 
+    @Override
+    public List<MessageThread> listThreadsByUserId(int userId) throws Exception {
+        try (Connection connection = dataSource.getConnection()) {
+            var sql = """
+                SELECT Topic, MessageThreads.Id FROM MessageThreadMemberships 
+                JOIN MessageThreads ON MessageThreadMemberships.MessageThreadId = MessageThreads.Id 
+                WHERE UserId = ?
+            """;
 
+            try(PreparedStatement stmt = connection.prepareStatement(sql)) {
+                stmt.setInt(1, userId);
+
+                try (ResultSet rs = stmt.executeQuery()) {
+                    List<MessageThread> threads = new ArrayList<>();
+
+                    while(rs.next()){
+                        var messageThreadId = rs.getInt("MessageThreadId");
+                        var topic =  rs.getString("Topic");
+
+                        threads.add(new MessageThread(messageThreadId, topic));
+                    }
+
+                    return threads;
+                }
+            }
+        }
+    }
 
 
     static MessageThread readMessageThread(ResultSet rs) throws SQLException {

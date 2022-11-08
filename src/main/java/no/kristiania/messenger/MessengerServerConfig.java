@@ -7,6 +7,7 @@ import no.kristiania.messenger.dao.jdbc.JdbcMessageThreadDao;
 import no.kristiania.messenger.dao.jdbc.JdbcMessageThreadMembershipDao;
 import no.kristiania.messenger.dao.jdbc.JdbcUserDao;
 import no.kristiania.messenger.endpoints.UserEndpoint;
+import no.kristiania.messenger.entities.MessageThread;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 import org.glassfish.jersey.server.ResourceConfig;
 
@@ -14,7 +15,7 @@ import javax.sql.DataSource;
 
 public class MessengerServerConfig extends ResourceConfig {
     public MessengerServerConfig(DataSource dataSource) {
-        super(UserEndpoint.class);
+        super(UserEndpoint.class, MessageThread.class);
 
         register(new AbstractBinder() {
             @Override
