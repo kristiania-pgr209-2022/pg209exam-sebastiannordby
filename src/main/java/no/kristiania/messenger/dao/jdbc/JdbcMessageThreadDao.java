@@ -64,7 +64,10 @@ public class JdbcMessageThreadDao implements MessageThreadDao {
 
                     var messageThreadId = generatedKeys.getInt(1);
 
+
                     // Insert MessageThreadMemberships
+                    userReceiverIds.add(senderId);
+
                     for(var userReceiverId : userReceiverIds) {
                         var insertIntoThreadMembershipSql = "INSERT INTO MessageThreadMemberships(MessageThreadId, UserId) VALUES(?, ?)";
                         try (var membershipStmt

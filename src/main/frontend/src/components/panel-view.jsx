@@ -13,16 +13,17 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import {TextField} from "@mui/material";
 
-export function PanelView({setPanelData, userId, isLoading }) {
+export function PanelView({ setPanelData, userId, isLoading }) {
     const [newGroupDialogOpen, setNewGroupDialogOpen] = useState(false);
     const [newPersonDialogOpen, setNewPersonDialogOpen] = useState(false);
+    const [messageThreads, setMessageThreads] = useState([]);
 
     useEffect(() => {
         (async() => {
             const res = await fetch(`/api/message-thread/${userId}`);
             const json = await res.json();
 
-            console.log(json);
+            setMessageThreads(json);
         })();
     });
 
@@ -52,7 +53,9 @@ export function PanelView({setPanelData, userId, isLoading }) {
                     </Button>
                 </div>
                 <div class="content">
-
+                    {messageThreads.map(x =>
+                        <div>{x.topic}</div>
+                    )}
                 </div>
 
                 <NewPersonChatDialog
@@ -115,8 +118,34 @@ function NewPersonChatDialog({ open, setOpen, signedOnUserId }) {
         setOpen(false);
     };
 
-    const createChat = () => {
+    const createChat = async() => {
+        if(selectedUserId === 0)
+            return;
 
+        if(message.length == 0)
+            return;
+
+        if(subject.length == 0)
+            return;
+
+        const result = await fetch("/api/message-thread", {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                topic: subject,
+                message: message,
+                senderId: signedOnUserId,
+                receivers: [selectedUserId]
+            })
+        });
+
+        const json = await result.json();
+
+        console.log(json);
+
+        setOpen(false);
     };
 
     useEffect(() => {
@@ -124,7 +153,7 @@ function NewPersonChatDialog({ open, setOpen, signedOnUserId }) {
             const result = await fetch(`/api/user`);
             const users = await result.json();
 
-            setUsers(users.filter(x => x.id !== signedOnUserId));
+            setUsers(users.filter(x => x.id != signedOnUserId));
         })();
     }, [ setUsers ]);
 

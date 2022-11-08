@@ -1,18 +1,11 @@
 package no.kristiania.messenger.endpoints;
 
 import jakarta.inject.Inject;
-import jakarta.json.bind.annotation.JsonbProperty;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import no.kristiania.messenger.dao.MessageThreadDao;
 import no.kristiania.messenger.dtos.commands.CreateUserMessageThreadCommandDto;
-import no.kristiania.messenger.entities.MessageThread;
-import no.kristiania.messenger.json.MessageThreadJsonBuilder;
-
-import javax.json.JsonArrayBuilder;
-import javax.print.attribute.standard.Media;
-import java.util.List;
 
 @Path("/message-thread")
 public class MessageThreadEndpoint {
