@@ -15,7 +15,6 @@ public class UserEndpoint {
     public UserDao userDao;
 
     @GET
-    @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response list() throws Exception {
         var result = Json.createArrayBuilder();
@@ -50,7 +49,6 @@ public class UserEndpoint {
     }
 
     @POST
-    @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response create(String body) throws Exception {

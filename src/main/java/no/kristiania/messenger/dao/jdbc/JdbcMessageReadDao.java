@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.Date;
 
 public class JdbcMessageReadDao implements MessageReadDao {
@@ -18,18 +19,18 @@ public class JdbcMessageReadDao implements MessageReadDao {
         this.dataSource = dataSource;
     }
 
-
     @Override
     public int insert(int userId, int messageId) throws Exception {
         try(var connection = dataSource.getConnection()){
             var sql = """
-                INSERT INTO MessageRead (UserId, MessageId) values (?, ?)""";
+                INSERT INTO MessageRead (UserId, MessageId, ReadAt) values (?, ?, ?)""";
 
             try(var stmt = connection.prepareStatement(
                     sql, PreparedStatement.RETURN_GENERATED_KEYS)){
 
                 stmt.setInt(1, userId);
                 stmt.setInt(2, messageId);
+                stmt.setDate(3, java.sql.Date.valueOf(LocalDate.now()));
 
                 stmt.executeUpdate();
 
@@ -37,19 +38,6 @@ public class JdbcMessageReadDao implements MessageReadDao {
                     generatedKeys.next();
                     return  generatedKeys.getInt(1);
                 }
-            }
-        }
-    }
-    @Override
-    public void update(int id) throws Exception {
-        Date date = new Date(System.currentTimeMillis());
-        try (var connection = dataSource.getConnection()) {
-            var sql = "UPDATE MessageRead SET ReadAt = (?) WHERE Id = (?)";
-
-            try (var statement = connection.prepareStatement(sql)) {
-                statement.setDate(1, new java.sql.Date(date.getTime()));
-                statement.setInt(2, id);
-
             }
         }
     }

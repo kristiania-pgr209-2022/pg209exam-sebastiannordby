@@ -10,13 +10,14 @@ import java.net.URL;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class ServerTest {
+public abstract class ServerTest {
     protected MessengerServer server;
 
     @BeforeEach
     void setup() throws Exception {
         server = new MessengerServer(0, InMemoryDatabase.createTestDataSource());
         server.start();
+        additionalSetup();
     }
 
     @AfterEach
@@ -31,5 +32,9 @@ public class ServerTest {
         var httpUrlConnection = (HttpURLConnection) connection;
 
         return httpUrlConnection;
+    }
+
+    protected void additionalSetup() {
+
     }
 }

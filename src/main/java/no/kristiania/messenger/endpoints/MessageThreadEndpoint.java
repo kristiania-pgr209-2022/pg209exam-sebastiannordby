@@ -22,7 +22,6 @@ public class MessageThreadEndpoint {
     }
 
     @POST
-    @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addThread(CreateUserMessageThreadCommandDto command) throws Exception {

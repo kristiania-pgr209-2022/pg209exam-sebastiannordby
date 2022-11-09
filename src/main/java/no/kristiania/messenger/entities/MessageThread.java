@@ -14,7 +14,7 @@ public class MessageThread {
     }
 
     public MessageThread(String topic) {
-        this.topic =topic;
+        this.topic = topic;
     }
 
 

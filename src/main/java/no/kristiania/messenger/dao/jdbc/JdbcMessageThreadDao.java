@@ -17,7 +17,7 @@ public class JdbcMessageThreadDao implements MessageThreadDao {
     private DataSource dataSource;
 
     @Inject
-    public JdbcMessageThreadDao(DataSource dataSource) throws Exception{
+    public JdbcMessageThreadDao(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
