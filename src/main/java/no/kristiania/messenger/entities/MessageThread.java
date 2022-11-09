@@ -17,6 +17,8 @@ public class MessageThread {
         this.topic =topic;
     }
 
+
+
     public int getId() {
         return id;
     }
