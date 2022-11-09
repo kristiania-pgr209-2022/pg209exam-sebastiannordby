@@ -22,16 +22,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class MessageReadDaoTests {
     private DataSource dataSource = InMemoryDatabase.createTestDataSource();
-    private JdbcUserDao messageReadDao;
+    private UserDao messageReadDao;
     private MessageThreadMembershipDao membershipDao;
     private UserDao userDao;
     private MessageThreadDao messageThreadDao;
     private MessageDao messageDao;
     private MessageThreadMembershipDao messageThreadMembershipDao;
 
-
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
         messageReadDao = new JdbcUserDao(dataSource);
         membershipDao = new JdbcMessageThreadMembershipDao(dataSource);
         messageDao = new JdbcMessageDao(dataSource);
@@ -42,21 +41,17 @@ public class MessageReadDaoTests {
 
     @Test
     void shouldAddMessageReadWhenMessageIsSent() throws Exception {
-        var sender = SampleData.sampleUser();
-        userDao.insertUser(sender);
-        var receiver = SampleData.sampleUser();
-        userDao.insertUser(receiver);
-        List<Integer> recieverList = new ArrayList();
-        recieverList.add(receiver.getId());
+        var senderId = userDao.insertUser(SampleData.sampleUser());
+        var receiverId = userDao.insertUser(SampleData.sampleUser());
+        var receiverList = new ArrayList<Integer>() {{
+            add(receiverId);
+        }};
 
-
-        messageThreadDao.insert("abc", "message", sender.getId(), recieverList);
-
-
+        messageThreadDao.insert("abc", "message", senderId, receiverList);
     }
 
     @Test
-    void shouldRetrieveNullForMissingMessageRead() throws SQLException {
+    void shouldRetrieveNullForMissingMessageRead() throws Exception {
         assertThat(messageReadDao.find(-1)).isNull();
     }
 }

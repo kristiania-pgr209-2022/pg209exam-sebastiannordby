@@ -11,15 +11,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.sql.DataSource;
-
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.*;
 
 public class MessageThreadDaoTests {
     private DataSource dataSource = InMemoryDatabase.createTestDataSource();
-    private JdbcMessageThreadDao messageThreadDao;
+    private MessageThreadDao messageThreadDao;
     private UserDao userDao;
     private MessageDao messageDao;
     private MessageThreadMembershipDao messageThreadMembershipDao;
@@ -91,7 +89,7 @@ public class MessageThreadDaoTests {
     }
 
     @Test
-    void shouldRetrieveNullForMissingThread() throws SQLException {
+    void shouldRetrieveNullForMissingThread() throws Exception {
         assertThat(messageThreadDao.find(-1)).isNull();
     }
 }

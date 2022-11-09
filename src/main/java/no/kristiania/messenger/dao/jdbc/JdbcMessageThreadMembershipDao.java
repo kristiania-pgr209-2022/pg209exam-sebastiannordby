@@ -20,11 +20,11 @@ public class JdbcMessageThreadMembershipDao implements MessageThreadMembershipDa
 
     @Override
     public int insert(int userId, int messageThreadId) throws Exception {
-        try(Connection connection = dataSource.getConnection()){
+        try(var connection = dataSource.getConnection()){
             var sql = """
                 INSERT INTO MessageThreadMemberships(UserId, MessageThreadId) values (?, ?)""";
 
-            try(PreparedStatement stmt = connection.prepareStatement(
+            try(var stmt = connection.prepareStatement(
                     sql, PreparedStatement.RETURN_GENERATED_KEYS)){
 
                 stmt.setInt(1, userId);
@@ -32,7 +32,7 @@ public class JdbcMessageThreadMembershipDao implements MessageThreadMembershipDa
 
                 stmt.executeUpdate();
 
-                try(ResultSet generatedKeys = stmt.getGeneratedKeys()){
+                try(var generatedKeys = stmt.getGeneratedKeys()){
                     generatedKeys.next();
                     return  generatedKeys.getInt(1);
                 }

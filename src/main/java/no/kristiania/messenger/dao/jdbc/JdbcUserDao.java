@@ -16,16 +16,16 @@ public class JdbcUserDao implements UserDao {
     private DataSource dataSource;
 
     @Inject
-    public JdbcUserDao(DataSource dataSource) throws Exception{
+    public JdbcUserDao(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
     public int insertUser(User entity) throws SQLException {
-        try(Connection connection = dataSource.getConnection()){
+        try(var connection = dataSource.getConnection()){
             var sql = """
                 INSERT INTO Users (Name, EmailAddress, Nickname, Bio) values (?, ?, ?, ?)""";
 
-            try(PreparedStatement stmt = connection.prepareStatement(
+            try(var stmt = connection.prepareStatement(
                 sql, PreparedStatement.RETURN_GENERATED_KEYS)){
 
                 stmt.setString(1, entity.getName());
@@ -34,7 +34,7 @@ public class JdbcUserDao implements UserDao {
                 stmt.setString(4, entity.getBio());
                 stmt.executeUpdate();
 
-                try(ResultSet generatedKeys = stmt.getGeneratedKeys()){
+                try(var generatedKeys = stmt.getGeneratedKeys()){
                     generatedKeys.next();
                     var generatedKey = generatedKeys.getInt(1);
 
@@ -62,12 +62,12 @@ public class JdbcUserDao implements UserDao {
 
 
     public List<User> list() throws SQLException {
-        try (Connection connection = dataSource.getConnection()) {
+        try (var connection = dataSource.getConnection()) {
             var sql = "SELECT * FROM Users";
 
-            try(PreparedStatement stmt = connection.prepareStatement(sql)){
-                try (ResultSet rs = stmt.executeQuery()) {
-                    List<User> users = new ArrayList<>();
+            try(var stmt = connection.prepareStatement(sql)){
+                try (var rs = stmt.executeQuery()) {
+                    var users = new ArrayList<User>();
 
                     while(rs.next()){
                         users.add(readUser(rs));

@@ -19,16 +19,16 @@ public class JdbcMessageDao implements MessageDao {
     private DataSource dataSource;
 
     @Inject
-    public JdbcMessageDao(DataSource dataSource) throws Exception{
+    public JdbcMessageDao(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
     public int newMessage(int loggedInUser, int messageThreadId, String content) throws SQLException {
-        try(Connection connection = dataSource.getConnection()){
+        try(var connection = dataSource.getConnection()){
             var sql = """
                 INSERT INTO Messages (Content, SenderId, MessageThreadId, SentDate) values (?, ?, ?, ?)""";
 
-            try(PreparedStatement stmt = connection.prepareStatement(
+            try(var stmt = connection.prepareStatement(
                     sql, PreparedStatement.RETURN_GENERATED_KEYS)){
 
                 stmt.setString(1, content);
@@ -37,7 +37,7 @@ public class JdbcMessageDao implements MessageDao {
                 stmt.setDate(4, java.sql.Date.valueOf(LocalDate.now()));
                 stmt.executeUpdate();
 
-                try(ResultSet generatedKeys = stmt.getGeneratedKeys()){
+                try(var generatedKeys = stmt.getGeneratedKeys()){
                     generatedKeys.next();
                     var generatedKey = generatedKeys.getInt(1);
 
@@ -48,14 +48,14 @@ public class JdbcMessageDao implements MessageDao {
     }
 
     public List<Message> findMessagesInThread(int messageThreadId) throws SQLException {
-        try (Connection connection = dataSource.getConnection()) {
+        try (var connection = dataSource.getConnection()) {
             var sql = "SELECT * FROM Messages WHERE MessageThreadId = ?";
 
             try(var statement = connection.prepareStatement(sql)){
                 statement.setInt(1, messageThreadId);
 
 
-                try (ResultSet rs = statement.executeQuery()) {
+                try (var rs = statement.executeQuery()) {
                     List<Message> messages = new ArrayList<>();
 
                     while(rs.next()){
@@ -70,7 +70,7 @@ public class JdbcMessageDao implements MessageDao {
 
     @Override
     public List<MessageView> findMessageViewsInThread(int messageThreadId) throws Exception {
-        try (Connection connection = dataSource.getConnection()) {
+        try (var connection = dataSource.getConnection()) {
             var sql = """
                 SELECT Messages.Id as MessageId, Content, SenderId, MessageThreadId, SentDate, Users.Nickname AS UserNickname FROM Messages 
                 JOIN Users ON Users.Id = Messages.SenderId
@@ -79,8 +79,7 @@ public class JdbcMessageDao implements MessageDao {
             try(var statement = connection.prepareStatement(sql)){
                 statement.setInt(1, messageThreadId);
 
-
-                try (ResultSet rs = statement.executeQuery()) {
+                try (var rs = statement.executeQuery()) {
                     List<MessageView> messages = new ArrayList<>();
 
                     while(rs.next()){

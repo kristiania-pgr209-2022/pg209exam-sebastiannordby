@@ -15,9 +15,8 @@ import java.sql.SQLException;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserDaoTests {
-
     private DataSource  dataSource = InMemoryDatabase.createTestDataSource();
-    private JdbcUserDao userDao;
+    private UserDao userDao;
 
     @BeforeEach
     void setUp() throws Exception {
@@ -26,20 +25,20 @@ public class UserDaoTests {
 
     @Test
     void shouldInsertUser() throws Exception {
-        User sampleUser = SampleData.sampleUser();
-        userDao.insertUser(sampleUser);
+        var insertedUserId = userDao.insertUser(SampleData.sampleUser());
         var list = userDao.list();
 
         assertThat(list).isNotNull();
         assertThat(list).isNotEmpty();
+        assertThat(list.stream().map(x -> x.getId())).contains(insertedUserId);
     }
 
 
     @Test
-    void shouldListUser() throws Exception{
+    void shouldListUser() throws Exception {
         var sampleUser = SampleData.sampleUser();
-        userDao.insertUser(sampleUser);
-        var insertedUser = userDao.find(sampleUser.getId());
+        var sampleUserId = userDao.insertUser(sampleUser);
+        var insertedUser = userDao.find(sampleUserId);
 
         assertThat(insertedUser)
             .usingRecursiveComparison()
@@ -48,7 +47,7 @@ public class UserDaoTests {
     }
 
     @Test
-    void shouldRetrieveNullForMissingUser() throws SQLException {
+    void shouldRetrieveNullForMissingUser() throws Exception {
         assertThat(userDao.find(-1)).isNull();
     }
 }

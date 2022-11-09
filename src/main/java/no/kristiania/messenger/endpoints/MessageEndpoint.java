@@ -5,14 +5,21 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import no.kristiania.messenger.dao.MessageDao;
+import no.kristiania.messenger.dao.MessageReadDao;
 import no.kristiania.messenger.dao.MessageThreadDao;
 import no.kristiania.messenger.dtos.commands.CreateUserMessageThreadCommandDto;
 import no.kristiania.messenger.dtos.commands.InsertNewMessageIntoThreadCommandDto;
+import no.kristiania.messenger.dtos.commands.MarkMessageAsReadCommandDto;
+
+import javax.print.attribute.standard.Media;
 
 @Path("/message")
 public class MessageEndpoint {
     @Inject
     public MessageDao messageDao;
+
+    @Inject
+    public MessageReadDao messageReadDao;
 
     @GET
     @Path("/{messageThreadId}")
@@ -24,8 +31,6 @@ public class MessageEndpoint {
     }
 
     @POST
-    @Path("/")
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response insertMessageIntoThread(InsertNewMessageIntoThreadCommandDto command) throws Exception {
         if(command == null)
@@ -36,6 +41,18 @@ public class MessageEndpoint {
 
         messageDao.newMessage(command.userId, command.messageThreadId, command.message);
 
-        return Response.ok(true).build();
+        return Response.ok().build();
+    }
+
+    @POST
+    @Path("/message-read")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response markMessageAsRead(MarkMessageAsReadCommandDto command) throws Exception {
+        if(command == null)
+            return Response.status(404).build();
+
+        messageReadDao.insert(command.userId, command.messageId);
+
+        return Response.ok().build();
     }
 }

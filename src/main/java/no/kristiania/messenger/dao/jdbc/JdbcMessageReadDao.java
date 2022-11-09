@@ -21,11 +21,11 @@ public class JdbcMessageReadDao implements MessageReadDao {
 
     @Override
     public int insert(int userId, int messageId) throws Exception {
-        try(Connection connection = dataSource.getConnection()){
+        try(var connection = dataSource.getConnection()){
             var sql = """
                 INSERT INTO MessageRead (UserId, MessageId) values (?, ?)""";
 
-            try(PreparedStatement stmt = connection.prepareStatement(
+            try(var stmt = connection.prepareStatement(
                     sql, PreparedStatement.RETURN_GENERATED_KEYS)){
 
                 stmt.setInt(1, userId);
