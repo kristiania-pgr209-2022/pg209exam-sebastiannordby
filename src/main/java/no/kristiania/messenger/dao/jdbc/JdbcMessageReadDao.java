@@ -76,70 +76,93 @@ public class JdbcMessageReadDao implements MessageReadDao {
     }
 
     @Override
-    public int insert(int userId, int messageId) throws Exception {
-        try (var connection = dataSource.getConnection()) {
-            var sql = "INSERT INTO MessageRead (UserId, MessageId, ReadAt) values (?, ?, ?)";
+    public void markMessagesInThreadAsRead(int userId, int messageThreadId) throws Exception {
 
-            try(var stmt = connection.prepareStatement(
+        var allMessageIdsForUser = new ArrayList<Integer>();
+        var allMessageIdsForUserMarkedAsRead = new ArrayList<Integer>();
+
+        try (var connection = dataSource.getConnection()) {
+
+            // All messages in the thread that userId is connected to
+            var sql = """
+                    SELECT Messages.Id FROM Messages
+                    JOIN MessageThreads ON MessageThreads.Id = Messages.MessageThreadId
+                    JOIN MessageThreadMemberships ON MessageThreadMemberships.MessageThreadId = MessageThreads.Id
+                    WHERE UserId = ?
+                    """;
+
+            try (var statement = connection.prepareStatement(sql)) {
+                statement.setInt(1, userId);
+
+                try (var rs = statement.executeQuery()) {
+
+                    while (rs.next()) {
+                        allMessageIdsForUser.add(rs.getInt(1));
+                    }
+                }
+            }
+
+            var messageReadSql = """
+                    SELECT Messages.Id FROM Messages
+                    JOIN MessageThreads ON MessageThreads.Id = Messages.MessageThreadId
+                    JOIN MessageThreadMemberships ON MessageThreadMemberships.MessageThreadId = MessageThreads.Id
+                    JOIN MessageRead ON MessageRead.MessageId = Messages.Id
+                    WHERE MessageRead.UserId = ?""";
+
+            try (var statement = connection.prepareStatement(messageReadSql)) {
+                statement.setInt(1, userId);
+
+                try (var rs = statement.executeQuery()) {
+                    while (rs.next()) {
+                        allMessageIdsForUserMarkedAsRead.add(rs.getInt(1));
+                    }
+                }
+            }
+
+            connection.setAutoCommit(false);
+
+            var messageIdsToMarkAsRead = allMessageIdsForUser
+                    .stream()
+                    .filter(messageId -> !allMessageIdsForUserMarkedAsRead.contains(messageId))
+                    .toList();
+
+            for(var messageIdToMarkAsRead : messageIdsToMarkAsRead) {
+                var insertMessageReadSql = "INSERT INTO MessageRead (UserId, MessageId, ReadAt) values (?, ?, ?)";
+
+                try(var stmt = connection.prepareStatement(insertMessageReadSql)){
+                    stmt.setInt(1, userId);
+                    stmt.setInt(2, messageIdToMarkAsRead);
+                    stmt.setDate(3, java.sql.Date.valueOf(LocalDate.now()));
+                    stmt.executeUpdate();
+                }
+            }
+
+            connection.commit();
+        }
+    }
+
+    public Date find(int userId, int messageId) throws Exception {
+        try (var connection = dataSource.getConnection()) {
+            var sql = "SELECT ReadAt FROM MessageRead where UserId = (?) AND MessageId = (?) LIMIT 1";
+
+            try(var statement = connection.prepareStatement(
                     sql, PreparedStatement.RETURN_GENERATED_KEYS)){
 
-                stmt.setInt(1, userId);
-                stmt.setInt(2, messageId);
-                stmt.setDate(3, java.sql.Date.valueOf(LocalDate.now()));
+                statement.setInt(1, userId);
+                statement.setInt(2, messageId);
 
-                stmt.executeUpdate();
 
-                try(ResultSet generatedKeys = stmt.getGeneratedKeys()){
-                    generatedKeys.next();
-                    return  generatedKeys.getInt(1);
+                try (var rs = statement.executeQuery()) {
+
+                    if (rs.next())
+                        return rs.getDate(1);
+                    else
+                        return null;
+
+                    //return rs.next() ? rs.getDate("ReadAt") : null;
+
                 }
             }
         }
     }
-
-    @Override
-    public void update(int userId, int messageThreadId) throws Exception {
-        try(var connection = dataSource.getConnection()){
-            var sql = """
-                update mr set (ReadAt) values (?) 
-                FROM MessageRead mr
-                join Messages m on mr.MessageId = m.id
-                where mr.readAt=NULL AND m.SenderId = (?) AND m.MessageThreadId= (?)""";
-
-            try(var stmt = connection.prepareStatement(
-                    sql, PreparedStatement.RETURN_GENERATED_KEYS)){
-
-                    stmt.setDate(1, java.sql.Date.valueOf(LocalDate.now()));
-                    stmt.setInt(2, userId);
-                    stmt.setInt(3, messageThreadId);
-
-                    stmt.executeUpdate();
-                }
-            }
-        }
-
-        public Date find(int userId, int messageId) throws Exception {
-            try (var connection = dataSource.getConnection()) {
-                var sql = "SELECT ReadAt FROM MessageRead where UserId = (?) AND MessageId = (?) LIMIT 1";
-
-                try(var statement = connection.prepareStatement(
-                        sql, PreparedStatement.RETURN_GENERATED_KEYS)){
-
-                    statement.setInt(1, userId);
-                    statement.setInt(2, messageId);
-
-
-                    try (var rs = statement.executeQuery()) {
-
-                        if (rs.next())
-                            return rs.getDate(1);
-                        else
-                            return null;
-
-                        //return rs.next() ? rs.getDate("ReadAt") : null;
-
-                    }
-                }
-            }
-        }
 }
