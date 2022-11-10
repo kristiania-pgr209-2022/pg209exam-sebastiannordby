@@ -4,6 +4,7 @@ import jakarta.inject.Inject;
 import no.kristiania.messenger.dao.MessageDao;
 import no.kristiania.messenger.dao.MessageReadDao;
 import no.kristiania.messenger.entities.MessageRead;
+import no.kristiania.messenger.views.UnreadMessagesCountView;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -30,11 +31,10 @@ public class JdbcMessageReadDao implements MessageReadDao {
 
         // All messages in the thread that userId is connected to
         var sql = """
-                    SELECT Messages.Id FROM Messages
-                    JOIN MessageThreads ON MessageThreads.Id = Messages.MessageThreadId
-                    JOIN MessageThreadMemberships ON MessageThreadMemberships.MessageThreadId = MessageThreads.Id
-                    WHERE UserId = ? AND Messages.MessageThreadId = ?
-                    """;
+            SELECT Messages.Id FROM Messages
+            JOIN MessageThreads ON MessageThreads.Id = Messages.MessageThreadId
+            JOIN MessageThreadMemberships ON MessageThreadMemberships.MessageThreadId = MessageThreads.Id
+            WHERE UserId = ? AND Messages.MessageThreadId = ?""";
 
         try (var statement = connection.prepareStatement(sql)) {
             statement.setInt(1, userId);
@@ -71,6 +71,22 @@ public class JdbcMessageReadDao implements MessageReadDao {
                 .stream()
                 .filter(messageId -> !allMessageIdsForUserMarkedAsRead.contains(messageId))
                 .toList();
+    }
+
+    @Override
+    public List<UnreadMessagesCountView> getUnreadMessages(int userId, List<Integer> messageThreadIds) throws Exception {
+        var result = new ArrayList<UnreadMessagesCountView>();
+
+        try (var connection = dataSource.getConnection()) {
+            for (var messageThreadId : messageThreadIds) {
+                var unreadMessageCountForThread = getMessageIdsWhereMessagesNotReadForUser(connection, userId, messageThreadId).size();
+                var view = new UnreadMessagesCountView(unreadMessageCountForThread, messageThreadId);
+
+                result.add(view);
+            }
+        }
+
+        return result;
     }
 
     @Override
@@ -120,9 +136,6 @@ public class JdbcMessageReadDao implements MessageReadDao {
                         return rs.getDate(1);
                     else
                         return null;
-
-                    //return rs.next() ? rs.getDate("ReadAt") : null;
-
                 }
             }
         }

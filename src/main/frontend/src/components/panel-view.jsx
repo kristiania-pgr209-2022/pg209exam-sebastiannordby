@@ -19,15 +19,49 @@ export function PanelView({ setMessageThread, userId, isLoading }) {
 
     useEffect(() => {
         (async() => {
-            const res = await fetch(`/api/message-thread/${userId}`);
-            const json = await res.json();
+            const messageThreadsRes = await fetch(`/api/message-thread/${userId}`);
+            const messageThreads = await messageThreadsRes.json();
 
-            setMessageThreads(json);
+            const unreadMessagesRes = await fetch(`/api/message/unread`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    userId: userId,
+                    messageThreadIds: messageThreads.map(x => x.id)
+                })
+            });
+            const unreadMessages = await unreadMessagesRes.json();
+
+            console.log('Unread: ', unreadMessages);
+
+            const result = [];
+
+            messageThreads.forEach(messageThread =>{
+                const unreadMessageMatch = unreadMessages.find(unreadMs => unreadMs.messageThreadId == messageThread.id);
+                result.push({
+                    ...messageThread,
+                    unreadMessages: unreadMessageMatch.messagesUnread
+                });
+            });
+
+            setMessageThreads(result);
         })();
     }, []);
 
-    function selectMessageThread(messageThread) {
+    async function selectMessageThread(messageThread) {
         setMessageThread(messageThread);
+        await fetch(`/api/message/message-read`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+               userId: userId,
+               messageThreadId: messageThread.id
+            }),
+        });
     }
 
     if(!isLoading) {
@@ -47,7 +81,7 @@ export function PanelView({ setMessageThread, userId, isLoading }) {
                 </div>
                 <div class="content">
                     {messageThreads.map(x =>
-                        <div className="message" key={x.id} onClick={() => selectMessageThread(x)}>{x.topic}</div>
+                        <div className="message" key={x.id} onClick={async() => await selectMessageThread(x)}>{x.topic} - Uleste: {x.unreadMessages}</div>
                     )}
                 </div>
 

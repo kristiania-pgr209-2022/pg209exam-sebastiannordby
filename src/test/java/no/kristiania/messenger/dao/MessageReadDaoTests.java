@@ -55,11 +55,11 @@ public class MessageReadDaoTests {
     void shouldDecreaseMessageNotReadCount() throws Exception {
         var senderId = userDao.insertUser(SampleData.sampleUser());
         var receiverId = userDao.insertUser(SampleData.sampleUser());
-        List<Integer> recieverList = new ArrayList(){{
+        var receiverList = new ArrayList<Integer>(){{
             add(receiverId);
         }};
 
-        var messageThreadId = messageThreadDao.insert("abc", "Message 1", senderId, recieverList);
+        var messageThreadId = messageThreadDao.insert("abc", "Message 1", senderId, receiverList);
         var message2Id = messageDao.newMessage(senderId, messageThreadId, "Message 2");
         var message3Id = messageDao.newMessage(senderId, messageThreadId, "Message 3");
 
