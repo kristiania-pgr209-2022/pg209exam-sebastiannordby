@@ -41,10 +41,12 @@ public class MessageReadDaoTests {
             add(receiverId);
         }};
 
-        var messageThreadId = messageThreadDao.insert("abc", "Message 1", senderId, recieverList);
-        messageDao.newMessage(senderId, messageThreadId, "Message 2");
+        var messageThread1Id = messageThreadDao.insert("Whats up saturday?", "Message 1", senderId, recieverList);
+        messageThreadDao.insert("My birthday next year", "Message In Second Thread", senderId, recieverList);
 
-        var amountOfUnreadMessages = messageReadDao.unReadMessages(receiverId, messageThreadId);
+        messageDao.newMessage(senderId, messageThread1Id, "Message 2");
+
+        var amountOfUnreadMessages = messageReadDao.unReadMessages(receiverId, messageThread1Id);
 
         assertThat(amountOfUnreadMessages).isEqualTo(2);
     }
