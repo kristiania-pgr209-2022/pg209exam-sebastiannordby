@@ -49,10 +49,6 @@ public class MessageReadDaoTests {
 
         messageThreadDao.insert("abc", "message", sender.getId(), recieverList);
         messageReadDao.insert(receiver.getId(), 1);
-
-
-
-
     }
 
     @Test

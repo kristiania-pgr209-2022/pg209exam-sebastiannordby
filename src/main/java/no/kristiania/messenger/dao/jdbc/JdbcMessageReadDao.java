@@ -78,14 +78,11 @@ public class JdbcMessageReadDao implements MessageReadDao {
             try(var stmt = connection.prepareStatement(
                     sql, PreparedStatement.RETURN_GENERATED_KEYS)){
 
-                stmt.setDate(1, java.sql.Date.valueOf(LocalDate.now()));
-                stmt.setInt(2, userId);
-                stmt.setInt(3, messageThreadId);
+                    stmt.setDate(1, java.sql.Date.valueOf(LocalDate.now()));
+                    stmt.setInt(2, userId);
+                    stmt.setInt(3, messageThreadId);
 
-
-                stmt.executeUpdate();
-
-
+                    stmt.executeUpdate();
                 }
             }
         }

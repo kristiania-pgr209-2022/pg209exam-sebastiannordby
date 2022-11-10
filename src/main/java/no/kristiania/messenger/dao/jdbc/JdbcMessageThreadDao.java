@@ -154,7 +154,6 @@ public class JdbcMessageThreadDao implements MessageThreadDao {
         }
     }
 
-
     static MessageThread readMessageThread(ResultSet rs) throws SQLException {
         var group = new MessageThread();
 

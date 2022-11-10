@@ -37,7 +37,6 @@ public class MessageDaoTests {
         var receiver = SampleData.sampleUser();
         userDao.insertUser(receiver);
 
-
         var messageThreadId = messageThreadDao.insert(new MessageThread(""));
 
         messageThreadMembershipDao.insert(sender.getId(), messageThreadId);

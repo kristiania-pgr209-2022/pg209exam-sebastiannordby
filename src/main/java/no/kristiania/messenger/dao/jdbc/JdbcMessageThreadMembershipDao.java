@@ -61,4 +61,25 @@ public class JdbcMessageThreadMembershipDao implements MessageThreadMembershipDa
             }
         }
     }
+
+    @Override
+    public List<Integer> getUserIdsWhichIsMembersIn(int messageThreadId) throws Exception {
+        try(var connection = dataSource.getConnection()) {
+            var sql = "SELECT UserId from MessageThreadMemberships WHERE MessageThreadId = ?";
+
+            try(var statement = connection.prepareStatement(sql)) {
+                statement.setInt(1, messageThreadId);
+
+                var result = new ArrayList<Integer>();
+
+                try(var rs = statement.executeQuery()) {
+                    while(rs.next()) {
+                        result.add(rs.getInt("UserId"));
+                    }
+
+                    return result;
+                }
+            }
+        }
+    }
 }

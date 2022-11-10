@@ -41,6 +41,7 @@ public class JdbcMessageDao implements MessageDao {
                     generatedKeys.next();
                     var generatedKey = generatedKeys.getInt(1);
 
+
                     return generatedKey;
                 }
             }

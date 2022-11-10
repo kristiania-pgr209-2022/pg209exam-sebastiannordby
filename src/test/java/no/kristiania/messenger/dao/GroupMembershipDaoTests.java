@@ -1,6 +1,7 @@
 package no.kristiania.messenger.dao;
 
 import no.kristiania.messenger.InMemoryDatabase;
+import no.kristiania.messenger.SampleData;
 import no.kristiania.messenger.dao.jdbc.JdbcMessageThreadDao;
 import no.kristiania.messenger.dao.jdbc.JdbcMessageThreadMembershipDao;
 import no.kristiania.messenger.dao.jdbc.JdbcUserDao;
@@ -10,6 +11,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.sql.DataSource;
+
+import java.util.ArrayList;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -28,13 +31,32 @@ public class GroupMembershipDaoTests {
 
     @Test
     void shouldInsertMemberIntoGroup() throws Exception {
-        var userId = userDao.insertUser(new User(
-        "Test", "test@shouldInsertMemberIntoGroup.com", "Testo", "Full oftest"));
-        var groupId = messageThreadDao.insert(new MessageThread("Test Group"));
-        var membershipId = membershipDao.insert(userId, groupId);
+        var userId = userDao.insertUser(SampleData.sampleUser());
+        var messageThreadId = messageThreadDao.insert(new MessageThread("Test Group"));
+        var membershipId = membershipDao.insert(userId, messageThreadId);
         var groupIdsWhereUserIsMember = membershipDao.getMessageThreadIdsByUserId(userId);
 
         assertThat(groupIdsWhereUserIsMember).isNotNull();
         assertThat(groupIdsWhereUserIsMember.size() >= 1).isEqualTo(true);
+    }
+
+    @Test
+    void shouldListUserIdsWhichIsMemberInMessageThread() throws Exception {
+        var user1Id = userDao.insertUser(SampleData.sampleUser());
+        var user2Id = userDao.insertUser(SampleData.sampleUser());
+        var user3Id = userDao.insertUser(SampleData.sampleUser());
+        var messageThreadId = messageThreadDao.insert(new MessageThread("Test Group"));
+        var membership1Id = membershipDao.insert(user1Id, messageThreadId);
+        var membership2Id = membershipDao.insert(user2Id, messageThreadId);
+        var membership3Id = membershipDao.insert(user3Id, messageThreadId);
+        var userIds = membershipDao.getUserIdsWhichIsMembersIn(messageThreadId);
+
+        assertThat(userIds).isNotNull();
+        assertThat(userIds.size() >= 1).isEqualTo(true);
+        assertThat(userIds.containsAll(new ArrayList<>(){{
+            add(user1Id);
+            add(user2Id);
+            add(user3Id);
+        }}));
     }
 }

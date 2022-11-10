@@ -2,11 +2,11 @@ package no.kristiania.messenger.entities;
 
 public class MessageThreadMembership {
     private int userId;
-    private int groupId;
+    private int messageThreadId;
 
     public MessageThreadMembership(int userId, int groupId) {
         this.userId = userId;
-        this.groupId = groupId;
+        this.messageThreadId = groupId;
     }
 
     public int getUserId() {
@@ -17,11 +17,11 @@ public class MessageThreadMembership {
         this.userId = userId;
     }
 
-    public int getGroupId() {
-        return groupId;
+    public int getMessageThreadId() {
+        return messageThreadId;
     }
 
-    public void setGroupId(int groupId) {
-        this.groupId = groupId;
+    public void setMessageThreadId(int messageThreadId) {
+        this.messageThreadId = messageThreadId;
     }
 }
