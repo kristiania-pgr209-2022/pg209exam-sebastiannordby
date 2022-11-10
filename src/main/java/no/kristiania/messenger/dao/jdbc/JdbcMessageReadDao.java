@@ -70,10 +70,10 @@ public class JdbcMessageReadDao implements MessageReadDao {
     public void update(int userId, int messageThreadId) throws Exception {
         try(var connection = dataSource.getConnection()){
             var sql = """
-                update Mr set (ReadAt) values (?) 
+                update mr set (ReadAt) values (?) 
                 FROM MessageRead mr
-                join Messages m on Mr.MessageId = m.id
-                where Mr.readAt=NULL AND m.SenderId = (?) AND m.MessageThreadId= (?)""";
+                join Messages m on mr.MessageId = m.id
+                where mr.readAt=NULL AND m.SenderId = (?) AND m.MessageThreadId= (?)""";
 
             try(var stmt = connection.prepareStatement(
                     sql, PreparedStatement.RETURN_GENERATED_KEYS)){
