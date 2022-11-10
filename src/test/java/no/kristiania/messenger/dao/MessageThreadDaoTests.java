@@ -2,10 +2,7 @@ package no.kristiania.messenger.dao;
 
 import no.kristiania.messenger.InMemoryDatabase;
 import no.kristiania.messenger.SampleData;
-import no.kristiania.messenger.dao.jdbc.JdbcMessageDao;
-import no.kristiania.messenger.dao.jdbc.JdbcMessageThreadDao;
-import no.kristiania.messenger.dao.jdbc.JdbcMessageThreadMembershipDao;
-import no.kristiania.messenger.dao.jdbc.JdbcUserDao;
+import no.kristiania.messenger.dao.jdbc.*;
 import no.kristiania.messenger.entities.MessageThread;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,10 +21,10 @@ public class MessageThreadDaoTests {
 
     @BeforeEach
     void setUp() throws Exception {
-        messageDao = new JdbcMessageDao(dataSource);
         messageThreadDao = new JdbcMessageThreadDao(dataSource);
         userDao = new JdbcUserDao(dataSource);
         messageThreadMembershipDao = new JdbcMessageThreadMembershipDao(dataSource);
+        messageDao = new JdbcMessageDao(dataSource, messageThreadMembershipDao, new JdbcMessageReadDao(dataSource));
     }
 
     @Test

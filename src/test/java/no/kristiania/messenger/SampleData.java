@@ -21,14 +21,18 @@ public class SampleData {
 
 
     public static Message sampleMessage(User sender, int messageThread){
+        return sampleMessage(sender.getId(), messageThread);
+    }
+
+    public static Message sampleMessage(int senderId, int messageThread){
         Date date = new Date(System.currentTimeMillis());
 
         return new Message(
-            pick(
-        "Hei, skal vi spille tennis etter backend timen?",
-                "Når kommer du over?",
-                "Byen i kveld?"),
-                sender.getId(), messageThread, date);
+                pick(
+                        "Hei, skal vi spille tennis etter backend timen?",
+                        "Når kommer du over?",
+                        "Byen i kveld?"),
+                senderId, messageThread, date);
 
     }
 

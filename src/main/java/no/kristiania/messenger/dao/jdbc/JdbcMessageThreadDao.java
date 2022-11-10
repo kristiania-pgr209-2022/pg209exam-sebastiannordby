@@ -46,7 +46,9 @@ public class JdbcMessageThreadDao implements MessageThreadDao {
     }
 
     @Override
-    public void insert(String topic, String message, int senderId, List<Integer> userReceiverIds) throws Exception {
+    public int insert(String topic, String message, int senderId, List<Integer> userReceiverIds) throws Exception {
+        int messageThreadId = -1;
+
         try (var connection = dataSource.getConnection()) {
             connection.setAutoCommit(false);
 
@@ -62,8 +64,7 @@ public class JdbcMessageThreadDao implements MessageThreadDao {
                     if(!generatedKeys.next())
                         throw new IllegalStateException("MessageThreadId was not generated.");
 
-                    var messageThreadId = generatedKeys.getInt(1);
-
+                    messageThreadId = generatedKeys.getInt(1);
 
                     // Insert MessageThreadMemberships
                     userReceiverIds.add(senderId);
@@ -92,6 +93,8 @@ public class JdbcMessageThreadDao implements MessageThreadDao {
 
             connection.commit();
         }
+
+        return messageThreadId;
     }
 
     public MessageThread find(int id) throws SQLException {

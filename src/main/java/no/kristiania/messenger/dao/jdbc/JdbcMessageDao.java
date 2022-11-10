@@ -2,6 +2,8 @@ package no.kristiania.messenger.dao.jdbc;
 
 import jakarta.inject.Inject;
 import no.kristiania.messenger.dao.MessageDao;
+import no.kristiania.messenger.dao.MessageReadDao;
+import no.kristiania.messenger.dao.MessageThreadMembershipDao;
 import no.kristiania.messenger.entities.Message;
 import no.kristiania.messenger.views.MessageView;
 
@@ -17,13 +19,19 @@ import java.util.*;
 
 public class JdbcMessageDao implements MessageDao {
     private DataSource dataSource;
+    private MessageThreadMembershipDao messageThreadMembershipDao;
+    private MessageReadDao messageReadDao;
 
     @Inject
-    public JdbcMessageDao(DataSource dataSource) {
+    public JdbcMessageDao(DataSource dataSource,
+          MessageThreadMembershipDao messageThreadMembershipDao,
+          MessageReadDao messageReadDao) {
         this.dataSource = dataSource;
+        this.messageThreadMembershipDao = messageThreadMembershipDao;
+        this.messageReadDao = messageReadDao;
     }
 
-    public int newMessage(int loggedInUser, int messageThreadId, String content) throws SQLException {
+    public int newMessage(int loggedInUser, int messageThreadId, String content) throws Exception {
         try(var connection = dataSource.getConnection()){
             var sql = """
                 INSERT INTO Messages (Content, SenderId, MessageThreadId, SentDate) values (?, ?, ?, ?)""";
@@ -39,10 +47,7 @@ public class JdbcMessageDao implements MessageDao {
 
                 try(var generatedKeys = stmt.getGeneratedKeys()){
                     generatedKeys.next();
-                    var generatedKey = generatedKeys.getInt(1);
-
-
-                    return generatedKey;
+                    return generatedKeys.getInt(1);
                 }
             }
         }

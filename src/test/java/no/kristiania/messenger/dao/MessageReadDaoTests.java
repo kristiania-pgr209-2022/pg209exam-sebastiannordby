@@ -31,24 +31,26 @@ public class MessageReadDaoTests {
     void setUp() throws Exception {
         userDao = new JdbcUserDao(dataSource);
         membershipDao = new JdbcMessageThreadMembershipDao(dataSource);
-        messageDao = new JdbcMessageDao(dataSource);
         messageThreadDao = new JdbcMessageThreadDao(dataSource);
         messageReadDao = new JdbcMessageReadDao(dataSource);
         messageThreadMembershipDao = new JdbcMessageThreadMembershipDao(dataSource);
+        messageDao = new JdbcMessageDao(dataSource, messageThreadMembershipDao, messageReadDao);
     }
 
     @Test
-    void shouldAddMessageReadWhenMessageIsSent() throws Exception {
-        var sender = SampleData.sampleUser();
-        userDao.insertUser(sender);
-        var receiver = SampleData.sampleUser();
-        userDao.insertUser(receiver);
-        List<Integer> recieverList = new ArrayList();
-        recieverList.add(receiver.getId());
+    void shouldListAmountOfUnreadMessagesForUser() throws Exception {
+        var senderId = userDao.insertUser(SampleData.sampleUser());
+        var receiverId = userDao.insertUser(SampleData.sampleUser());
+        List<Integer> recieverList = new ArrayList(){{
+            add(receiverId);
+        }};
 
+        var messageThreadId = messageThreadDao.insert("abc", "Message 1", senderId, recieverList);
+        messageDao.newMessage(senderId, messageThreadId, "Message 2");
 
-        messageThreadDao.insert("abc", "message", sender.getId(), recieverList);
-        messageReadDao.insert(receiver.getId(), 1);
+        var amountOfUnreadMessages = messageReadDao.unReadMessages(receiverId, messageThreadId);
+
+        assertThat(amountOfUnreadMessages).isEqualTo(2);
     }
 
     @Test
