@@ -46,6 +46,19 @@ public class UserDaoTests {
             .isNotSameAs(sampleUser);
     }
 
+
+    @Test
+    void shouldUpdateUser() throws Exception{
+        var sampleUser = SampleData.sampleUser();
+        var sampleUserId = userDao.insertUser(sampleUser);
+        userDao.updateUser(sampleUserId, sampleUser.getName(), sampleUser.getEmailAddress(), sampleUser.getNickname(), "Bio updated!");
+        var insertedUser = userDao.find(sampleUserId);
+
+
+        assertThat(insertedUser.getBio()).contains("Bio updated!");
+
+    }
+
     @Test
     void shouldRetrieveNullForMissingUser() throws Exception {
         assertThat(userDao.find(-1)).isNull();

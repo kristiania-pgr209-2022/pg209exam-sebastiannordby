@@ -5,7 +5,6 @@ import no.kristiania.messenger.dao.UserDao;
 import no.kristiania.messenger.entities.User;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -75,6 +74,25 @@ public class JdbcUserDao implements UserDao {
 
                     return users;
                 }
+            }
+        }
+    }
+    @Override
+    public void updateUser(int userId, String name, String email, String nickName, String bio) throws Exception{
+        try (var connection = dataSource.getConnection()) {
+            var sql = """
+                UPDATE Users
+                SET Name = ?, EmailAddress = ?, Nickname = ?, Bio = ?
+                WHERE Id = ?""";
+
+            try (var statement = connection.prepareStatement(sql)) {
+                statement.setString(1, name);
+                statement.setString(2, email);
+                statement.setString(3, nickName);
+                statement.setString(4, bio);
+                statement.setInt(5, userId);
+
+                statement.execute();
             }
         }
     }
