@@ -19,6 +19,7 @@ public class MessengerServerConfig extends ResourceConfig {
                 bind(JdbcMessageThreadDao.class).to(MessageThreadDao.class);
                 bind(JdbcMessageThreadMembershipDao.class).to(MessageThreadMembershipDao.class);
                 bind(JdbcMessageReadDao.class).to(MessageReadDao.class);
+                bind(JdbcMessageThreadViewDao.class).to(MessageThreadViewDao.class);
                 bind(dataSource).to(DataSource.class);
             }
         });

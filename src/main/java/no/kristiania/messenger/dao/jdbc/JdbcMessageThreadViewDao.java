@@ -30,8 +30,6 @@ public class JdbcMessageThreadViewDao implements MessageThreadViewDao {
                 	MessageThreads.Id,
                 	MessageThreads.Topic,
                 	MessageThreadMemberships.UserId,
-                	COUNT(MessageRead.Id) AS MessagesRead,
-                	COUNT(Messages.Id) AS TotalMessages,
                 	(COUNT(Messages.Id) - COUNT(MessageRead.Id)) AS UnreadCount
                 FROM MessageThreadMemberships
                 	LEFT OUTER JOIN MessageThreads ON MessageThreads.Id = MessageThreadMemberships.MessageThreadId
@@ -51,15 +49,11 @@ public class JdbcMessageThreadViewDao implements MessageThreadViewDao {
                         var messageThreadId = rs.getInt("Id");
                         var topic =  rs.getString("Topic");
                         var unreadCount =  rs.getInt("UnreadCount");
-                        var messagesRead =  rs.getInt("MessagesRead");
-                        var totalMessages =  rs.getInt("TotalMessages");
 
                         views.add(new MessageThreadView(
                             messageThreadId,
                             topic,
-                            unreadCount,
-                            totalMessages,
-                            messagesRead
+                            unreadCount
                         ));
                     }
 

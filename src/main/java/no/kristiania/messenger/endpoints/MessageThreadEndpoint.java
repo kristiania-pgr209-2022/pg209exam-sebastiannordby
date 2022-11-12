@@ -5,6 +5,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import no.kristiania.messenger.dao.MessageThreadDao;
+import no.kristiania.messenger.dao.MessageThreadViewDao;
 import no.kristiania.messenger.dtos.commands.CreateUserMessageThreadCommandDto;
 
 @Path("/message-thread")
@@ -12,13 +13,16 @@ public class MessageThreadEndpoint {
     @Inject
     public MessageThreadDao messageThreadDao;
 
+    @Inject
+    public MessageThreadViewDao messageThreadViewDao;
+
     @GET
     @Path("/{userId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response listAllThreads(@PathParam("userId") int userId) throws Exception {
-        var messageThreads = messageThreadDao.listThreadsByUserId(userId);
-
-        return Response.ok(messageThreads).build();
+        return Response.ok(
+            messageThreadViewDao.getListOfThreadsByRecieverId(userId)
+        ).build();
     }
 
     @POST

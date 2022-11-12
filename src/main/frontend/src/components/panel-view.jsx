@@ -21,34 +21,7 @@ export function PanelView({ setMessageThread, userId, isLoading }) {
     (async () => {
       const messageThreadsRes = await fetch(`/api/message-thread/${userId}`);
       const messageThreads = await messageThreadsRes.json();
-
-      const unreadMessagesRes = await fetch(`/api/message/unread`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userId: userId,
-          messageThreadIds: messageThreads.map((x) => x.id),
-        }),
-      });
-      const unreadMessages = await unreadMessagesRes.json();
-
-      console.log("Unread: ", unreadMessages);
-
-      const result = [];
-
-      messageThreads.forEach((messageThread) => {
-        const unreadMessageMatch = unreadMessages.find(
-          (unreadMs) => unreadMs.messageThreadId == messageThread.id
-        );
-        result.push({
-          ...messageThread,
-          unreadMessages: unreadMessageMatch.messagesUnread,
-        });
-      });
-
-      setMessageThreads(result);
+      setMessageThreads(messageThreads);
     })();
   }, []);
 
