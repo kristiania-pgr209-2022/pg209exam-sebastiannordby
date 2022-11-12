@@ -47,7 +47,6 @@ public class JdbcMessageReadDao implements MessageReadDao {
             statement.setInt(4, messageThreadId);
 
             try (var rs = statement.executeQuery()) {
-
                 while (rs.next()) {
                     allMessageIdsForUserThatWhichAreNotMarkedRead.add(rs.getInt(1));
                 }
