@@ -1,4 +1,4 @@
-import {useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import Message from "@mui/icons-material/Message";
 import Skeleton from "@mui/material/Skeleton";
@@ -14,88 +14,120 @@ import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 
 export function PanelView({ setMessageThread, userId, isLoading }) {
-    const [newPersonDialogOpen, setNewPersonDialogOpen] = useState(false);
-    const [messageThreads, setMessageThreads] = useState([]);
+  const [newPersonDialogOpen, setNewPersonDialogOpen] = useState(false);
+  const [messageThreads, setMessageThreads] = useState([]);
 
-    useEffect(() => {
-        (async() => {
-            const messageThreadsRes = await fetch(`/api/message-thread/${userId}`);
-            const messageThreads = await messageThreadsRes.json();
+  useEffect(() => {
+    (async () => {
+      const messageThreadsRes = await fetch(`/api/message-thread/${userId}`);
+      const messageThreads = await messageThreadsRes.json();
 
-            const unreadMessagesRes = await fetch(`/api/message/unread`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    userId: userId,
-                    messageThreadIds: messageThreads.map(x => x.id)
-                })
-            });
-            const unreadMessages = await unreadMessagesRes.json();
+      const unreadMessagesRes = await fetch(`/api/message/unread`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: userId,
+          messageThreadIds: messageThreads.map((x) => x.id),
+        }),
+      });
+      const unreadMessages = await unreadMessagesRes.json();
 
-            console.log('Unread: ', unreadMessages);
+      console.log("Unread: ", unreadMessages);
 
-            const result = [];
+      const result = [];
 
-            messageThreads.forEach(messageThread =>{
-                const unreadMessageMatch = unreadMessages.find(unreadMs => unreadMs.messageThreadId == messageThread.id);
-                result.push({
-                    ...messageThread,
-                    unreadMessages: unreadMessageMatch.messagesUnread
-                });
-            });
-
-            setMessageThreads(result);
-        })();
-    }, []);
-
-    async function selectMessageThread(messageThread) {
-        setMessageThread(messageThread);
-        await fetch(`/api/message/message-read`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-               userId: userId,
-               messageThreadId: messageThread.id
-            }),
-        });
-    }
-
-    if(!isLoading) {
-        return (
-            <div className={"panel-view"}>
-                <div class="header section-header">
-                    <h3 className={"secondary-title"}>Chatter</h3>
-
-                    <Button
-                        onClick={() => setNewPersonDialogOpen(true)}
-                        color="primary"
-                        aria-label="new message"
-                        component="label"
-                        startIcon={<Message />}>
-                        Ny melding
-                    </Button>
-                </div>
-                <div class="content">
-                    {messageThreads.map(x =>
-                        <div className="message" key={x.id} onClick={async() => await selectMessageThread(x)}>{x.topic} - Uleste: {x.unreadMessages}</div>
-                    )}
-                </div>
-
-                <NewPersonChatDialog
-                    open={newPersonDialogOpen}
-                    setOpen={setNewPersonDialogOpen}
-                    signedOnUserId={userId}>
-                </NewPersonChatDialog>
-            </div>
+      messageThreads.forEach((messageThread) => {
+        const unreadMessageMatch = unreadMessages.find(
+          (unreadMs) => unreadMs.messageThreadId == messageThread.id
         );
-    }
+        result.push({
+          ...messageThread,
+          unreadMessages: unreadMessageMatch.messagesUnread,
+        });
+      });
 
-    return PanelViewSkeleton();
+      setMessageThreads(result);
+    })();
+  }, []);
+
+  async function selectMessageThread(messageThread) {
+    setMessageThread(messageThread);
+    await fetch(`/api/message/message-read`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: userId,
+        messageThreadId: messageThread.id,
+      }),
+    });
+  }
+
+  if (!isLoading) {
+    return (
+      <div className={"panel-view"}>
+        <div class="header section-header">
+          <h3 className={"secondary-title"}>Chatter</h3>
+
+          <Button
+            onClick={() => setNewPersonDialogOpen(true)}
+            color="primary"
+            aria-label="new message"
+            component="label"
+            startIcon={<Message />}
+          >
+            Ny melding
+          </Button>
+        </div>
+        <div class="content">
+          {messageThreads.map((thread) => (
+            <MessageThread
+              messageThread={thread}
+              selectMessageThread={selectMessageThread}
+            />
+          ))}
+        </div>
+
+        <NewPersonChatDialog
+          open={newPersonDialogOpen}
+          setOpen={setNewPersonDialogOpen}
+          signedOnUserId={userId}
+        />
+      </div>
+    );
+  }
+
+  return PanelViewSkeleton();
 }
+
+function MessageThread({ messageThread, selectMessageThread }) {
+  const renderTopic = () => {
+    if (messageThread.unreadMessages > 0) {
+      return (
+        <>
+          <span className="topic">{messageThread.topic}</span>
+          <span className="unread">{messageThread.unreadMessages}</span>
+        </>
+      );
+    } else {
+      return <span className="topic">{messageThread.topic}</span>;
+    }
+  };
+
+  return (
+    <div
+      key={messageThread.id}
+      className="message-thread"
+      onClick={async () => await selectMessageThread(messageThread)}
+    >
+      {renderTopic()}
+    </div>
+  );
+}
+
 /**
  *
  * {PANEL_DATA.map(x =>
@@ -107,171 +139,190 @@ export function PanelView({ setMessageThread, userId, isLoading }) {
  * */
 
 function PanelViewSkeleton() {
-    return (
-        <div className={"panel-view"}>
-            <div class="header section-header">
-                <h3 className={"secondary-title"}>Chatter</h3>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1em', padding: '1em'}}>
-                <Skeleton variant="rounded" width={"100%"} height={30} />
-                <Skeleton variant="rounded" width={"100%"} height={30} />
-                <Skeleton variant="rounded" width={"100%"} height={30} />
-                <Skeleton variant="rounded" width={"100%"} height={30} />
-                <Skeleton variant="rounded" width={"100%"} height={30} />
-                <Skeleton variant="rounded" width={"100%"} height={30} />
-                <Skeleton variant="rounded" width={"100%"} height={30} />
-                <Skeleton variant="rounded" width={"100%"} height={30} />
-                <Skeleton variant="rounded" width={"100%"} height={30} />
-                <Skeleton variant="rounded" width={"100%"} height={30} />
-                <Skeleton variant="rounded" width={"100%"} height={30} />
-                <Skeleton variant="rounded" width={"100%"} height={30} />
-                <Skeleton variant="rounded" width={"100%"} height={30} />
-            </div>
-        </div>
-    );
+  return (
+    <div className={"panel-view"}>
+      <div class="header section-header">
+        <h3 className={"secondary-title"}>Chatter</h3>
+      </div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "1em",
+          padding: "1em",
+        }}
+      >
+        <Skeleton variant="rounded" width={"100%"} height={30} />
+        <Skeleton variant="rounded" width={"100%"} height={30} />
+        <Skeleton variant="rounded" width={"100%"} height={30} />
+        <Skeleton variant="rounded" width={"100%"} height={30} />
+        <Skeleton variant="rounded" width={"100%"} height={30} />
+        <Skeleton variant="rounded" width={"100%"} height={30} />
+        <Skeleton variant="rounded" width={"100%"} height={30} />
+        <Skeleton variant="rounded" width={"100%"} height={30} />
+        <Skeleton variant="rounded" width={"100%"} height={30} />
+        <Skeleton variant="rounded" width={"100%"} height={30} />
+        <Skeleton variant="rounded" width={"100%"} height={30} />
+        <Skeleton variant="rounded" width={"100%"} height={30} />
+        <Skeleton variant="rounded" width={"100%"} height={30} />
+      </div>
+    </div>
+  );
 }
 
-
 function NewPersonChatDialog({ open, setOpen, signedOnUserId }) {
-    const [ users, setUsers ] = useState([]);
-    const [ selectedUserId, setSelectedUserId ] = useState(0);
-    const [ message, setMessage ] = useState('');
-    const [ subject, setSubject ] = useState('');
+  const [users, setUsers] = useState([]);
+  const [selectedUserId, setSelectedUserId] = useState(0);
+  const [message, setMessage] = useState("");
+  const [subject, setSubject] = useState("");
 
-    const handleClose = () => {
-        setSelectedUserId(0);
-        setMessage('');
-        setSubject('');
-        setOpen(false);
-    };
+  const handleClose = () => {
+    setSelectedUserId(0);
+    setMessage("");
+    setSubject("");
+    setOpen(false);
+  };
 
-    const createChat = async() => {
-        if(selectedUserId === 0)
-            return;
+  const createChat = async () => {
+    if (selectedUserId === 0) return;
 
-        if(message.length == 0)
-            return;
+    if (message.length == 0) return;
 
-        if(subject.length == 0)
-            return;
+    if (subject.length == 0) return;
 
-        const result = await fetch("/api/message-thread", {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                topic: subject,
-                message: message,
-                senderId: signedOnUserId,
-                receivers: [selectedUserId]
-            })
-        });
+    const result = await fetch("/api/message-thread", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        topic: subject,
+        message: message,
+        senderId: signedOnUserId,
+        receivers: [selectedUserId],
+      }),
+    });
 
-        const json = await result.json();
+    const json = await result.json();
 
-        console.log(json);
+    console.log(json);
 
-        setOpen(false);
-    };
+    setOpen(false);
+  };
 
-    useEffect(() => {
-        (async () => {
-            const result = await fetch(`/api/user`);
-            const users = await result.json();
+  useEffect(() => {
+    (async () => {
+      const result = await fetch(`/api/user`);
+      const users = await result.json();
 
-            setUsers(users.filter(x => x.id != signedOnUserId));
-        })();
-    }, [ setUsers ]);
+      setUsers(users.filter((x) => x.id != signedOnUserId));
+    })();
+  }, [setUsers]);
 
-    return (
-        <Dialog open={open} onClose={handleClose}>
-            <DialogTitle>Ny chat</DialogTitle>
-            <DialogContent>
-                <div style={{minWidth: '500px', padding: '1em', display: 'flex', flexDirection: 'column', gap: '1em'}}>
-                    <FormControl sx={{width: '100%'}}>
-                        <InputLabel id="recieverLabel">Mottaker</InputLabel>
-                        <Select
-                            labelId="recieverLabel"
-                            id="demo-simple-select"
-                            value={selectedUserId}
-                            label="Mottaker"
-                            sx={{width: '100%'}}
-                            onChange={e => setSelectedUserId(e.target.value)}>
-                            <MenuItem disabled value="">
-                                <em>Velg mottaker</em>
-                            </MenuItem>
+  return (
+    <Dialog open={open} onClose={handleClose}>
+      <DialogTitle>Ny chat</DialogTitle>
+      <DialogContent>
+        <div
+          style={{
+            minWidth: "500px",
+            padding: "1em",
+            display: "flex",
+            flexDirection: "column",
+            gap: "1em",
+          }}
+        >
+          <FormControl sx={{ width: "100%" }}>
+            <InputLabel id="recieverLabel">Mottaker</InputLabel>
+            <Select
+              labelId="recieverLabel"
+              id="demo-simple-select"
+              value={selectedUserId}
+              label="Mottaker"
+              sx={{ width: "100%" }}
+              onChange={(e) => setSelectedUserId(e.target.value)}
+            >
+              <MenuItem disabled value="">
+                <em>Velg mottaker</em>
+              </MenuItem>
 
-                            {users.map(user =>
-                                <MenuItem value={user.id}>{user.name}</MenuItem>
-                            )}
-                        </Select>
-                    </FormControl>
-                    <TextField value={subject} onChange={e => setSubject(e.target.value)} label="Tittel" variant="outlined" />
-                    <TextField value={message} onChange={e => setMessage(e.target.value)} label="Melding" variant="outlined" />
-                </div>
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={handleClose}>Avbryt</Button>
-                <Button onClick={createChat}>Send</Button>
-            </DialogActions>
-        </Dialog>
-    );
+              {users.map((user) => (
+                <MenuItem value={user.id}>{user.name}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <TextField
+            value={subject}
+            onChange={(e) => setSubject(e.target.value)}
+            label="Tittel"
+            variant="outlined"
+          />
+          <TextField
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            label="Melding"
+            variant="outlined"
+          />
+        </div>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose}>Avbryt</Button>
+        <Button onClick={createChat}>Send</Button>
+      </DialogActions>
+    </Dialog>
+  );
 }
 
 function NewGroupChatDialog({ open, setOpen, signedOnUserId }) {
-    const [ users, setUsers ] = useState([]);
-    const [ selectedUsers, setSelectedUsers ] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [selectedUsers, setSelectedUsers] = useState([]);
 
-    const handleClose = () => {
-        setOpen(false);
-    };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
-    const createChat = () => {
+  const createChat = () => {};
 
-    };
+  const selectUser = (user) => {
+    setSelectedUsers([...selectedUsers, user]);
+  };
 
-    const selectUser = (user) => {
-        setSelectedUsers([
-            ...selectedUsers, user
-        ]);
-    };
+  const isChecked = (userId) => {
+    return selectedUsers.filter((x) => x.id == userId).length > 0;
+  };
 
-    const isChecked = (userId) => {
-        return selectedUsers.filter(x => x.id == userId).length > 0;
-    };
+  useEffect(() => {
+    (async () => {
+      const result = await fetch(`/api/user`);
+      const users = await result.json();
 
-    useEffect(() => {
-        (async () => {
-            const result = await fetch(`/api/user`);
-            const users = await result.json();
+      setUsers(users.filter((x) => x.id !== signedOnUserId));
+    })();
+  }, [setUsers]);
 
-            setUsers(users.filter(x => x.id !== signedOnUserId));
-        })();
-    }, [ setUsers ]);
+  return (
+    <Dialog open={open} onClose={handleClose} maxWidth={"md"}>
+      <DialogTitle>Ny gruppechat</DialogTitle>
+      <DialogContent>
+        <div>
+          {users.map((user) => (
+            <div>
+              <Checkbox
+                checked={isChecked(user.id)}
+                onChange={(e) => selectUser(user)}
+                defaultChecked
+                sx={{ "& .MuiSvgIcon-root": { fontSize: 28 } }}
+              />
 
-    return (
-        <Dialog open={open} onClose={handleClose} maxWidth={"md"}>
-            <DialogTitle>Ny gruppechat</DialogTitle>
-            <DialogContent>
-                <div>
-                    {users.map(user =>
-                        <div>
-                            <Checkbox
-                                checked={isChecked(user.id)}
-                                onChange={e => selectUser(user)}
-                                defaultChecked
-                                sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}/>
-
-                            <label>{user.name}</label>
-                        </div>
-                    )}
-                </div>
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={handleClose}>Avbryt</Button>
-                <Button onClick={createChat}>Opprett</Button>
-            </DialogActions>
-        </Dialog>
-    );
+              <label>{user.name}</label>
+            </div>
+          ))}
+        </div>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose}>Avbryt</Button>
+        <Button onClick={createChat}>Opprett</Button>
+      </DialogActions>
+    </Dialog>
+  );
 }

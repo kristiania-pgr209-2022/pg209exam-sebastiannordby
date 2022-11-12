@@ -170,6 +170,7 @@ h2 {
 
 .main-view > .content .selector {
   flex: 0 1 300px;
+  max-width: 300px;
   border-right: 1px solid #dfdfdf;
 }
 
@@ -235,19 +236,40 @@ h2 {
   gap: 1em;
 }
 
-.panel-view .message {
+.panel-view .message-thread {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   width: 100%;
   padding: .5em;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  text-align: left;
+  gap: .5em;
   border-bottom: 1px solid #cfcfcf;
 }
 
-.panel-view .message:hover {
+.panel-view .message-thread .topic {
+  align-items: center;
+  gap: .5em;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.panel-view .message-thread .unread {
+  border-radius: 52%;
+  padding: 1px 8px;
+  background-color: var(--kristiania-color);
+  color: #fff;
+}
+
+.panel-view .message-thread:hover {
   cursor: pointer;
   background-color: var(--kristiania-color);
   color: #fff;
+}
+
+.panel-view .message-thread:hover .unread {
+  background: #fff;
+  color: var(--kristiania-color);
 }
 
 .avatar {
