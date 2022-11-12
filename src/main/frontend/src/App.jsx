@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { HashRouter, Route, Routes, useNavigate, useParams} from "react-router-dom";
 import Button from '@mui/material/Button';
 import {UserSelectionPage} from "./pages/user-selection-page";
-import {CreateUserDialog} from "./components/create-user-dialog";
+import {CreateUserDialog} from "./components/user/create-user-dialog.jsx";
 import {MessengerPage} from "./pages/message-page";
 
 function WelcomeScreen() {

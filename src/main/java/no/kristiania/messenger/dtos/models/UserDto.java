@@ -4,7 +4,7 @@ public class UserDto {
     public int id;
     public String name;
     public String emailAddress;
-    public String nickName;
+    public String nickname;
     public String bio;
 
     public UserDto() {
@@ -15,12 +15,12 @@ public class UserDto {
         int id,
         String name,
         String emailAddress,
-        String nickName,
+        String nickname,
         String bio) {
         this.id = id;
         this.name = name;
         this.emailAddress = emailAddress;
-        this.nickName = nickName;
+        this.nickname = nickname;
         this.bio = bio;
     }
 }

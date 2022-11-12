@@ -79,7 +79,7 @@ public class UserEndpoint {
             return Response.status(404).build();
         }
 
-        userDao.updateUser(user.id, user.name, user.emailAddress, user.nickName, user.bio);
+        userDao.updateUser(user.id, user.name, user.emailAddress, user.nickname, user.bio);
 
         return Response.ok().build();
     }
