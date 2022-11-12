@@ -8,13 +8,12 @@ import no.kristiania.messenger.entities.Message;
 import no.kristiania.messenger.views.MessageView;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class JdbcMessageDao implements MessageDao {
@@ -42,7 +41,7 @@ public class JdbcMessageDao implements MessageDao {
                 stmt.setString(1, content);
                 stmt.setInt(2, loggedInUser);
                 stmt.setInt(3, messageThreadId);
-                stmt.setDate(4, java.sql.Date.valueOf(LocalDate.now()));
+                stmt.setTimestamp(4, Timestamp.from(Instant.now()));
                 stmt.executeUpdate();
 
                 try(var generatedKeys = stmt.getGeneratedKeys()){

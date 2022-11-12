@@ -188,7 +188,7 @@ h2 {
   padding: .5em 1em;
 }
 
-.message-view .content {
+.message-view > .content {
   flex: 1;
 }
 
@@ -196,6 +196,24 @@ h2 {
   text-align: left;
   border-bottom: 1px solid #cfcfcf;
   padding: .5em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.message-view .message .message-content {
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.message-view .message .message-info{
+  cursor: pointer;
+}
+
+.message-view .message .message-info:hover {
+  color: var(--kristiania-color);
 }
 
 .message-view .footer {

@@ -4,13 +4,12 @@ import jakarta.inject.Inject;
 import no.kristiania.messenger.dao.MessageDao;
 import no.kristiania.messenger.dao.MessageReadDao;
 import no.kristiania.messenger.entities.MessageRead;
+import no.kristiania.messenger.views.MessageReadByUserView;
 import no.kristiania.messenger.views.UnreadMessagesCountView;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -93,7 +92,7 @@ public class JdbcMessageReadDao implements MessageReadDao {
                 try(var stmt = connection.prepareStatement(insertMessageReadSql)){
                     stmt.setInt(1, userId);
                     stmt.setInt(2, messageIdToMarkAsRead);
-                    stmt.setDate(3, java.sql.Date.valueOf(LocalDate.now()));
+                    stmt.setTimestamp(3, Timestamp.from(Instant.now()));
                     stmt.executeUpdate();
                 }
             }
@@ -112,13 +111,38 @@ public class JdbcMessageReadDao implements MessageReadDao {
                 statement.setInt(1, userId);
                 statement.setInt(2, messageId);
 
+                try (var rs = statement.executeQuery()) {
+                    return rs.next() ? rs.getDate(1) : null;
+                }
+            }
+        }
+    }
+
+    @Override
+    public List<MessageReadByUserView> getUserViewsWhichHasReadMessage(int messageId) throws Exception {
+        try (var connection = dataSource.getConnection()) {
+            var sql = """       
+                SELECT ReadAt, Users.Nickname AS UserNickname, Users.Id AS UserId FROM MessageRead\s
+                JOIN Users ON Users.Id = MessageRead.UserId
+                WHERE MessageId = ?""";
+
+            try(var statement = connection.prepareStatement(
+                    sql, PreparedStatement.RETURN_GENERATED_KEYS)){
+
+                statement.setInt(1, messageId);
 
                 try (var rs = statement.executeQuery()) {
+                    var result = new ArrayList<MessageReadByUserView>();
 
-                    if (rs.next())
-                        return rs.getDate(1);
-                    else
-                        return null;
+                    while(rs.next()) {
+                        result.add(new MessageReadByUserView(
+                            rs.getInt("UserId"),
+                            rs.getString("UserNickname"),
+                            rs.getTimestamp("ReadAt").toLocalDateTime()
+                        ));
+                    }
+
+                    return result;
                 }
             }
         }

@@ -12,32 +12,15 @@ import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
+import { restFetch } from "../rest/RestFetch";
 
-export function PanelView({ setMessageThread, userId, isLoading }) {
+export function PanelView({
+  onMessageThreadSelected,
+  userId,
+  isLoading,
+  messageThreads,
+}) {
   const [newPersonDialogOpen, setNewPersonDialogOpen] = useState(false);
-  const [messageThreads, setMessageThreads] = useState([]);
-
-  useEffect(() => {
-    (async () => {
-      const messageThreadsRes = await fetch(`/api/message-thread/${userId}`);
-      const messageThreads = await messageThreadsRes.json();
-      setMessageThreads(messageThreads);
-    })();
-  }, []);
-
-  async function selectMessageThread(messageThread) {
-    setMessageThread(messageThread);
-    await fetch(`/api/message/message-read`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userId: userId,
-        messageThreadId: messageThread.id,
-      }),
-    });
-  }
 
   if (!isLoading) {
     return (
@@ -59,7 +42,7 @@ export function PanelView({ setMessageThread, userId, isLoading }) {
           {messageThreads.map((thread) => (
             <MessageThread
               messageThread={thread}
-              selectMessageThread={selectMessageThread}
+              onMessageThreadSelected={onMessageThreadSelected}
             />
           ))}
         </div>
@@ -76,7 +59,7 @@ export function PanelView({ setMessageThread, userId, isLoading }) {
   return PanelViewSkeleton();
 }
 
-function MessageThread({ messageThread, selectMessageThread }) {
+function MessageThread({ messageThread, onMessageThreadSelected }) {
   const renderTopic = () => {
     if (messageThread.unreadMessages > 0) {
       return (
@@ -94,7 +77,7 @@ function MessageThread({ messageThread, selectMessageThread }) {
     <div
       key={messageThread.id}
       className="message-thread"
-      onClick={async () => await selectMessageThread(messageThread)}
+      onClick={async () => await onMessageThreadSelected(messageThread)}
     >
       {renderTopic()}
     </div>
@@ -158,12 +141,10 @@ function NewPersonChatDialog({ open, setOpen, signedOnUserId }) {
 
   const createChat = async () => {
     if (selectedUserId === 0) return;
-
     if (message.length == 0) return;
-
     if (subject.length == 0) return;
 
-    const result = await fetch("/api/message-thread", {
+    await fetch("/api/message-thread", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -175,10 +156,6 @@ function NewPersonChatDialog({ open, setOpen, signedOnUserId }) {
         receivers: [selectedUserId],
       }),
     });
-
-    const json = await result.json();
-
-    console.log(json);
 
     setOpen(false);
   };

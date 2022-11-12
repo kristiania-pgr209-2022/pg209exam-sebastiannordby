@@ -1,5 +1,6 @@
 package no.kristiania.messenger.dao;
 
+import no.kristiania.messenger.views.MessageReadByUserView;
 import no.kristiania.messenger.views.UnreadMessagesCountView;
 
 import java.sql.SQLException;
@@ -11,4 +12,5 @@ public interface MessageReadDao {
     int unReadMessages(int userId, int messageThreadId) throws Exception;
     void markMessagesInThreadAsRead(int userId, int messageThreadId) throws Exception;
     Date find(int userId, int messageId) throws Exception;
+    List<MessageReadByUserView> getUserViewsWhichHasReadMessage(int messageId) throws Exception;
 }

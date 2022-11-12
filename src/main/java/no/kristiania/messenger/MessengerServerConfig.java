@@ -9,7 +9,12 @@ import javax.sql.DataSource;
 
 public class MessengerServerConfig extends ResourceConfig {
     public MessengerServerConfig(DataSource dataSource) {
-        super(UserEndpoint.class, MessageThreadEndpoint.class, MessageEndpoint.class);
+        super(
+            UserEndpoint.class,
+            MessageThreadEndpoint.class,
+            MessageEndpoint.class,
+            MessageReadEndpoint.class
+        );
 
         register(new AbstractBinder() {
             @Override
