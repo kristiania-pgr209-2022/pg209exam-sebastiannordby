@@ -26,51 +26,35 @@ public class JdbcMessageReadDao implements MessageReadDao {
     }
 
     private List<Integer> getMessageIdsWhereMessagesNotReadForUser(Connection connection, int userId, int messageThreadId) throws Exception{
-        var allMessageIdsForUser = new ArrayList<Integer>();
-        var allMessageIdsForUserMarkedAsRead = new ArrayList<Integer>();
+        var allMessageIdsForUserThatWhichAreNotMarkedRead = new ArrayList<Integer>();
 
-        // All messages in the thread that userId is connected to
         var sql = """
             SELECT Messages.Id FROM Messages
             JOIN MessageThreads ON MessageThreads.Id = Messages.MessageThreadId
             JOIN MessageThreadMemberships ON MessageThreadMemberships.MessageThreadId = MessageThreads.Id
-            WHERE UserId = ? AND Messages.MessageThreadId = ?""";
+            WHERE UserId = ? AND Messages.MessageThreadId = ? AND Messages.Id NOT IN(
+                SELECT Messages.Id FROM Messages
+                JOIN MessageThreads ON MessageThreads.Id = Messages.MessageThreadId
+                JOIN MessageThreadMemberships ON MessageThreadMemberships.MessageThreadId = MessageThreads.Id
+                JOIN MessageRead ON MessageRead.MessageId = Messages.Id
+                WHERE MessageRead.UserId = ? AND MessageThreads.Id = ?
+            )""";
 
         try (var statement = connection.prepareStatement(sql)) {
             statement.setInt(1, userId);
             statement.setInt(2, messageThreadId);
+            statement.setInt(3, userId);
+            statement.setInt(4, messageThreadId);
 
             try (var rs = statement.executeQuery()) {
 
                 while (rs.next()) {
-                    allMessageIdsForUser.add(rs.getInt(1));
+                    allMessageIdsForUserThatWhichAreNotMarkedRead.add(rs.getInt(1));
                 }
             }
         }
 
-        // All messages in thread which are read
-        var messageReadSql = """
-            SELECT Messages.Id FROM Messages
-            JOIN MessageThreads ON MessageThreads.Id = Messages.MessageThreadId
-            JOIN MessageThreadMemberships ON MessageThreadMemberships.MessageThreadId = MessageThreads.Id
-            JOIN MessageRead ON MessageRead.MessageId = Messages.Id
-            WHERE MessageRead.UserId = ? AND MessageThreads.Id = ?""";
-
-        try (var statement = connection.prepareStatement(messageReadSql)) {
-            statement.setInt(1, userId);
-            statement.setInt(2, messageThreadId);
-
-            try (var rs = statement.executeQuery()) {
-                while (rs.next()) {
-                    allMessageIdsForUserMarkedAsRead.add(rs.getInt(1));
-                }
-            }
-        }
-
-        return allMessageIdsForUser
-                .stream()
-                .filter(messageId -> !allMessageIdsForUserMarkedAsRead.contains(messageId))
-                .toList();
+        return allMessageIdsForUserThatWhichAreNotMarkedRead;
     }
 
     @Override
