@@ -10,15 +10,17 @@ Vi parprogrammerer med delt skjerm.
 ## ER-diagram for databasen vår:
 ![image](https://user-images.githubusercontent.com/97464729/201485230-6e8d5f54-622c-492a-b480-cabb2b422608.png)
 
-link til githup-repo:
+Link til Github-repo:
 https://github.com/kristiania-pgr209-2022/pg209exam-sebastiannordby
 
+Link til Azure:
+https://pg209exam-sebastiannordby.azurewebsites.net/
 
 ## Sjekkliste for innleveringen
-* [ ] Dere har lest eksamensteksten
+* [X] Dere har lest eksamensteksten
 * [x] Koden er sjekket inn på github.com/pg209-2022 repository
 * [ ] Dere har lastet opp en ZIP-fil lastet ned fra Github
-* [ ] Dere har committed kode med begge prosjektdeltagernes GitHub-konto (alternativt: README beskriver hvordan dere har jobbet)
+* [X] Dere har committed kode med begge prosjektdeltagernes GitHub-konto (alternativt: README beskriver hvordan dere har jobbet)
 
 ## README.md
 * [ ] Inneholder link til Azure Websites deployment
