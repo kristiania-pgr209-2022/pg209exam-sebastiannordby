@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import javax.sql.DataSource;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -54,6 +55,28 @@ public class GroupMembershipDaoTests {
         assertThat(userIds).isNotNull();
         assertThat(userIds.size() >= 1).isEqualTo(true);
         assertThat(userIds.containsAll(new ArrayList<>(){{
+            add(user1Id);
+            add(user2Id);
+            add(user3Id);
+        }}));
+    }
+
+    @Test
+    void shouldListUsersWhichIsMemberInMessageThread() throws Exception {
+        var user1Id = userDao.insertUser(SampleData.sampleUser());
+        var user2Id = userDao.insertUser(SampleData.sampleUser());
+        var user3Id = userDao.insertUser(SampleData.sampleUser());
+        var messageThreadId = messageThreadDao.insert(new MessageThread("Test Group"));
+        var membership1Id = membershipDao.insert(user1Id, messageThreadId);
+        var membership2Id = membershipDao.insert(user2Id, messageThreadId);
+        var membership3Id = membershipDao.insert(user3Id, messageThreadId);
+        var users = membershipDao.getMembersInMessageThread(messageThreadId);
+
+        assertThat(users).isNotNull();
+        assertThat(users.size() >= 1).isEqualTo(true);
+        assertThat(users.stream().map(x -> x.getId())
+            .collect(Collectors.toList())
+            .containsAll(new ArrayList<>(){{
             add(user1Id);
             add(user2Id);
             add(user3Id);

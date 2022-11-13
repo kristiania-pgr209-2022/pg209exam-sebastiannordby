@@ -5,8 +5,12 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import no.kristiania.messenger.dao.MessageThreadDao;
+import no.kristiania.messenger.dao.MessageThreadMembershipDao;
 import no.kristiania.messenger.dao.MessageThreadViewDao;
 import no.kristiania.messenger.dtos.commands.CreateUserMessageThreadCommandDto;
+import no.kristiania.messenger.dtos.models.UserDto;
+
+import java.util.stream.Collectors;
 
 @Path("/message-thread")
 public class MessageThreadEndpoint {
@@ -16,6 +20,9 @@ public class MessageThreadEndpoint {
     @Inject
     public MessageThreadViewDao messageThreadViewDao;
 
+    @Inject
+    public MessageThreadMembershipDao messageThreadMembershipDao;
+
     @GET
     @Path("/userId/{userId}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -23,6 +30,22 @@ public class MessageThreadEndpoint {
         return Response.ok(
             messageThreadViewDao.getListOfThreadsByRecieverId(userId)
         ).build();
+    }
+
+    @GET
+    @Path("/members/{messageThreadId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getMembersByMessageThreadId(@PathParam("messageThreadId") int messageThreadId) throws Exception {
+        var users = messageThreadMembershipDao.getMembersInMessageThread(messageThreadId);
+        var userDtos = users.stream().map(x -> new UserDto(
+            x.getId(),
+            x.getName(),
+            x.getEmailAddress(),
+            x.getNickname(),
+            x.getBio()
+        )).collect(Collectors.toList());
+
+        return Response.ok(userDtos).build();
     }
 
     @POST

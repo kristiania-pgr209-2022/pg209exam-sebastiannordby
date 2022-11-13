@@ -5,18 +5,16 @@ import { restFetch } from "../rest/RestFetch";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
+import Avatar from "@mui/material/Avatar";
 
 export function MessageView({ messageThread, isLoading, userId }) {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [infoMessage, setInfoMessage] = useState();
+  const [messageThreadMembers, setMessageThreadMembers] = useState([]);
   const [messageInfoDialogVisible, setMessageInfoDialogVisible] =
     useState(false);
 
@@ -24,6 +22,7 @@ export function MessageView({ messageThread, isLoading, userId }) {
     (async () => {
       if (messageThread) {
         await fetchMessages();
+        await fetchMembers();
       }
     })();
   }, [messageThread]);
@@ -31,6 +30,14 @@ export function MessageView({ messageThread, isLoading, userId }) {
   const fetchMessages = async () => {
     if (messageThread) {
       setMessages(await restFetch(`/api/message/${messageThread.id}`));
+    }
+  };
+
+  const fetchMembers = async () => {
+    if (messageThread) {
+      setMessageThreadMembers(
+        await restFetch(`/api/message-thread/members/${messageThread.id}`)
+      );
     }
   };
 
@@ -72,6 +79,11 @@ export function MessageView({ messageThread, isLoading, userId }) {
       <div className="message-view">
         <div className="header section-header">
           <h3 className="secondary-title">Meldinger</h3>
+          <div className="members">
+            {messageThreadMembers.map((x) => (
+              <Avatar>{x.nickname}</Avatar>
+            ))}
+          </div>
         </div>
 
         <div className="content">

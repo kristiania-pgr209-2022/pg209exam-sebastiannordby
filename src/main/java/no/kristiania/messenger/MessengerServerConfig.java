@@ -19,13 +19,13 @@ public class MessengerServerConfig extends ResourceConfig {
         register(new AbstractBinder() {
             @Override
             protected void configure() {
-                bind(JdbcUserDao.class).to(UserDao.class);
-                bind(JdbcMessageDao.class).to(MessageDao.class);
-                bind(JdbcMessageThreadDao.class).to(MessageThreadDao.class);
-                bind(JdbcMessageThreadMembershipDao.class).to(MessageThreadMembershipDao.class);
-                bind(JdbcMessageReadDao.class).to(MessageReadDao.class);
-                bind(JdbcMessageThreadViewDao.class).to(MessageThreadViewDao.class);
-                bind(dataSource).to(DataSource.class);
+            bind(JdbcUserDao.class).to(UserDao.class);
+            bind(JdbcMessageDao.class).to(MessageDao.class);
+            bind(JdbcMessageThreadDao.class).to(MessageThreadDao.class);
+            bind(JdbcMessageThreadMembershipDao.class).to(MessageThreadMembershipDao.class);
+            bind(JdbcMessageReadDao.class).to(MessageReadDao.class);
+            bind(JdbcMessageThreadViewDao.class).to(MessageThreadViewDao.class);
+            bind(dataSource).to(DataSource.class);
             }
         });
     }

@@ -13,6 +13,7 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import { restFetch } from "../rest/RestFetch";
+import Badge from "@mui/material/Badge";
 
 export function PanelView({
   onMessageThreadSelected,
@@ -68,7 +69,9 @@ function MessageThread({ messageThread, onMessageThreadSelected, userId }) {
       return (
         <>
           <span className="topic">{messageThread.topic}</span>
-          <span className="unread">{messageThread.unreadMessages}</span>
+          <Badge color="secondary" badgeContent={messageThread.unreadMessages}>
+            <Message />
+          </Badge>
         </>
       );
     } else {

@@ -2,6 +2,9 @@ package no.kristiania.messenger.dao.jdbc;
 
 import jakarta.inject.Inject;
 import no.kristiania.messenger.dao.MessageThreadMembershipDao;
+import no.kristiania.messenger.dao.UserDao;
+import no.kristiania.messenger.dtos.models.UserDto;
+import no.kristiania.messenger.entities.User;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -75,6 +78,42 @@ public class JdbcMessageThreadMembershipDao implements MessageThreadMembershipDa
                 try(var rs = statement.executeQuery()) {
                     while(rs.next()) {
                         result.add(rs.getInt("UserId"));
+                    }
+
+                    return result;
+                }
+            }
+        }
+    }
+
+    @Override
+    public List<User> getMembersInMessageThread(int messageThreadId) throws Exception {
+        try(var connection = dataSource.getConnection()) {
+            var sql = """       
+                SELECT 
+                    Users.Id AS Id,
+                    Users.Name AS Name,
+                    Users.EmailAddress AS EmailAddress,
+                    Users.Nickname AS Nickname,
+                    Users.Bio AS Bio 
+                FROM MessageThreadMemberships 
+                JOIN Users ON Users.Id = MessageThreadMemberships.UserId 
+                WHERE MessageThreadId = ?""";
+
+            try(var statement = connection.prepareStatement(sql)) {
+                statement.setInt(1, messageThreadId);
+
+                var result = new ArrayList<User>();
+
+                try(var rs = statement.executeQuery()) {
+                    while(rs.next()) {
+                        result.add(new User(
+                            rs.getInt("Id"),
+                            rs.getString("Name"),
+                            rs.getString("EmailAddress"),
+                            rs.getString("Nickname"),
+                            rs.getString("Bio")
+                        ));
                     }
 
                     return result;

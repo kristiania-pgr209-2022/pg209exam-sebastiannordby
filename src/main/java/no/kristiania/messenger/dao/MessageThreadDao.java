@@ -1,5 +1,6 @@
 package no.kristiania.messenger.dao;
 
+import no.kristiania.messenger.dtos.models.UserDto;
 import no.kristiania.messenger.entities.MessageThread;
 
 import java.util.List;
