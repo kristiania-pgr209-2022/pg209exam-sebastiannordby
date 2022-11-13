@@ -104,7 +104,7 @@ public class JdbcMessageDao implements MessageDao {
         message.setContent(rs.getString("Content"));
         message.setSenderId(rs.getInt("SenderId"));
         message.setMessageThreadId(rs.getInt("MessageThreadId"));
-        message.setSentDate(rs.getDate("SentDate"));
+        message.setSentDate(rs.getTimestamp("SentDate"));
 
         return message;
     }
@@ -116,7 +116,7 @@ public class JdbcMessageDao implements MessageDao {
         message.content = rs.getString("Content");
         message.senderId = rs.getInt("SenderId");
         message.messageThreadId = rs.getInt("MessageThreadId");
-        message.sentDate = rs.getDate("SentDate");
+        message.sentDate = rs.getTimestamp("SentDate");
         message.userNickname = rs.getString("UserNickName");
 
         return message;

@@ -19,6 +19,7 @@ export function PanelView({
   userId,
   isLoading,
   messageThreads,
+  onNewChatCreated,
 }) {
   const [newPersonDialogOpen, setNewPersonDialogOpen] = useState(false);
 
@@ -35,7 +36,7 @@ export function PanelView({
             component="label"
             startIcon={<Message />}
           >
-            Ny melding
+            Ny meldingstråd
           </Button>
         </div>
         <div class="content">
@@ -43,11 +44,13 @@ export function PanelView({
             <MessageThread
               messageThread={thread}
               onMessageThreadSelected={onMessageThreadSelected}
+              userId={userId}
             />
           ))}
         </div>
 
         <NewPersonChatDialog
+          onNewChatCreated={onNewChatCreated}
           open={newPersonDialogOpen}
           setOpen={setNewPersonDialogOpen}
           signedOnUserId={userId}
@@ -59,7 +62,7 @@ export function PanelView({
   return PanelViewSkeleton();
 }
 
-function MessageThread({ messageThread, onMessageThreadSelected }) {
+function MessageThread({ messageThread, onMessageThreadSelected, userId }) {
   const renderTopic = () => {
     if (messageThread.unreadMessages > 0) {
       return (
@@ -73,11 +76,25 @@ function MessageThread({ messageThread, onMessageThreadSelected }) {
     }
   };
 
+  const selectMessageThread = async () => {
+    await fetch("/api/message-read", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        messageThreadId: messageThread.id,
+        userId: userId,
+      }),
+    });
+    await onMessageThreadSelected(messageThread);
+  };
+
   return (
     <div
       key={messageThread.id}
       className="message-thread"
-      onClick={async () => await onMessageThreadSelected(messageThread)}
+      onClick={selectMessageThread}
     >
       {renderTopic()}
     </div>
@@ -126,21 +143,28 @@ function PanelViewSkeleton() {
   );
 }
 
-function NewPersonChatDialog({ open, setOpen, signedOnUserId }) {
+function NewPersonChatDialog({
+  open,
+  setOpen,
+  signedOnUserId,
+  onNewChatCreated,
+}) {
   const [users, setUsers] = useState([]);
-  const [selectedUserId, setSelectedUserId] = useState(0);
+  const [selectedUsersIds, setSelectedUsersIds] = useState([]);
   const [message, setMessage] = useState("");
   const [subject, setSubject] = useState("");
+  const [selectedUsersDisplayValue, setSelectedUsersDisplayValue] =
+    useState("");
 
   const handleClose = () => {
-    setSelectedUserId(0);
+    setSelectedUsersIds([]);
     setMessage("");
     setSubject("");
     setOpen(false);
   };
 
   const createChat = async () => {
-    if (selectedUserId === 0) return;
+    if (!selectedUsersIds) return;
     if (message.length == 0) return;
     if (subject.length == 0) return;
 
@@ -153,11 +177,14 @@ function NewPersonChatDialog({ open, setOpen, signedOnUserId }) {
         topic: subject,
         message: message,
         senderId: signedOnUserId,
-        receivers: [selectedUserId],
+        receivers: selectedUsersIds,
       }),
     });
 
     setOpen(false);
+    if (onNewChatCreated) {
+      await onNewChatCreated();
+    }
   };
 
   useEffect(() => {
@@ -165,13 +192,31 @@ function NewPersonChatDialog({ open, setOpen, signedOnUserId }) {
       const result = await fetch(`/api/user`);
       const users = await result.json();
 
-      setUsers(users.filter((x) => x.id != signedOnUserId));
+      console.log("Users: ", users);
+
+      setUsers(users.filter((x) => x.id != Number.parseInt(signedOnUserId)));
     })();
-  }, [setUsers]);
+  }, []);
+
+  const selectUser = (hello) => {
+    console.log(hello);
+  };
+
+  const isChecked = (user) => {
+    return selectedUsersIds.find((x) => x == user.id) !== undefined;
+  };
+
+  const checkChanged = (user) => {
+    if (isChecked(user)) {
+      setSelectedUsersIds([...selectedUsersIds.filter((x) => x != user.id)]);
+    } else {
+      setSelectedUsersIds([...selectedUsersIds, user.id]);
+    }
+  };
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Ny chat</DialogTitle>
+      <DialogTitle>Ny meldingstråd</DialogTitle>
       <DialogContent>
         <div
           style={{
@@ -182,25 +227,6 @@ function NewPersonChatDialog({ open, setOpen, signedOnUserId }) {
             gap: "1em",
           }}
         >
-          <FormControl sx={{ width: "100%" }}>
-            <InputLabel id="recieverLabel">Mottaker</InputLabel>
-            <Select
-              labelId="recieverLabel"
-              id="demo-simple-select"
-              value={selectedUserId}
-              label="Mottaker"
-              sx={{ width: "100%" }}
-              onChange={(e) => setSelectedUserId(e.target.value)}
-            >
-              <MenuItem disabled value="">
-                <em>Velg mottaker</em>
-              </MenuItem>
-
-              {users.map((user) => (
-                <MenuItem value={user.id}>{user.name}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
           <TextField
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
@@ -213,6 +239,26 @@ function NewPersonChatDialog({ open, setOpen, signedOnUserId }) {
             label="Melding"
             variant="outlined"
           />
+
+          <div>
+            <h2>Mottakere</h2>
+            <div>
+              {users.map((x) => (
+                <div>
+                  <Checkbox
+                    inputProps={{ "aria-labelledby": x.name }}
+                    checked={isChecked(x)}
+                    check
+                    onChange={() => checkChanged(x)}
+                  />
+
+                  <label>
+                    {x.name} - {x.nickname}
+                  </label>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </DialogContent>
       <DialogActions>

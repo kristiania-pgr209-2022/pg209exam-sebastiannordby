@@ -22,6 +22,9 @@ export function UpdateUserDialog({ open, setOpen, userId }) {
 
   const fetchUser = async () => {
     const fetchedUser = await restFetch(`/api/user/${userId}`);
+
+    console.log(fetchedUser);
+
     setName(fetchedUser.name);
     setEmailAddress(fetchedUser.emailAddress);
     setNickname(fetchedUser.nickname);

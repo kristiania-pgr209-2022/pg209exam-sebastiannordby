@@ -62,7 +62,7 @@ public class UserEndpoint {
         var createdUserId = userDao.insertUser(new User(
             command.name,
             command.emailAddress,
-            command.nickName,
+            command.nickname,
             command.bio
         ));
 

@@ -122,7 +122,7 @@ public class JdbcMessageReadDao implements MessageReadDao {
     public List<MessageReadByUserView> getUserViewsWhichHasReadMessage(int messageId) throws Exception {
         try (var connection = dataSource.getConnection()) {
             var sql = """       
-                SELECT ReadAt, Users.Nickname AS UserNickname, Users.Id AS UserId FROM MessageRead\s
+                SELECT ReadAt, Users.Nickname AS UserNickname, Users.Id AS UserId FROM MessageRead
                 JOIN Users ON Users.Id = MessageRead.UserId
                 WHERE MessageId = ?""";
 

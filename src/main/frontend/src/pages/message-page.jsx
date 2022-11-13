@@ -43,21 +43,29 @@ export function MessengerPage() {
 
   useEffect(() => {
     (async () => {
-      const messageThreads = await restFetch(
-        `/api/message-thread/userId/${userId}`
-      );
-
-      if (messageThreadId) {
-        const messageThread = messageThreads.find(
-          (x) => x.id == Number.parseInt(messageThreadId)
-        );
-
-        setMessageThread(messageThread);
-      }
-
-      setMessageThreads(messageThreads);
+      await fetchMessageThreads();
     })();
   }, [messageThreadId, userId]);
+
+  const onNewMessageThreadCreated = async () => {
+    await fetchMessageThreads();
+  };
+
+  const fetchMessageThreads = async () => {
+    const messageThreads = await restFetch(
+      `/api/message-thread/userId/${userId}`
+    );
+
+    if (messageThreadId) {
+      const messageThread = messageThreads.find(
+        (x) => x.id == Number.parseInt(messageThreadId)
+      );
+
+      setMessageThread(messageThread);
+    }
+
+    setMessageThreads(messageThreads);
+  };
 
   return (
     <div className={"main-view"}>
@@ -89,21 +97,18 @@ export function MessengerPage() {
         )}
       </header>
       <div className={"content"}>
-        <div className={"selector"}>
-          <PanelView
-            isLoading={!user}
-            userId={userId}
-            messageThreads={messageThreads}
-            onMessageThreadSelected={onPanelViewMessageThreadSelected}
-          />
-        </div>
-        <div className={"messages"}>
-          <MessageView
-            isLoading={!user}
-            userId={userId}
-            messageThread={messageThread}
-          />
-        </div>
+        <PanelView
+          isLoading={!user}
+          userId={userId}
+          messageThreads={messageThreads}
+          onNewChatCreated={onNewMessageThreadCreated}
+          onMessageThreadSelected={onPanelViewMessageThreadSelected}
+        />
+        <MessageView
+          isLoading={!user}
+          userId={userId}
+          messageThread={messageThread}
+        />
       </div>
 
       <UpdateUserDialog

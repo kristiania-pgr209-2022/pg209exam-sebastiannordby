@@ -38,7 +38,7 @@ export function MessageView({ messageThread, isLoading, userId }) {
     if (messageThread == null) return;
     if (newMessage.length == 0) return;
 
-    await fetch("/api/message", {
+    const result = await fetch("/api/message", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -50,8 +50,10 @@ export function MessageView({ messageThread, isLoading, userId }) {
       }),
     });
 
-    setNewMessage("");
-    await fetchMessages();
+    if (result.ok) {
+      setNewMessage("");
+      await fetchMessages();
+    }
   };
 
   const onNewMessageKeyUp = async (event) => {
@@ -87,16 +89,19 @@ export function MessageView({ messageThread, isLoading, userId }) {
           ))}
         </div>
         <div className="footer">
-          <input
+          <TextField
+            sx={{ flex: "1" }}
             onKeyUp={onNewMessageKeyUp}
             placeholder="Melding.."
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
           />
-          <button onClick={sendNewMessage}>Send</button>
+
+          <Button onClick={sendNewMessage}>Send</Button>
         </div>
 
         <MessageInfoDialog
+          userId={userId}
           message={infoMessage}
           open={messageInfoDialogVisible}
           setOpen={setMessageInfoDialogVisible}
@@ -108,20 +113,23 @@ export function MessageView({ messageThread, isLoading, userId }) {
   return MessageViewSkeleton();
 }
 
-function MessageInfoDialog({ open, setOpen, message }) {
+function MessageInfoDialog({ open, setOpen, message, userId }) {
   const [readByUsers, setReadByUsers] = useState([]);
 
   useEffect(() => {
     (async () => {
       if (open) {
+        const signedOnUserId = Number.parseInt(userId);
+        const messagesReadBy = await restFetch(
+          `/api/message-read/${message.messageId}`
+        );
+
         setReadByUsers(
-          await restFetch(`/api/message-read/${message.messageId}`)
+          messagesReadBy.filter((x) => x.userId != signedOnUserId)
         );
       }
     })();
   }, [open]);
-
-  console.log(readByUsers);
 
   const handleClose = () => {
     setOpen(false);
