@@ -72,7 +72,7 @@ public class JdbcMessageReadDao implements MessageReadDao {
     }
 
     @Override
-    public int unReadMessages(int userId, int messageThreadId) throws Exception {
+    public int getUnreadMessageCountByUserInThread(int userId, int messageThreadId) throws Exception {
         try (var connection = dataSource.getConnection()) {
             return getMessageIdsWhereMessagesNotReadForUser(connection, userId, messageThreadId).size();
         }

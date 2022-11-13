@@ -30,28 +30,7 @@ public class MessageDaoTests {
     }
 
     @Test
-    void shouldSendMessageToDataBase() throws Exception {
-        var sender = SampleData.sampleUser();
-        userDao.insertUser(sender);
-        var receiver = SampleData.sampleUser();
-        userDao.insertUser(receiver);
-
-        var messageThreadId = messageThreadDao.insert(new MessageThread(""));
-
-        messageThreadMembershipDao.insert(sender.getId(), messageThreadId);
-        messageThreadMembershipDao.insert(receiver.getId(), messageThreadId);
-
-        Message sampleMessage = SampleData.sampleMessage(sender, messageThreadId);
-        messageDao.newMessage(sender.getId(), messageThreadId, sampleMessage.getContent());
-
-        var list = messageDao.findMessagesInThread(messageThreadId);
-
-        assertThat(list).isNotNull();
-        assertThat(list).isNotEmpty();
-    }
-
-    @Test
-    void shouldInsertMessageReadWhenMessageSent() throws Exception {
+    void shouldInsertMessage() throws Exception {
         var senderId = userDao.insertUser(SampleData.sampleUser());
         var receiver1Id = userDao.insertUser(SampleData.sampleUser());
         var receiver2Id = userDao.insertUser(SampleData.sampleUser());

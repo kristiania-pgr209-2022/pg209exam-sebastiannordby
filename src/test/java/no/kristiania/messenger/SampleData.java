@@ -33,7 +33,14 @@ public class SampleData {
                         "Når kommer du over?",
                         "Byen i kveld?"),
                 senderId, messageThread, date);
+    }
 
+    public static String getSampleMessageContent() {
+        return pick(
+            "Hei, skal vi spille tennis etter backend timen?",
+            "Når kommer du over?",
+            "Byen i kveld?"
+        );
     }
 
     public static MessageThread sampleThread(){
