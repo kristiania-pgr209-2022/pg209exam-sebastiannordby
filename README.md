@@ -10,15 +10,17 @@ Vi parprogrammerer med delt skjerm.
 ## ER-diagram for databasen vår:
 ![image](https://user-images.githubusercontent.com/97464729/201485230-6e8d5f54-622c-492a-b480-cabb2b422608.png)
 
-link til githup-repo:
+Link til Github-repo:
 https://github.com/kristiania-pgr209-2022/pg209exam-sebastiannordby
 
+Link til Azure:
+https://pg209exam-sebastiannordby.azurewebsites.net/
 
 ## Sjekkliste for innleveringen
-* [ ] Dere har lest eksamensteksten
+* [X] Dere har lest eksamensteksten
 * [x] Koden er sjekket inn på github.com/pg209-2022 repository
 * [ ] Dere har lastet opp en ZIP-fil lastet ned fra Github
-* [ ] Dere har committed kode med begge prosjektdeltagernes GitHub-konto (alternativt: README beskriver hvordan dere har jobbet)
+* [X] Dere har committed kode med begge prosjektdeltagernes GitHub-konto (alternativt: README beskriver hvordan dere har jobbet)
 
 ## README.md
 * [ ] Inneholder link til Azure Websites deployment
@@ -96,48 +98,26 @@ Man velger bruker ved å trykke på et av bruker-kortene:
 ![image](https://user-images.githubusercontent.com/24465003/201512375-d53a4e60-9220-4257-937a-b68463df16e1.png)
 
 #### Meldinger
-Når du har logget inn kommer man til følgende side:
-
-![image](https://user-images.githubusercontent.com/24465003/201512403-ca20497c-47db-476e-ad31-da997a57f9e6.png)
-
-Her kan man:
+Når du har logget inn kommer man til følgende side, der man kan:
 - Opprette ny meldingstråd
+- Se hvem bruker du er innlogget som
 - Oppdatere/redigere bruker
 - Logge ut
-- 
-![image](https://user-images.githubusercontent.com/24465003/201512486-9f3b849d-dbc3-45c2-bf48-15b839ddf027.png)
+
+![image](https://user-images.githubusercontent.com/24465003/201538955-078101ac-229e-447d-81a3-b229c9ddd1d9.png)
+
+
 
 ### Oppdatere bruker
 ![image](https://user-images.githubusercontent.com/24465003/201512783-d7051585-2ac2-49da-84d3-ecd62a9d4b2b.png)
 ![image](https://user-images.githubusercontent.com/24465003/201512796-fcf180f7-7a36-4472-915e-61de68805c63.png)
 
 ### Ny meldingstråd:
-Fyll inn følgende:
-- Tittel
-- Melding
-- Velg mottaker(e)
-- 
-![image](https://user-images.githubusercontent.com/24465003/201512806-020c8e97-1d3f-4c13-b7ca-40f02a513de2.png)
-![image](https://user-images.githubusercontent.com/24465003/201512858-833a401c-e119-4368-9ff2-fcdf2113e86d.png)
-
-Meldingstråden vil så dukke opp her, og du kan velge den(klikke på den) for å se meldinger:
-
-![image](https://user-images.githubusercontent.com/24465003/201512967-c6e74d61-2a0c-4e83-b9f0-617658d33b0a.png)
-![image](https://user-images.githubusercontent.com/24465003/201512995-da7e69dc-0a82-465c-8ee1-d3fbe3fe46e2.png)
-
-### Bytt til annen bruker for å se effekt:
-Hvis du går inn på en annen bruker vil den ha fått opp et merke som viser hvor mange uleste meldinger man har innenfor tråden:
-
-![image](https://user-images.githubusercontent.com/24465003/201513029-f7195f0e-1e6d-42b1-9f61-95678b338976.png)
-![image](https://user-images.githubusercontent.com/24465003/201513043-f6a90342-24a8-474b-96fa-38d65f9494d3.png)
-
-### Bytt tilbake til orginal:
-![image](https://user-images.githubusercontent.com/24465003/201513054-906719da-63ed-449d-b915-aacabc7b1d87.png)
-![image](https://user-images.githubusercontent.com/24465003/201513056-369502c8-3c90-476a-8e48-24cedba899b9.png)
-![image](https://user-images.githubusercontent.com/24465003/201513069-748628eb-9108-492a-9656-34488a44176f.png)
-
-Trykk enter eller på send knappen for å sende en melding.
-
-![image](https://user-images.githubusercontent.com/24465003/201513079-36df78d4-81ef-4200-b270-df1a5e74c6e7.png)
+![image](https://user-images.githubusercontent.com/24465003/201538674-da30604e-d090-4426-b5d9-f058f1b84e58.png)
+![image](https://user-images.githubusercontent.com/24465003/201538689-98b52d9f-9672-4c03-8c7c-ac7a98ebdf13.png)
+![image](https://user-images.githubusercontent.com/24465003/201538739-63589dfe-56a2-40cb-9c91-e0a93f97f6f1.png)
+![image](https://user-images.githubusercontent.com/24465003/201538759-147e7d3b-ccb8-4699-abb9-442793a37c13.png)
+![image](https://user-images.githubusercontent.com/24465003/201538790-b9185904-9942-4465-9b93-995a67d2902e.png)
+![image](https://user-images.githubusercontent.com/24465003/201538821-ec6ca1d6-d8e4-4552-a183-33680f4db58a.png)
 
 
