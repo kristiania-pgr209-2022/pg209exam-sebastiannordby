@@ -137,10 +137,9 @@ function MessageInfoDialog({ open, setOpen, message, userId }) {
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Informasjon</DialogTitle>
+      <DialogTitle>Meldingen er lest av</DialogTitle>
       <DialogContent>
         <div>
-          <h3>Meldingen er lest av</h3>
           <ul>
             {readByUsers.map((x) => (
               <li>
