@@ -5,11 +5,10 @@ import no.kristiania.messenger.dao.MessageThreadDao;
 import no.kristiania.messenger.entities.MessageThread;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,7 +84,7 @@ public class JdbcMessageThreadDao implements MessageThreadDao {
                         messageStmt.setString(1, message);
                         messageStmt.setInt(2, senderId);
                         messageStmt.setInt(3, messageThreadId);
-                        messageStmt.setDate(4, java.sql.Date.valueOf(LocalDate.now()));
+                        messageStmt.setTimestamp(4, Timestamp.from(Instant.now()));
                         messageStmt.executeUpdate();
                     }
                 }
