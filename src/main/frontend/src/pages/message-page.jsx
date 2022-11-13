@@ -8,6 +8,8 @@ import Skeleton from "@mui/material/Skeleton";
 import ExitToApp from "@mui/icons-material/ExitToApp";
 import Settings from "@mui/icons-material/Settings";
 import { UpdateUserDialog } from "../components/user/update-user-dialog.jsx";
+import Avatar from "@mui/material/Avatar";
+import Tooltip from "@mui/material/Tooltip";
 
 export function MessengerPage() {
   const { userId, messageThreadId } = useParams();
@@ -67,6 +69,13 @@ export function MessengerPage() {
     setMessageThreads(messageThreads);
   };
 
+  const getInitials = (name) => {
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join(".");
+  };
+
   return (
     <div className={"main-view"}>
       <header>
@@ -74,7 +83,13 @@ export function MessengerPage() {
           <>
             <h1>Kristiania Messenger</h1>
 
-            <div>
+            <div className={"options"}>
+              <Tooltip
+                title={`${user.name} - ${user.emailAddress} - ${user.nickname}`}
+              >
+                <Avatar>{getInitials(user.name)}</Avatar>
+              </Tooltip>
+
               <IconButton
                 onClick={showSettingsDialog}
                 aria-label="settings"

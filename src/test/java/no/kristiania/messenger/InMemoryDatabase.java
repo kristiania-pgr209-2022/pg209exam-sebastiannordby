@@ -19,5 +19,4 @@ public class InMemoryDatabase {
 
         return dataSource;
     }
-
 }

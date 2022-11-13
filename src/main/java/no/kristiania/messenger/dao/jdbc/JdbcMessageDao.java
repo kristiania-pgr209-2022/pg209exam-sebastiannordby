@@ -116,7 +116,7 @@ public class JdbcMessageDao implements MessageDao {
         message.content = rs.getString("Content");
         message.senderId = rs.getInt("SenderId");
         message.messageThreadId = rs.getInt("MessageThreadId");
-        message.sentDate = rs.getTimestamp("SentDate");
+        message.sentDate = rs.getTimestamp("SentDate").toLocalDateTime();
         message.userNickname = rs.getString("UserNickName");
 
         return message;

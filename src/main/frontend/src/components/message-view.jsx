@@ -9,6 +9,7 @@ import TextField from "@mui/material/TextField";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import Avatar from "@mui/material/Avatar";
+import Tooltip from "@mui/material/Tooltip";
 
 export function MessageView({ messageThread, isLoading, userId }) {
   const [messages, setMessages] = useState([]);
@@ -74,6 +75,13 @@ export function MessageView({ messageThread, isLoading, userId }) {
     setMessageInfoDialogVisible(true);
   };
 
+  const getInitials = (name) => {
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join(".");
+  };
+
   if (!isLoading) {
     return (
       <div className="message-view">
@@ -81,7 +89,9 @@ export function MessageView({ messageThread, isLoading, userId }) {
           <h3 className="secondary-title">Meldinger</h3>
           <div className="members">
             {messageThreadMembers.map((x) => (
-              <Avatar>{x.nickname}</Avatar>
+              <Tooltip title={`${x.name} - ${x.emailAddress} - ${x.nickname}`}>
+                <Avatar>{getInitials(x.name)}</Avatar>
+              </Tooltip>
             ))}
           </div>
         </div>
@@ -89,13 +99,14 @@ export function MessageView({ messageThread, isLoading, userId }) {
         <div className="content">
           {messages.map((x) => (
             <div key={x.id} className="message">
+              <span className="time">
+                {new Date(x.sentDate).toUTCString().replace("GMT", "")}
+              </span>
               <span className="message-content">
-                {x.sentDate} | {x.userNickname}: {x.content}
+                {x.userNickname}: {x.content}
               </span>
               <span className="message-info">
-                <InfoIcon
-                  onClick={async () => await showMessageInfo(x)}
-                ></InfoIcon>
+                <InfoIcon onClick={async () => await showMessageInfo(x)} />
               </span>
             </div>
           ))}
@@ -105,11 +116,14 @@ export function MessageView({ messageThread, isLoading, userId }) {
             sx={{ flex: "1" }}
             onKeyUp={onNewMessageKeyUp}
             placeholder="Melding.."
+            disabled={!messageThread}
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
           />
 
-          <Button onClick={sendNewMessage}>Send</Button>
+          <Button onClick={sendNewMessage} disabled={!messageThread}>
+            Send
+          </Button>
         </div>
 
         <MessageInfoDialog

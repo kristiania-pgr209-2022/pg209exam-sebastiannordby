@@ -1,5 +1,6 @@
 package no.kristiania.messenger.views;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class MessageView {
@@ -7,6 +8,6 @@ public class MessageView {
     public String content;
     public int senderId;
     public int messageThreadId;
-    public Date sentDate;
+    public LocalDateTime sentDate;
     public String userNickname;
 }

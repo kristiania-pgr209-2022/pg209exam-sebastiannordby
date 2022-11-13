@@ -34,7 +34,7 @@ public class GroupMembershipDaoTests {
     void shouldInsertMemberIntoGroup() throws Exception {
         var userId = userDao.insertUser(SampleData.sampleUser());
         var messageThreadId = messageThreadDao.insert(new MessageThread("Test Group"));
-        var membershipId = membershipDao.insert(userId, messageThreadId);
+        membershipDao.insert(userId, messageThreadId);
         var groupIdsWhereUserIsMember = membershipDao.getMessageThreadIdsByUserId(userId);
 
         assertThat(groupIdsWhereUserIsMember).isNotNull();
@@ -47,9 +47,9 @@ public class GroupMembershipDaoTests {
         var user2Id = userDao.insertUser(SampleData.sampleUser());
         var user3Id = userDao.insertUser(SampleData.sampleUser());
         var messageThreadId = messageThreadDao.insert(new MessageThread("Test Group"));
-        var membership1Id = membershipDao.insert(user1Id, messageThreadId);
-        var membership2Id = membershipDao.insert(user2Id, messageThreadId);
-        var membership3Id = membershipDao.insert(user3Id, messageThreadId);
+        membershipDao.insert(user1Id, messageThreadId);
+        membershipDao.insert(user2Id, messageThreadId);
+        membershipDao.insert(user3Id, messageThreadId);
         var userIds = membershipDao.getUserIdsWhichIsMembersIn(messageThreadId);
 
         assertThat(userIds).isNotNull();
@@ -67,9 +67,9 @@ public class GroupMembershipDaoTests {
         var user2Id = userDao.insertUser(SampleData.sampleUser());
         var user3Id = userDao.insertUser(SampleData.sampleUser());
         var messageThreadId = messageThreadDao.insert(new MessageThread("Test Group"));
-        var membership1Id = membershipDao.insert(user1Id, messageThreadId);
-        var membership2Id = membershipDao.insert(user2Id, messageThreadId);
-        var membership3Id = membershipDao.insert(user3Id, messageThreadId);
+        membershipDao.insert(user1Id, messageThreadId);
+        membershipDao.insert(user2Id, messageThreadId);
+        membershipDao.insert(user3Id, messageThreadId);
         var users = membershipDao.getMembersInMessageThread(messageThreadId);
 
         assertThat(users).isNotNull();

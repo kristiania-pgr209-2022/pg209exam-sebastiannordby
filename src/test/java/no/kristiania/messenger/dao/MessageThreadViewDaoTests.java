@@ -4,6 +4,7 @@ import no.kristiania.messenger.InMemoryDatabase;
 import no.kristiania.messenger.SampleData;
 import no.kristiania.messenger.dao.jdbc.*;
 import no.kristiania.messenger.entities.MessageThread;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +15,6 @@ import java.util.ArrayList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class MessageThreadViewDaoTests {
-    private DataSource dataSource = InMemoryDatabase.createTestDataSource();
     private MessageThreadDao messageThreadDao;
     private UserDao userDao;
     private MessageDao messageDao;
@@ -23,6 +23,7 @@ public class MessageThreadViewDaoTests {
 
     @BeforeEach
     void setUp() throws Exception {
+        var dataSource = InMemoryDatabase.createTestDataSource();
         messageThreadDao = new JdbcMessageThreadDao(dataSource);
         userDao = new JdbcUserDao(dataSource);
         messageThreadMembershipDao = new JdbcMessageThreadMembershipDao(dataSource);

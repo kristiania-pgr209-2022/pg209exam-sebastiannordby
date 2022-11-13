@@ -22,23 +22,17 @@ public class JdbcMessageThreadMembershipDao implements MessageThreadMembershipDa
     }
 
     @Override
-    public int insert(int userId, int messageThreadId) throws Exception {
+    public void insert(int userId, int messageThreadId) throws Exception {
         try(var connection = dataSource.getConnection()){
             var sql = """
                 INSERT INTO MessageThreadMemberships(UserId, MessageThreadId) values (?, ?)""";
 
-            try(var stmt = connection.prepareStatement(
-                    sql, PreparedStatement.RETURN_GENERATED_KEYS)){
+            try(var stmt = connection.prepareStatement(sql)){
 
                 stmt.setInt(1, userId);
                 stmt.setInt(2, messageThreadId);
 
                 stmt.executeUpdate();
-
-                try(var generatedKeys = stmt.getGeneratedKeys()){
-                    generatedKeys.next();
-                    return  generatedKeys.getInt(1);
-                }
             }
         }
     }

@@ -30,7 +30,7 @@ public class JdbcMessageThreadViewDao implements MessageThreadViewDao {
                 	MessageThreads.Id,
                 	MessageThreads.Topic,
                 	MessageThreadMemberships.UserId,
-                	(COUNT(Messages.Id) - COUNT(MessageRead.Id)) AS UnreadCount
+                	(COUNT(Messages.Id) - COUNT(MessageRead.UserId)) AS UnreadCount
                 FROM MessageThreadMemberships
                 	LEFT OUTER JOIN MessageThreads ON MessageThreads.Id = MessageThreadMemberships.MessageThreadId
                 	LEFT OUTER JOIN Messages ON Messages.MessageThreadId = MessageThreads.Id AND Messages.SenderId != MessageThreadMemberships.UserId

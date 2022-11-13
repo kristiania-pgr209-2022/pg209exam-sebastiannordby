@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class JdbcMessageThreadDao implements MessageThreadDao {
     private DataSource dataSource;
@@ -46,7 +47,18 @@ public class JdbcMessageThreadDao implements MessageThreadDao {
 
     @Override
     public int insert(String topic, String message, int senderId, List<Integer> userReceiverIds) throws Exception {
+        if(topic == null || topic.length() == 0)
+            throw new IllegalArgumentException("Topic is required");
+
+        if(message == null || message.length() == 0)
+            throw new IllegalArgumentException("Message is required");
+
+        if(userReceiverIds == null || userReceiverIds.size() == 0)
+            throw new IllegalArgumentException("UserReceiverIds is required.");
+
         int messageThreadId = -1;
+
+        var uniqueReceiverIds = userReceiverIds.stream().collect(Collectors.toSet());
 
         try (var connection = dataSource.getConnection()) {
             connection.setAutoCommit(false);
@@ -66,12 +78,11 @@ public class JdbcMessageThreadDao implements MessageThreadDao {
                     messageThreadId = generatedKeys.getInt(1);
 
                     // Insert MessageThreadMemberships
-                    userReceiverIds.add(senderId);
+                    uniqueReceiverIds.add(senderId);
 
-                    for(var userReceiverId : userReceiverIds) {
+                    for(var userReceiverId : uniqueReceiverIds) {
                         var insertIntoThreadMembershipSql = "INSERT INTO MessageThreadMemberships(MessageThreadId, UserId) VALUES(?, ?)";
-                        try (var membershipStmt
-                                 = connection.prepareStatement(insertIntoThreadMembershipSql)) {
+                        try (var membershipStmt = connection.prepareStatement(insertIntoThreadMembershipSql)) {
                             membershipStmt.setInt(1, messageThreadId);
                             membershipStmt.setInt(2, userReceiverId);
                             membershipStmt.executeUpdate();
