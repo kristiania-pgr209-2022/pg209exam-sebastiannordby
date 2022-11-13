@@ -4,6 +4,7 @@ import no.kristiania.messenger.InMemoryDatabase;
 import no.kristiania.messenger.SampleData;
 import no.kristiania.messenger.dao.jdbc.*;
 import no.kristiania.messenger.entities.MessageThread;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +20,6 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class MessageReadDaoTests {
-    private DataSource dataSource = InMemoryDatabase.createTestDataSource();
     private UserDao userDao;
     private MessageThreadMembershipDao membershipDao;
     private MessageReadDao messageReadDao;
@@ -27,9 +27,9 @@ public class MessageReadDaoTests {
     private MessageDao messageDao;
     private MessageThreadMembershipDao messageThreadMembershipDao;
 
-
     @BeforeEach
     void setUp() throws Exception {
+        var dataSource = InMemoryDatabase.createTestDataSource();
         userDao = new JdbcUserDao(dataSource);
         membershipDao = new JdbcMessageThreadMembershipDao(dataSource);
         messageThreadDao = new JdbcMessageThreadDao(dataSource);
@@ -75,30 +75,32 @@ public class MessageReadDaoTests {
         assertThat(amountOfUnreadMessages).isEqualTo(0);
     }
 
-//    @Test
-//    void shouldMarkMessageAsRead() throws Exception {
-//        var senderId = userDao.insertUser(SampleData.sampleUser());
-//        var receiverId = userDao.insertUser(SampleData.sampleUser());
-//        var messageThreadId = messageThreadDao.insert(new MessageThread(""));
-//        var timeStamp = LocalDateTime.now();
-//
-//        messageThreadMembershipDao.insert(senderId, messageThreadId);
-//        messageThreadMembershipDao.insert(receiverId, messageThreadId);
-//        messageDao.newMessage(senderId, messageThreadId, SampleData.getSampleMessageContent());
-//        messageReadDao.markMessagesInThreadAsRead(receiverId, messageThreadId);
-//
-//        var views = messageReadDao.getUserViewsWhichHasReadMessage(messageThreadId);
-//        var receiverReadView = views
-//                .stream()
-//                .filter(x -> x.userId == receiverId)
-//                .collect(Collectors.toList())
-//                .get(0);
-//
-//        assertThat(views).isNotNull();
-//        assertThat(views).isNotEmpty();
-//        assertThat(receiverReadView).isNotNull();
-//        assertThat(receiverReadView.dateRead).isAfter(timeStamp);
-//    }
+    @Test
+    void shouldMarkMessageAsRead() throws Exception {
+        var timeStamp = LocalDateTime.now();
+        var senderId = userDao.insertUser(SampleData.sampleUser());
+        var receiverId = userDao.insertUser(SampleData.sampleUser());
+        var messageThreadId = messageThreadDao.insert(new MessageThread("Test"));
+
+        messageThreadMembershipDao.insert(senderId, messageThreadId);
+        messageThreadMembershipDao.insert(receiverId, messageThreadId);
+        var messageId = messageDao.newMessage(senderId, messageThreadId, SampleData.getSampleMessageContent());
+        messageReadDao.markMessagesInThreadAsRead(receiverId, messageThreadId);
+        messageReadDao.markMessagesInThreadAsRead(senderId, messageThreadId);
+
+        var count = messageReadDao.getUnreadMessageCountByUserInThread(receiverId, messageId);
+        var views = messageReadDao.getUserViewsWhichHasReadMessage(messageId);
+        var receiverReadView = views
+                .stream()
+                .filter(x -> x.userId == receiverId)
+                .findFirst().orElse(null);
+
+        assertThat(count).isEqualTo(0);
+        assertThat(views).isNotNull();
+        assertThat(views).isNotEmpty();
+        assertThat(receiverReadView).isNotNull();
+        assertThat(receiverReadView.dateRead).isAfter(timeStamp);
+    }
 
     @Test
     void shouldRetrieveNullForMissingMessageRead() throws Exception {

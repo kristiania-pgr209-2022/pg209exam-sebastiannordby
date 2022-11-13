@@ -81,10 +81,11 @@ public class JdbcMessageReadDao implements MessageReadDao {
     @Override
     public void markMessagesInThreadAsRead(int userId, int messageThreadId) throws Exception {
         try (var connection = dataSource.getConnection()) {
-            connection.setAutoCommit(false);
 
             var messageIdsToMarkAsRead =
                     getMessageIdsWhereMessagesNotReadForUser(connection, userId, messageThreadId);
+
+            connection.setAutoCommit(false);
 
             for(var messageIdToMarkAsRead : messageIdsToMarkAsRead) {
                 var insertMessageReadSql = "INSERT INTO MessageRead (UserId, MessageId, ReadAt) values (?, ?, ?)";
@@ -98,9 +99,11 @@ public class JdbcMessageReadDao implements MessageReadDao {
             }
 
             connection.commit();
+            connection.setAutoCommit(true);
         }
     }
 
+    @Override
     public Date find(int userId, int messageId) throws Exception {
         try (var connection = dataSource.getConnection()) {
             var sql = "SELECT ReadAt FROM MessageRead where UserId = (?) AND MessageId = (?) LIMIT 1";
@@ -123,7 +126,7 @@ public class JdbcMessageReadDao implements MessageReadDao {
         try (var connection = dataSource.getConnection()) {
             var sql = """       
                 SELECT ReadAt, Users.Nickname AS UserNickname, Users.Id AS UserId FROM MessageRead
-                JOIN Users ON Users.Id = MessageRead.UserId
+                LEFT OUTER JOIN Users ON Users.Id = MessageRead.UserId
                 WHERE MessageId = ?""";
 
             try(var statement = connection.prepareStatement(
