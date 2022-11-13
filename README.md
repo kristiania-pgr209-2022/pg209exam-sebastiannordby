@@ -7,7 +7,7 @@ Under denne oppgaven har vi valgt og jobbe sammen ved å bruke kommuniseringspla
 Når vi jobber deler vi skjermen med hverandre så hvis en commit'er mer kode enn den andre er det fordi vi jobber på denne måten. 
 Vi parprogrammerer med delt skjerm.
 
-Uml-diagram for databasemodellen vår:
+## ER-diagram for databasen vår:
 ![image](https://user-images.githubusercontent.com/97464729/201485230-6e8d5f54-622c-492a-b480-cabb2b422608.png)
 
 link til githup-repo:
