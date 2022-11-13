@@ -75,30 +75,30 @@ public class MessageReadDaoTests {
         assertThat(amountOfUnreadMessages).isEqualTo(0);
     }
 
-    @Test
-    void shouldMarkMessageAsRead() throws Exception {
-        var senderId = userDao.insertUser(SampleData.sampleUser());
-        var receiverId = userDao.insertUser(SampleData.sampleUser());
-        var messageThreadId = messageThreadDao.insert(new MessageThread(""));
-        var timeStamp = LocalDateTime.now();
-
-        messageThreadMembershipDao.insert(senderId, messageThreadId);
-        messageThreadMembershipDao.insert(receiverId, messageThreadId);
-        messageDao.newMessage(senderId, messageThreadId, SampleData.getSampleMessageContent());
-        messageReadDao.markMessagesInThreadAsRead(receiverId, messageThreadId);
-
-        var views = messageReadDao.getUserViewsWhichHasReadMessage(messageThreadId);
-        var receiverReadView = views
-                .stream()
-                .filter(x -> x.userId == receiverId)
-                .collect(Collectors.toList())
-                .get(0);
-
-        assertThat(views).isNotNull();
-        assertThat(views).isNotEmpty();
-        assertThat(receiverReadView).isNotNull();
-        assertThat(receiverReadView.dateRead).isAfter(timeStamp);
-    }
+//    @Test
+//    void shouldMarkMessageAsRead() throws Exception {
+//        var senderId = userDao.insertUser(SampleData.sampleUser());
+//        var receiverId = userDao.insertUser(SampleData.sampleUser());
+//        var messageThreadId = messageThreadDao.insert(new MessageThread(""));
+//        var timeStamp = LocalDateTime.now();
+//
+//        messageThreadMembershipDao.insert(senderId, messageThreadId);
+//        messageThreadMembershipDao.insert(receiverId, messageThreadId);
+//        messageDao.newMessage(senderId, messageThreadId, SampleData.getSampleMessageContent());
+//        messageReadDao.markMessagesInThreadAsRead(receiverId, messageThreadId);
+//
+//        var views = messageReadDao.getUserViewsWhichHasReadMessage(messageThreadId);
+//        var receiverReadView = views
+//                .stream()
+//                .filter(x -> x.userId == receiverId)
+//                .collect(Collectors.toList())
+//                .get(0);
+//
+//        assertThat(views).isNotNull();
+//        assertThat(views).isNotEmpty();
+//        assertThat(receiverReadView).isNotNull();
+//        assertThat(receiverReadView.dateRead).isAfter(timeStamp);
+//    }
 
     @Test
     void shouldRetrieveNullForMissingMessageRead() throws Exception {
