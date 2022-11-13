@@ -98,16 +98,15 @@ Man velger bruker ved å trykke på et av bruker-kortene:
 ![image](https://user-images.githubusercontent.com/24465003/201512375-d53a4e60-9220-4257-937a-b68463df16e1.png)
 
 #### Meldinger
-Når du har logget inn kommer man til følgende side:
-
-![image](https://user-images.githubusercontent.com/24465003/201538955-078101ac-229e-447d-81a3-b229c9ddd1d9.png)
-Her kan man:
+Når du har logget inn kommer man til følgende side, der man kan:
 - Opprette ny meldingstråd
 - Se hvem bruker du er innlogget som
 - Oppdatere/redigere bruker
 - Logge ut
 
-![image](https://user-images.githubusercontent.com/24465003/201512486-9f3b849d-dbc3-45c2-bf48-15b839ddf027.png)
+![image](https://user-images.githubusercontent.com/24465003/201538955-078101ac-229e-447d-81a3-b229c9ddd1d9.png)
+
+
 
 ### Oppdatere bruker
 ![image](https://user-images.githubusercontent.com/24465003/201512783-d7051585-2ac2-49da-84d3-ecd62a9d4b2b.png)
