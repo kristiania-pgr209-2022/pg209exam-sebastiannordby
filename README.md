@@ -100,10 +100,10 @@ Man velger bruker ved å trykke på et av bruker-kortene:
 #### Meldinger
 Når du har logget inn kommer man til følgende side:
 
-![image](https://user-images.githubusercontent.com/24465003/201512403-ca20497c-47db-476e-ad31-da997a57f9e6.png)
-
+![image](https://user-images.githubusercontent.com/24465003/201538955-078101ac-229e-447d-81a3-b229c9ddd1d9.png)
 Her kan man:
 - Opprette ny meldingstråd
+- Se hvem bruker du er innlogget som
 - Oppdatere/redigere bruker
 - Logge ut
 
