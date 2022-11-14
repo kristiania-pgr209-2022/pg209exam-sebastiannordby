@@ -8,7 +8,7 @@ Når vi jobber deler vi skjermen med hverandre så hvis en commit'er mer kode en
 Vi parprogrammerer med delt skjerm.
 
 ## ER-diagram for databasen vår:
-![image](https://user-images.githubusercontent.com/97464729/201485230-6e8d5f54-622c-492a-b480-cabb2b422608.png)
+![image](https://user-images.githubusercontent.com/97464729/201685740-2ff51fda-acc5-45c5-86a4-06817d4ad682.png)
 
 Link til Github-repo:
 https://github.com/kristiania-pgr209-2022/pg209exam-sebastiannordby
