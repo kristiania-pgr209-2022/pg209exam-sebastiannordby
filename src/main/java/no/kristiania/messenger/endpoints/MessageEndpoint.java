@@ -20,7 +20,7 @@ public class MessageEndpoint {
     @GET
     @Path("/{messageThreadId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response listAllThreads(@PathParam("messageThreadId") int messageThreadId) throws Exception {
+    public Response listAllMessagesInThread(@PathParam("messageThreadId") int messageThreadId) throws Exception {
         return Response
                 .ok(messageDao.findMessageViewsInThread(messageThreadId))
                 .build();

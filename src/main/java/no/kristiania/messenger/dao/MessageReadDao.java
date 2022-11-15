@@ -2,8 +2,6 @@ package no.kristiania.messenger.dao;
 
 import no.kristiania.messenger.views.MessageReadByUserView;
 import no.kristiania.messenger.views.UnreadMessagesCountView;
-
-import java.sql.Connection;
 import java.util.Date;
 import java.util.List;
 
