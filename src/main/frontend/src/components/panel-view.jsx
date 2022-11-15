@@ -156,8 +156,6 @@ function NewPersonChatDialog({
   const [selectedUsersIds, setSelectedUsersIds] = useState([]);
   const [message, setMessage] = useState("");
   const [subject, setSubject] = useState("");
-  const [selectedUsersDisplayValue, setSelectedUsersDisplayValue] =
-    useState("");
 
   const handleClose = () => {
     setSelectedUsersIds([]);
@@ -184,6 +182,9 @@ function NewPersonChatDialog({
       }),
     });
 
+    setSelectedUsersIds([]);
+    setMessage("");
+    setSubject("");
     setOpen(false);
     if (onNewChatCreated) {
       await onNewChatCreated();
