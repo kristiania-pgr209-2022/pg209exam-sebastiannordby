@@ -3,12 +3,9 @@ package no.kristiania.messenger.dao.jdbc;
 import jakarta.inject.Inject;
 import no.kristiania.messenger.dao.MessageThreadDao;
 import no.kristiania.messenger.entities.MessageThread;
-
 import javax.sql.DataSource;
 import java.sql.*;
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;

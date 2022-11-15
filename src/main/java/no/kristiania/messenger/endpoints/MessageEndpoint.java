@@ -7,10 +7,7 @@ import jakarta.ws.rs.core.Response;
 import no.kristiania.messenger.dao.MessageDao;
 import no.kristiania.messenger.dao.MessageReadDao;
 import no.kristiania.messenger.dtos.commands.InsertNewMessageIntoThreadCommandDto;
-import no.kristiania.messenger.dtos.commands.MarkMessagesInMessageThreadAsReadCommandDto;
 import no.kristiania.messenger.dtos.queries.MessageThreadsUnreadCountQuery;
-
-import javax.print.attribute.standard.Media;
 
 @Path("/message")
 public class MessageEndpoint {

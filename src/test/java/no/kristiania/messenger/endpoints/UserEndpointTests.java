@@ -1,8 +1,11 @@
 package no.kristiania.messenger.endpoints;
 
 import jakarta.json.Json;
+import no.kristiania.messenger.InMemoryDatabase;
 import no.kristiania.messenger.SampleData;
 import no.kristiania.messenger.ServerTest;
+import no.kristiania.messenger.dao.UserDao;
+import no.kristiania.messenger.dao.jdbc.JdbcUserDao;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 import java.io.IOException;
@@ -12,6 +15,14 @@ import java.nio.charset.StandardCharsets;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class UserEndpointTests extends ServerTest {
+
+    private UserDao userDao;
+
+    @Override
+    protected void additionalSetup() {
+        userDao = new JdbcUserDao(InMemoryDatabase.createTestDataSource());
+    }
+
     @Test
     void shouldReachGetEndpoint() throws IOException {
         var connection = getServerConnection("/api/user");
@@ -83,5 +94,32 @@ public class UserEndpointTests extends ServerTest {
                 .isEqualTo(200);
 
         assertThat(connection.getResponseMessage().contains("id"));
+    }
+
+    @Test
+    void shouldFindUser() throws Exception {
+        var sampleUser = SampleData.sampleUser();
+        var sampleUserId = userDao.insertUser(sampleUser);
+        var connection = getServerConnection(String.format("/api/user/%d", sampleUserId));
+
+        connection.setRequestMethod("GET");
+        assertThat(connection.getContentType()).isEqualTo("application/json");
+        assertThat(connection.getResponseCode())
+                .as(connection.getResponseMessage())
+                .isEqualTo(200);
+
+        assertThat(connection.getResponseMessage().contains("id"));
+
+        var json = IOUtils.toString(connection.getInputStream(), StandardCharsets.UTF_8);
+        var expectedJson = Json.createObjectBuilder()
+                .add("id", sampleUserId)
+                .add("name", sampleUser.getName())
+                .add("emailAddress", sampleUser.getEmailAddress())
+                .add("nickname", sampleUser.getNickname())
+                .add("bio", sampleUser.getBio())
+                .build()
+                .toString();
+
+        assertThat(json).contains("id", "name", "emailAddress", "nickname", "bio");
     }
 }

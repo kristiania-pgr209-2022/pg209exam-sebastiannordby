@@ -3,13 +3,8 @@ package no.kristiania.messenger.dao;
 import no.kristiania.messenger.InMemoryDatabase;
 import no.kristiania.messenger.SampleData;
 import no.kristiania.messenger.dao.jdbc.*;
-import no.kristiania.messenger.entities.MessageThread;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import javax.sql.DataSource;
-
 import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.assertThat;

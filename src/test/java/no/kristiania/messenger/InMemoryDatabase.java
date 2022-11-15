@@ -1,9 +1,7 @@
 package no.kristiania.messenger;
 
 import org.flywaydb.core.Flyway;
-import org.glassfish.jersey.message.internal.DataSourceProvider;
 import org.h2.jdbcx.JdbcDataSource;
-
 import javax.sql.DataSource;
 
 public class InMemoryDatabase {

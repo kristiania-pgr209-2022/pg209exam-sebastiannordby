@@ -4,18 +4,11 @@ import no.kristiania.messenger.InMemoryDatabase;
 import no.kristiania.messenger.SampleData;
 import no.kristiania.messenger.dao.jdbc.*;
 import no.kristiania.messenger.entities.MessageThread;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import javax.sql.DataSource;
-
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

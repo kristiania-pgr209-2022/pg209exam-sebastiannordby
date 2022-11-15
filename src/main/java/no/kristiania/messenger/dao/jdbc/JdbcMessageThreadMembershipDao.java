@@ -2,14 +2,8 @@ package no.kristiania.messenger.dao.jdbc;
 
 import jakarta.inject.Inject;
 import no.kristiania.messenger.dao.MessageThreadMembershipDao;
-import no.kristiania.messenger.dao.UserDao;
-import no.kristiania.messenger.dtos.models.UserDto;
 import no.kristiania.messenger.entities.User;
-
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
