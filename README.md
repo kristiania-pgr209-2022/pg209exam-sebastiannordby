@@ -1,8 +1,15 @@
 [![Java CI with Maven](https://github.com/kristiania-pgr209-2022/pg209exam-sebastiannordby/actions/workflows/maven.yml/badge.svg)](https://github.com/kristiania-pgr209-2022/pg209exam-sebastiannordby/actions/workflows/maven.yml)
 
-
-
 # PG209 Backend programmering eksamen
+
+Link til Github-repo:
+https://github.com/kristiania-pgr209-2022/pg209exam-sebastiannordby
+
+Link til Azure:
+https://pg209exam-sebastiannordby.azurewebsites.net/
+
+Link til Action som kjører tester(Maven Surefire):
+https://github.com/kristiania-pgr209-2022/pg209exam-sebastiannordby/actions/workflows/maven.yml
 
 ## Hvordan vi jobber
 Under denne oppgaven har vi valgt og jobbe sammen ved å bruke kommuniseringsplatformen Discord. 
@@ -11,12 +18,6 @@ Vi parprogrammerer med delt skjerm.
 
 ## ER-diagram for databasen vår:
 ![image](https://user-images.githubusercontent.com/97464729/201685740-2ff51fda-acc5-45c5-86a4-06817d4ad682.png)
-
-Link til Github-repo:
-https://github.com/kristiania-pgr209-2022/pg209exam-sebastiannordby
-
-Link til Azure:
-https://pg209exam-sebastiannordby.azurewebsites.net/
 
 ## Sjekkliste for innleveringen
 * [X] Dere har lest eksamensteksten
