@@ -18,16 +18,10 @@ import java.util.*;
 
 public class JdbcMessageDao implements MessageDao {
     private DataSource dataSource;
-    private MessageThreadMembershipDao messageThreadMembershipDao;
-    private MessageReadDao messageReadDao;
 
     @Inject
-    public JdbcMessageDao(DataSource dataSource,
-          MessageThreadMembershipDao messageThreadMembershipDao,
-          MessageReadDao messageReadDao) {
+    public JdbcMessageDao(DataSource dataSource) {
         this.dataSource = dataSource;
-        this.messageThreadMembershipDao = messageThreadMembershipDao;
-        this.messageReadDao = messageReadDao;
     }
 
     public int newMessage(int loggedInUser, int messageThreadId, String content) throws Exception {

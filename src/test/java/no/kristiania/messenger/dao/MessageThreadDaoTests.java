@@ -24,7 +24,7 @@ public class MessageThreadDaoTests {
         messageThreadDao = new JdbcMessageThreadDao(dataSource);
         userDao = new JdbcUserDao(dataSource);
         messageThreadMembershipDao = new JdbcMessageThreadMembershipDao(dataSource);
-        messageDao = new JdbcMessageDao(dataSource, messageThreadMembershipDao, new JdbcMessageReadDao(dataSource));
+        messageDao = new JdbcMessageDao(dataSource);
     }
 
     @Test
