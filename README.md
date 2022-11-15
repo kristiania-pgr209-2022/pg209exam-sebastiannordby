@@ -85,9 +85,6 @@ så vi er litt småredd for at de creditsene går tomme før det er våres tur t
 
 ## Brukerveiledning
 
-
-
-
 ###Landingsside
 Når du kommer til landingssiden har du følgende valg:
 - Opprette bruker
