@@ -59,7 +59,7 @@ https://pg209exam-sebastiannordby.azurewebsites.net/
   * [x] Melding; innhold, mottakertråd , dato
   * [x] Tråder (kan ha en-mot en chat, eller lage en gruppe av det)
   * [x] Tråddeltaker (info om hvem medlem hører med i hvilken meldingstråd)
-  * [X] Meldinglest (info om hvilken melding har åpnet hvilken meldinger)
+  * [X] Meldinglest (info om hvilken bruker har åpnet hvilken meldinger)
 
 ## Vår forhånds plan for frontend
 * [X] Når man åpner applikasjonen skal man kunne gjøre følgende:
