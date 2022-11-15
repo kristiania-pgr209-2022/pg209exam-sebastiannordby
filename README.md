@@ -77,6 +77,8 @@ https://pg209exam-sebastiannordby.azurewebsites.net/
 
 På azure har man 1000 gratis kroner å disponere seg for, men det koster å holde databasen oppe når den er i bruk. Vi har allerede brukt over 100 kroner,
 så vi er litt småredd for at de creditsene går tomme før det er våres tur til å bli vurdert. Vi har derfor satt opp en brukerveiledning som også viser hvordan nettsiden funker når database serveren er oppe.
+-
+
 ![image](https://user-images.githubusercontent.com/97464729/201982216-de746c04-a869-4b57-9d7d-9e8befca9276.png)
 
 
