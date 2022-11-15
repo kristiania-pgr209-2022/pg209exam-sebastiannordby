@@ -1,5 +1,7 @@
 [![Java CI with Maven](https://github.com/kristiania-pgr209-2022/pg209exam-sebastiannordby/actions/workflows/maven.yml/badge.svg)](https://github.com/kristiania-pgr209-2022/pg209exam-sebastiannordby/actions/workflows/maven.yml)
 
+
+
 # PG209 Backend programmering eksamen
 
 ## Hvordan vi jobber
@@ -23,13 +25,13 @@ https://pg209exam-sebastiannordby.azurewebsites.net/
 * [X] Dere har committed kode med begge prosjektdeltagernes GitHub-konto (alternativt: README beskriver hvordan dere har jobbet)
 
 ## README.md
-* [ ] Inneholder link til Azure Websites deployment
+* [x] Inneholder link til Azure Websites deployment
 * [x] Inneholder en korrekt badge til GitHub Actions
-* [ ] Beskriver hva dere har løst utover minimum
+* [x] Beskriver hva dere har løst utover minimum
 * [x] Inneholder et diagram over databasemodellen
 
 ## Koden
-* [ ] Oppfyller Java kodestandard med hensyn til indentering og navngiving
+* [x] Oppfyller Java kodestandard med hensyn til indentering og navngiving
 * [x] Er deployet korrekt til Azure Websites
 * [x] Inneholder tester av HTTP og database-logikk
 * [x] Bruker Flyway DB for å sette opp databasen
@@ -41,38 +43,47 @@ https://pg209exam-sebastiannordby.azurewebsites.net/
 * [x] Lar brukeren opprette en ny melding
 * [x] Lar brukeren svare på meldinger
 * [x] For A: Kan endre navn og annen informasjon om bruker
-* [ ] For A: Meldingslisten viser navnet på avsender og mottakere
+* [x] For A: Meldingslisten viser navnet på avsender og mottakere
 
 ## Kvalitet
 * [x] Datamodellen er *normalisert* - dvs at for eksempel navnet på en meldingsavsender ligger i brukertallen, ikke i meldingstabellen
 * [x] Når man henter informasjon fra flere tabellen brukes join, i stedet for 1-plus-N queries (et for hovedlisten og et per svar for tilleggsinformasjon)
-* [ ] Det finnes test for alle JAX-RS endpoints og alle DAO-er
+* [x] Det finnes test for alle JAX-RS endpoints og alle DAO-er
 
-## Plan for backend
+## Vår forhånds plan for backend
 * [X] En Jetty Webserver
   * [X] Servere en React applikasjon
 * [X] Microsoft SQL Database med Flyway migreringer
-* [ ] Databasen skal inneholde følgende tabeller:
+* [X] Databasen skal inneholde følgende tabeller:
   * [X] Bruker
-  * [ ] Melding; innhold og avsenderId(bruker), mottakerId?(bruker), gruppeId?(Gruppe), dato
-  * [ ] Gruppe: Navn
-  * [ ] GruppeDeltaker: GruppeId(Gruppe), BrukerId(bruker)
+  * [x] Melding; innhold, mottakertråd , dato
+  * [x] Tråder (kan ha en-mot en chat, eller lage en gruppe av det)
+  * [x] Tråddeltaker (info om hvem medlem hører med i hvilken meldingstråd)
+  * [X] Meldinglest (info om hvilken melding har åpnet hvilken meldinger)
 
-## Plan for frontend
+## Vår forhånds plan for frontend
 * [X] Når man åpner applikasjonen skal man kunne gjøre følgende:
   * [X] Velge fra et sett med brukere
   * [X] Opprette en ny bruker
 * [X] Applikasjonen er delt opp i 2 komponenter: 
   * [X] Sendingspanel: En vertikal boks med valg for personer/grupper
   * [X] Meldingspanel: En vertikal boks der du ser meldinger som er hentet basert på valg i sendingspanel
-* [ x Sendingspanel: viser personer/grupper du har meldinger i
-  * [ ] Man skal kunne "opprette" en ny melding enten til person eller gruppe
+* [x] Sendingspanel: viser personer/grupper du har meldinger i
+  * [X] Man skal kunne "opprette" en ny melding enten til person eller gruppe
 * [x] Meldingspanel: viser meldingene innenfor personen/gruppen du har valgt på venstre side
 * [x] Øverst i applikasjonen er den en knapp for innstillinger med følgende:
   * [x] Endre opplysninger for pålogget bruker
   * [x] Logge ut
 
+På azure har man 1000 gratis kroner å disponere seg for, men det koster å holde databasen oppe når den er i bruk. Vi har allerede brukt over 100 kroner,
+så vi er litt småredd for at de creditsene går tomme før det er våres tur til å bli vurdert. Vi har derfor satt opp en brukerveiledning som også viser hvordan nettsiden funker når database serveren er oppe.
+![image](https://user-images.githubusercontent.com/97464729/201982216-de746c04-a869-4b57-9d7d-9e8befca9276.png)
+
+
 ## Brukerveiledning
+
+
+
 
 ###Landingsside
 Når du kommer til landingssiden har du følgende valg:
