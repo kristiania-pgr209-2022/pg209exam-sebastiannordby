@@ -120,7 +120,6 @@ Når du har logget inn kommer man til følgende side, der man kan:
 ![image](https://user-images.githubusercontent.com/24465003/201538955-078101ac-229e-447d-81a3-b229c9ddd1d9.png)
 
 
-
 ### Oppdatere bruker
 ![image](https://user-images.githubusercontent.com/24465003/201512783-d7051585-2ac2-49da-84d3-ecd62a9d4b2b.png)
 ![image](https://user-images.githubusercontent.com/24465003/201512796-fcf180f7-7a36-4472-915e-61de68805c63.png)
@@ -132,5 +131,8 @@ Når du har logget inn kommer man til følgende side, der man kan:
 ![image](https://user-images.githubusercontent.com/24465003/201538759-147e7d3b-ccb8-4699-abb9-442793a37c13.png)
 ![image](https://user-images.githubusercontent.com/24465003/201538790-b9185904-9942-4465-9b93-995a67d2902e.png)
 ![image](https://user-images.githubusercontent.com/24465003/201538821-ec6ca1d6-d8e4-4552-a183-33680f4db58a.png)
+
+### Se hvem som har lest melding:
+![image](https://user-images.githubusercontent.com/24465003/201990407-5eac04d5-a173-45c0-b5a2-45208b820330.png)
 
 
