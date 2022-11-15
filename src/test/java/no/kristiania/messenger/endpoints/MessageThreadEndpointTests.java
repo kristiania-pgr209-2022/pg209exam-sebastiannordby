@@ -124,4 +124,21 @@ public class MessageThreadEndpointTests extends ServerTest {
         assertThat(responseJson).contains(Integer.toString(messageThreadId));
         assertThat(responseJson).contains("id", "topic", "unreadMessages");
     }
+
+    @Test
+    void shouldGetMembersByMessageThreadId() throws Exception {
+        var userId = userDao.insertUser(SampleData.sampleUser());
+        var messageThreadId = messageThreadDao.insert(SampleData.sampleThread());
+        messageThreadMembershipDao.insert(userId, messageThreadId);
+        var connection = getServerConnection(
+                String.format("/api/message-thread/members/%d", messageThreadId));
+
+        var responseJson = IOUtils.toString(connection.getInputStream(), StandardCharsets.UTF_8);
+
+        assertThat(connection.getContentType()).isEqualTo("application/json");
+        assertThat(connection.getResponseCode())
+                .as(connection.getResponseMessage())
+                .isEqualTo(200);
+        assertThat(responseJson).contains("id", "name", "emailAddress", "nickname", "bio");
+    }
 }
