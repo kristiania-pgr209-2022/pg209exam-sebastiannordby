@@ -4,7 +4,11 @@ import jakarta.json.Json;
 import no.kristiania.messenger.InMemoryDatabase;
 import no.kristiania.messenger.SampleData;
 import no.kristiania.messenger.ServerTest;
+import no.kristiania.messenger.dao.MessageThreadDao;
+import no.kristiania.messenger.dao.MessageThreadMembershipDao;
 import no.kristiania.messenger.dao.UserDao;
+import no.kristiania.messenger.dao.jdbc.JdbcMessageThreadDao;
+import no.kristiania.messenger.dao.jdbc.JdbcMessageThreadMembershipDao;
 import no.kristiania.messenger.dao.jdbc.JdbcUserDao;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
@@ -17,11 +21,15 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class MessageThreadEndpointTests extends ServerTest {
     private UserDao userDao;
+    private MessageThreadDao messageThreadDao;
+    private MessageThreadMembershipDao messageThreadMembershipDao;
 
     @Override
     protected void additionalSetup() {
         var dataSource = InMemoryDatabase.createTestDataSource();
         userDao = new JdbcUserDao(dataSource);
+        messageThreadDao = new JdbcMessageThreadDao(dataSource);
+        messageThreadMembershipDao = new JdbcMessageThreadMembershipDao(dataSource);
     }
 
     @Test
@@ -96,5 +104,24 @@ public class MessageThreadEndpointTests extends ServerTest {
         assertThat(findByIdConnection.getResponseCode()).isEqualTo(200);
         assertThat(findByIdConnection.getContentType()).isEqualTo("application/json");
         assertThat(idJsonRespons).contains("name");
+    }
+
+    @Test
+    void shouldReachGetAllThreadsByUserId() throws Exception {
+        var userId = userDao.insertUser(SampleData.sampleUser());
+        var connection = getServerConnection(
+            String.format("/api/message-thread/userId/%d", userId));
+        var messageThreadId = messageThreadDao.insert(SampleData.sampleThread());
+
+        messageThreadMembershipDao.insert(userId, messageThreadId);
+
+        var responseJson = IOUtils.toString(connection.getInputStream(), StandardCharsets.UTF_8);
+
+        assertThat(connection.getContentType()).isEqualTo("application/json");
+        assertThat(connection.getResponseCode())
+            .as(connection.getResponseMessage())
+            .isEqualTo(200);
+        assertThat(responseJson).contains(Integer.toString(messageThreadId));
+        assertThat(responseJson).contains("id", "topic", "unreadMessages");
     }
 }
